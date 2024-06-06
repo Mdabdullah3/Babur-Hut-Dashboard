@@ -8,6 +8,7 @@ import { CiShoppingBasket } from "react-icons/ci";
 import { ImLocation } from "react-icons/im";
 import { IoIosRocket } from "react-icons/io";
 import { BsFillHandIndexFill, BsTicketDetailed } from "react-icons/bs";
+import Admin from "./Dashboard/Admin";
 const menu = [
     {
         name: "Dashboard",
@@ -15,6 +16,7 @@ const menu = [
         path: "default",
         icon: <MdHome className="h-6 w-6" />,
         navMenu: true,
+        component: <Admin />
     },
     {
         name: "Vendor",
