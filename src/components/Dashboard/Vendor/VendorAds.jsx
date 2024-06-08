@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { vendorAds } from "../../../utils/constants";
 import TableHead from "../../common/TableHead";
+import { vendorAds } from "../../../utils/constant";
 
 const VendorAds = () => {
   const [activeMenu, setActiveMenu] = useState(1);

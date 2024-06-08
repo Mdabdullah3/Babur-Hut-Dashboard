@@ -1,9 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
-"use client";
 import React, { useState, useEffect } from "react";
 import InputSearch from "../../common/InputSearch";
-import { vendorProducts } from "../../../utils/constants";
 import TableHead from "../../../components/common/TableHead";
+import { vendorProducts } from "../../../utils/constant";
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState("");

@@ -9,6 +9,8 @@ import { ImLocation } from "react-icons/im";
 import { IoIosRocket } from "react-icons/io";
 import { BsFillHandIndexFill, BsTicketDetailed } from "react-icons/bs";
 import Admin from "./Dashboard/Admin";
+import Vendor from "./Dashboard/vendor/Vendor";
+import SingleVendor from "./Dashboard/vendor/SingleVendor";
 const menu = [
     {
         name: "Dashboard",
@@ -24,6 +26,15 @@ const menu = [
         path: "vendor",
         icon: <FaUser className="h-6 w-6" />,
         navMenu: true,
+        component: <Vendor />
+    },
+    {
+        name: "Single Vendor",
+        layout: "/admin",
+        path: "vendor/:id",
+        icon: <FaUser className="h-6 w-6" />,
+        navMenu: true,
+        component: <SingleVendor />
     },
     {
         name: "Customer",

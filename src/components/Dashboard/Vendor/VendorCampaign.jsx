@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { vendorEvents } from "../../../utils/constants";
 import TableHead from "../../common/TableHead";
+import { vendorEvents } from "../../../utils/constant";
 const VendorCampaign = () => {
   const [activeMenu, setActiveMenu] = useState(1);
   const handleMenuClick = (id) => {
