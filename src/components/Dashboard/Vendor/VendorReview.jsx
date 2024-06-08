@@ -1,8 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 import React from "react";
-import { vendorReviews } from "../../../utils/constants";
 import { FaStar } from "react-icons/fa";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { vendorReviews } from "../../../utils/constant";
 const VendorReview = () => {
   return (
     <section>

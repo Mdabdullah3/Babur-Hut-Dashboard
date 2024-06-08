@@ -1,9 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
-"use client";
 import React, { useState } from "react";
-import InputSearch from "../../../../components/common/InputSearch";
-import { customerData } from "../../../../utils/constants";
-import TableHead from "../../../../components/common/TableHead";
+import { customerData } from "../../utils/constant";
+import InputSearch from "../../components/common/InputSearch";
+import TableHead from "../../components/common/TableHead";
 const Customer = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -21,7 +19,6 @@ const Customer = () => {
   ];
   return (
     <section className="px-5">
-      <h1 className="text-3xl text-gray-700 font-bold my-5">Customer</h1>
       <div>
         <div className="flex-1">
           <InputSearch
@@ -33,7 +30,6 @@ const Customer = () => {
         </div>
 
         <table className="table-auto w-full overflow-auto mt-10">
-          {" "}
           <TableHead header={header} />
           {customerData?.map((item) => (
             <tbody key={item.id}>

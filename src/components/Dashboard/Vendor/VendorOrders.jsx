@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { vendorOrder } from "../../../utils/constants";
 import InputSearch from "../../common/InputSearch";
 import TableHead from "../../common/TableHead";
+import { vendorOrder } from "../../../utils/constant";
 
 const VendorOrders = () => {
   const [activeMenu, setActiveMenu] = useState(1);

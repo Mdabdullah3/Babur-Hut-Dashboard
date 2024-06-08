@@ -12,7 +12,6 @@ const Vendor = () => {
   };
   return (
     <div>
-      <h1 className="text-3xl text-gray-700 font-bold">Vendor</h1>
       <div className="w-10/12 mx-auto py-6 flex items-center justify-between gap-6">
         <div className="flex-1">
           <InputSearch

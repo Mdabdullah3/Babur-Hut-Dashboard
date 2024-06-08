@@ -1,10 +1,9 @@
-"use client";
 import React, { useState } from "react";
 import InputSearch from "../../../../components/common/InputSearch";
 import TableHead from "../../../../components/common/TableHead";
-import { categoriesData } from "../../../../utils/constants";
 import AddMainCategory from "../../../../components/Dashboard/Category/AddMainCategory";
 import AddSubCategory from "../../../../components/Dashboard/Category/AddSubCategory";
+import { categoriesData } from "../../utils/constant";
 const Categories = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeMenu, setActiveMenu] = useState("All");

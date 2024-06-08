@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { vendor } from "../../utils/constants";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import VendorProducts from "../../components/Dashboard/Vendor/Products";
 import VendorOrders from "../../components/Dashboard/Vendor/VendorOrders";
@@ -8,6 +7,7 @@ import VendorCampaign from "../../components/Dashboard/Vendor/VendorCampaign";
 import VendorAds from "../../components/Dashboard/Vendor/VendorAds";
 import VendorReview from "../../components/Dashboard/Vendor/VendorReview";
 import VendorSetting from "../../components/Dashboard/Vendor/VendorSetting";
+import { vendor } from "../../utils/constant";
 const SingleVendor = () => {
   const [activeMenu, setActiveMenu] = useState(1);
   const handleMenuClick = (id) => {

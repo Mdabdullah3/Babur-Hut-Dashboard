@@ -11,6 +11,8 @@ import { BsFillHandIndexFill, BsTicketDetailed } from "react-icons/bs";
 import Admin from "./Dashboard/Admin";
 import Vendor from "./Dashboard/vendor/Vendor";
 import SingleVendor from "./Dashboard/vendor/SingleVendor";
+import Customer from "./Dashboard/customer/Customer";
+import SingleCustomer from "./Dashboard/customer/SingleCustomer";
 const menu = [
     {
         name: "Dashboard",
@@ -32,14 +34,21 @@ const menu = [
         name: "Single Vendor",
         layout: "/admin",
         path: "vendor/:id",
-        icon: <FaUser className="h-6 w-6" />,
-        navMenu: true,
         component: <SingleVendor />
     },
     {
         name: "Customer",
         layout: "/admin",
         path: "customer",
+        navMenu: true,
+        icon: <FaRocketchat className="h-6 w-6" />,
+        component: <Customer />
+    },
+    {
+      name: "Single Customer",
+      layout: "/admin", 
+      path: "customer/:id",
+      component: <SingleCustomer />
     },
     {
         name: "Categories",

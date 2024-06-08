@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import InputSearch from "../../common/InputSearch";
-import { vendorVouchers } from "../../../utils/constants";
 import TableHead from "../../common/TableHead";
 import AddNewVoucher from "./AddNewVoucher";
+import { vendorVouchers } from "../../../utils/constant";
 const VendorVouchers = () => {
   const [activeMenu, setActiveMenu] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");

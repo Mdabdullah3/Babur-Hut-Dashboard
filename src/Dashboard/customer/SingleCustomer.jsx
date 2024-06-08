@@ -1,7 +1,6 @@
-"use client";
 import React, { useState } from "react";
-import VendorOrders from "../../../../../components/Dashboard/Vendor/VendorOrders";
-import CustomerSettings from "../../../../../components/Dashboard/CustomerSettings";
+import VendorOrders from "../../components/Dashboard/Vendor/VendorOrders";
+import CustomerSettings from "../../components/Dashboard/CustomerSettings";
 const SingleCustomer = () => {
   const [activeMenu, setActiveMenu] = useState(1);
   const handleMenuClick = (id) => {
@@ -20,7 +19,6 @@ const SingleCustomer = () => {
   ];
   return (
     <section className="px-5">
-      <h1 className="text-3xl text-gray-700 font-bold my-5">Customer</h1>
       <div className="flex mt-8 items-center justify-center gap-10 w-10/12 mx-auto my-4 border-b-2 ">
         {menu.map((item) => (
           <>
