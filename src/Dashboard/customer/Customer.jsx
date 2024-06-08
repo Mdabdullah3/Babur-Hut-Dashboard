@@ -18,7 +18,7 @@ const Customer = () => {
     "Action",
   ];
   return (
-    <section className="px-5">
+    <section className="px-5 mt-10">
       <div>
         <div className="flex-1">
           <InputSearch

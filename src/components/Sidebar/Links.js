@@ -20,16 +20,16 @@ export function SidebarLinks(props) {
                             >
                                 <span
                                     className={`${activeRoute(route.path) === true
-                                            ? "font-bold text-primary"
-                                            : "font-medium"
+                                        ? "font-bold text-primary"
+                                        : "font-medium"
                                         }`}
                                 >
                                     {route.icon ? route.icon : ""}{" "}
                                 </span>
                                 <p
                                     className={`leading-1 ml-4 flex uppercase tracking-wider ${activeRoute(route.path) === true
-                                            ? "font-bold text-gray-700 "
-                                            : "font-medium text-gray-500"
+                                        ? "font-bold text-primary "
+                                        : "font-medium text-gray-500"
                                         }`}
                                 >
                                     {route.name}
