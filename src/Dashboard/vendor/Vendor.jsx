@@ -1,14 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import InputSearch from "../../../../components/common/InputSearch";
-import PrimaryButton from "../../../../components/common/PrimaryButton";
-import { vendor } from "../../../../utils/constants";
-import VendorCard from "../../../../components/Dashboard/Vendor/VendorCard";
+import InputSearch from "../../components/common/InputSearch";
+import PrimaryButton from "../../components/common/PrimaryButton";
+import { vendor } from "../../utils/constant";
+import VendorCard from "../../components/Dashboard/Vendor/VendorCard";
 const Vendor = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (value) => {
-    console.log("Search term:", value);
+    setSearchTerm(value);
   };
   return (
     <div>
