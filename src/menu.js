@@ -3,7 +3,7 @@ import {
     MdHome,
 } from "react-icons/md";
 import { BiSolidCategoryAlt, BiSupport } from "react-icons/bi";
-import { FaCartFlatbed, FaMoneyCheck, FaRocketchat, FaUser } from "react-icons/fa6";
+import { FaCartFlatbed, FaMoneyCheck, FaRocketchat, FaUser, FaUserGroup } from "react-icons/fa6";
 import { CiShoppingBasket } from "react-icons/ci";
 import { ImLocation } from "react-icons/im";
 import { IoIosRocket } from "react-icons/io";
@@ -13,6 +13,7 @@ import Vendor from "./Dashboard/vendor/Vendor";
 import SingleVendor from "./Dashboard/vendor/SingleVendor";
 import Customer from "./Dashboard/customer/Customer";
 import SingleCustomer from "./Dashboard/customer/SingleCustomer";
+import Categories from "./Dashboard/categories/Categories";
 const menu = [
     {
         name: "Dashboard",
@@ -41,14 +42,14 @@ const menu = [
         layout: "/admin",
         path: "customer",
         navMenu: true,
-        icon: <FaRocketchat className="h-6 w-6" />,
+        icon: <FaUserGroup className="h-6 w-6" />,
         component: <Customer />
     },
     {
-      name: "Single Customer",
-      layout: "/admin", 
-      path: "customer/:id",
-      component: <SingleCustomer />
+        name: "Single Customer",
+        layout: "/admin",
+        path: "customer/:id",
+        component: <SingleCustomer />
     },
     {
         name: "Categories",
@@ -56,6 +57,7 @@ const menu = [
         path: "categories",
         navMenu: true,
         icon: <BiSolidCategoryAlt className="h-6 w-6" />,
+        component: <Categories />
     },
     {
         name: "Products",

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import InputSearch from "../../../../components/common/InputSearch";
-import TableHead from "../../../../components/common/TableHead";
-import AddMainCategory from "../../../../components/Dashboard/Category/AddMainCategory";
-import AddSubCategory from "../../../../components/Dashboard/Category/AddSubCategory";
+
 import { categoriesData } from "../../utils/constant";
+import InputSearch from "../../components/common/InputSearch";
+import TableHead from "../../components/common/TableHead";
+import AddMainCategory from "../../components/Dashboard/Category/AddMainCategory";
+import AddSubCategory from "../../components/Dashboard/Category/AddSubCategory";
 const Categories = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeMenu, setActiveMenu] = useState("All");
@@ -14,7 +15,6 @@ const Categories = () => {
   const menu = ["All", "Add Main Category", "Add Sub Category"];
   return (
     <section className="w-11/12 mx-auto">
-      <h1 className="text-3xl font-bold my-4">Categories</h1>
       <div className="flex mt-8 items-center justify-center gap-10 w-10/12 mx-auto my-4 border-b-2 ">
         {menu.map((item, index) => (
           <>
@@ -68,17 +68,9 @@ const Categories = () => {
           </table>
         </>
       )}
-      {activeMenu === "Add Main Category" && (
-        <>
-          <AddMainCategory />
-        </>
-      )}
+      {activeMenu === "Add Main Category" && <AddMainCategory />}
 
-      {activeMenu === "Add Sub Category" && (
-        <>
-          <AddSubCategory />
-        </>
-      )}
+      {activeMenu === "Add Sub Category" && <AddSubCategory />}
     </section>
   );
 };
