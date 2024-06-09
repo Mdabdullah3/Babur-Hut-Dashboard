@@ -14,6 +14,8 @@ import SingleVendor from "./Dashboard/vendor/SingleVendor";
 import Customer from "./Dashboard/customer/Customer";
 import SingleCustomer from "./Dashboard/customer/SingleCustomer";
 import Categories from "./Dashboard/categories/Categories";
+import AddProduct from './Dashboard/products/AddProducts'
+import Products from "./Dashboard/products/Products"
 const menu = [
     {
         name: "Dashboard",
@@ -65,8 +67,14 @@ const menu = [
         path: "products",
         navMenu: true,
         icon: <FaCartFlatbed className="h-6 w-6" />,
+        component: <Products />
     },
-
+    {
+        name: "Add Product",
+        layout: "/admin",
+        path: "add-product",
+        component: <AddProduct />
+    },
     {
         name: "Order & Review",
         layout: "/admin",
