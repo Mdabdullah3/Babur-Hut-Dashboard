@@ -2,12 +2,20 @@ import React, { useState } from "react";
 import FileUpload from "../../components/common/FileUpload";
 import VideoUpload from "../../components/common/VideoUpload";
 import InputField from "../../components/common/InputField";
+import SelectField from "../../components/common/SelectField";
+import { category } from "../../utils/constant";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 const AddProducts = () => {
   const [activeVideo, setActiveVideo] = useState("file upload");
   const [form, setForm] = useState({
     videoUrl: "",
     img: [],
     productName: "",
+    category: "",
+    brand: "",
+    background: "",
+    description: "",
   });
   return (
     <section className="mt-5">
@@ -70,10 +78,64 @@ const AddProducts = () => {
         <h1 className="text-2xl font-bold tracking-wide">
           Product Information
         </h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 mb-4">
           Having Accurate Product Information Raises Discoverilty
         </p>
         <InputField placeholder="Product Name" value={form.productName} />
+        <div className="mt-4">
+          <SelectField
+            label="Product Category"
+            options={category.map((item) => ({
+              label: item.name,
+              value: item.name,
+            }))}
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+          />
+        </div>
+        <div className="mt-4">
+          <InputField
+            label="Brand Name"
+            placeholder="Brand Name"
+            value={form.brand}
+            onChange={(e) => setForm({ ...form, brand: e.target.value })}
+          />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-wide mt-6">
+            Product Highlight
+          </h1>
+          <p className="text-sm text-gray-500">
+            Having Accurate Product Information Raises Discoverilty
+          </p>
+          <h1 className="flex items-center gap-2 my-4">
+            Buyer Promation Image{" "}
+            <span className="px-2  border border-sky-500 text-sky-500 text-sm rounded-full">
+              !
+            </span>
+          </h1>
+          <h1>White Background Image</h1>
+          <p className="text-sm text-gray-500">
+            Upload an Image With a White Background
+          </p>
+          <div className="my-4 flex">
+            <FileUpload name="ProductImage" />
+          </div>
+          <h1>Description</h1>
+          <div className="mt-4">
+            <ReactQuill
+              theme="snow"
+              value={form.description}
+              onChange={(value) => setForm({ ...form, description: value })}
+              style={{ height: "400px" }}
+            />
+          </div>
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-wide mt-6 text-primary">
+            Variants, Price, Stock
+          </h1>
+        </div>
       </div>
     </section>
   );
