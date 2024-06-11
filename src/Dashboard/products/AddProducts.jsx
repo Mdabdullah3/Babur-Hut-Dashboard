@@ -6,6 +6,7 @@ import SelectField from "../../components/common/SelectField";
 import { category } from "../../utils/constant";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import PrimaryButton from "../../components/common/PrimaryButton";
 const AddProducts = () => {
   const [activeVideo, setActiveVideo] = useState("file upload");
   const [form, setForm] = useState({
@@ -16,7 +17,18 @@ const AddProducts = () => {
     brand: "",
     background: "",
     description: "",
+    colors: [],
+    newColor: "",
   });
+  const addColorField = () => {
+    setForm({ ...form, colors: [...form.colors, form.newColor], newColor: "" });
+  };
+
+  const removeColorField = (index) => {
+    const updatedColors = [...form.colors];
+    updatedColors.splice(index, 1);
+    setForm({ ...form, colors: updatedColors });
+  };
   return (
     <section className="mt-5">
       <h1 className="text-2xl font-bold tracking-wider">Basic Information</h1>
@@ -132,9 +144,37 @@ const AddProducts = () => {
           </div>
         </div>
         <div>
-          <h1 className="text-2xl font-bold tracking-wide mt-6 text-primary">
+          <h1 className="text-xl tracking-wide mt-16 text-primary">
             Variants, Price, Stock
           </h1>
+          <div className="mt-3">
+            <h1>Product Variants</h1>
+            <div className="flex gap-2">
+              {form?.colors?.map((color, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <div
+                    className="rounded-full w-8 h-8"
+                    style={{ backgroundColor: color, border: "1px solid #ccc" }}
+                  ></div>
+                  <span>{color}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeColorField(index)}
+                    className="text-red-500"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+            <InputField
+              placeholder="Color Name"
+              value={form.colors}
+              onChange={(e) => setForm({ ...form, colors: e.target.value })}
+              label="Color Family"
+            />
+            <PrimaryButton value="Add Color" onClick={addColorField} />
+          </div>
         </div>
       </div>
     </section>
