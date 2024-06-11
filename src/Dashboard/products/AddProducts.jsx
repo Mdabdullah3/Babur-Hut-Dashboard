@@ -7,8 +7,11 @@ import { category } from "../../utils/constant";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import PrimaryButton from "../../components/common/PrimaryButton";
+
 const AddProducts = () => {
   const [activeVideo, setActiveVideo] = useState("file upload");
+  const [colors, setColors] = useState([]);
+  const [newColor, setNewColor] = useState("");
   const [form, setForm] = useState({
     videoUrl: "",
     img: [],
@@ -17,18 +20,33 @@ const AddProducts = () => {
     brand: "",
     background: "",
     description: "",
-    colors: [],
-    newColor: "",
+    colors: colors,
+    price: 0,
+    promoPrice: 0,
+    quantity: 0,
+    sku: "",
+    warranty: "",
+    weight: "",
   });
+
   const addColorField = () => {
-    setForm({ ...form, colors: [...form.colors, form.newColor], newColor: "" });
+    if (newColor.trim()) {
+      setColors((prevColors) => {
+        const updatedColors = [...prevColors, newColor];
+        return updatedColors;
+      });
+      setNewColor("");
+    }
   };
 
   const removeColorField = (index) => {
-    const updatedColors = [...form.colors];
-    updatedColors.splice(index, 1);
-    setForm({ ...form, colors: updatedColors });
+    setColors((prevColors) => {
+      const updatedColors = [...prevColors];
+      updatedColors.splice(index, 1);
+      return updatedColors;
+    });
   };
+
   return (
     <section className="mt-5">
       <h1 className="text-2xl font-bold tracking-wider">Basic Information</h1>
@@ -50,6 +68,8 @@ const AddProducts = () => {
               type="radio"
               name="radio-2"
               className="radio radio-primary"
+              checked={activeVideo === "file upload"}
+              onChange={() => setActiveVideo("file upload")}
             />
             <label
               htmlFor="video"
@@ -64,6 +84,8 @@ const AddProducts = () => {
               type="radio"
               name="radio-2"
               className="radio radio-primary"
+              checked={activeVideo === "url"}
+              onChange={() => setActiveVideo("url")}
             />
             <label htmlFor="videoUrl" onClick={() => setActiveVideo("url")}>
               Video Url
@@ -93,7 +115,11 @@ const AddProducts = () => {
         <p className="text-sm text-gray-500 mb-4">
           Having Accurate Product Information Raises Discoverilty
         </p>
-        <InputField placeholder="Product Name" value={form.productName} />
+        <InputField
+          placeholder="Product Name"
+          value={form.productName}
+          onChange={(e) => setForm({ ...form, productName: e.target.value })}
+        />
         <div className="mt-4">
           <SelectField
             label="Product Category"
@@ -121,7 +147,7 @@ const AddProducts = () => {
             Having Accurate Product Information Raises Discoverilty
           </p>
           <h1 className="flex items-center gap-2 my-4">
-            Buyer Promation Image{" "}
+            Buyer Promotion Image{" "}
             <span className="px-2  border border-sky-500 text-sky-500 text-sm rounded-full">
               !
             </span>
@@ -148,32 +174,75 @@ const AddProducts = () => {
             Variants, Price, Stock
           </h1>
           <div className="mt-3">
-            <h1>Product Variants</h1>
-            <div className="flex gap-2">
-              {form?.colors?.map((color, index) => (
-                <div key={index} className="flex items-center gap-2">
+            <h1>Product Colors</h1>
+            <div className="flex gap-4">
+              {colors.map((color, index) => (
+                <div key={index} className="flex items-center gap-2 relative">
                   <div
-                    className="rounded-full w-8 h-8"
-                    style={{ backgroundColor: color, border: "1px solid #ccc" }}
+                    className="rounded-full w-4 h-4"
+                    style={{ backgroundColor: color }}
                   ></div>
-                  <span>{color}</span>
+                  <span className="">{color}</span>
                   <button
                     type="button"
                     onClick={() => removeColorField(index)}
-                    className="text-red-500"
+                    className="text-red-500  absolute -top-2 -right-2"
                   >
-                    Remove
+                    x
                   </button>
                 </div>
               ))}
             </div>
-            <InputField
-              placeholder="Color Name"
-              value={form.colors}
-              onChange={(e) => setForm({ ...form, colors: e.target.value })}
-              label="Color Family"
-            />
-            <PrimaryButton value="Add Color" onClick={addColorField} />
+            <div className="flex items-center gap-2">
+              <InputField
+                placeholder="New Color"
+                value={newColor}
+                onChange={(e) => setNewColor(e.target.value)}
+              />
+              <button
+                onClick={addColorField}
+                className="px-6 py-3 bg-primary rounded-xl text-white"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+          <div className="mt-5">
+            <h1>
+              Price & Stock <span className="text-red-500">*</span>
+            </h1>
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 items-center mt-5">
+              <InputField
+                placeholder="BDT"
+                type="number"
+                label={"Price"}
+                required
+                value={form.price}
+                onChange={(e) => setForm({ ...form, price: e.target.value })}
+              />
+              <InputField
+                placeholder="BDT"
+                type="number"
+                label="Promo Price"
+                value={form.promoPrice}
+                onChange={(e) =>
+                  setForm({ ...form, promoPrice: e.target.value })
+                }
+              />
+              <InputField
+                type="number"
+                label="Quantity"
+                placeholder="Quantity"
+                value={form.stock}
+                onChange={(e) => setForm({ ...form, stock: e.target.value })}
+              />
+              <InputField
+                label="Seller Sku"
+                value={form.sku}
+                onChange={(e) => setForm({ ...form, sku: e.target.value })}
+                placeholder={"Seller Sku"}
+              />
+            </div>
           </div>
         </div>
       </div>
