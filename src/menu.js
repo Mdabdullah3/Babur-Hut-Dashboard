@@ -16,6 +16,7 @@ import SingleCustomer from "./Dashboard/customer/SingleCustomer";
 import Categories from "./Dashboard/categories/Categories";
 import AddProduct from './Dashboard/products/AddProducts'
 import Products from "./Dashboard/products/Products"
+import AllOrder from "./Dashboard/order/AllOrder";
 const menu = [
     {
         name: "Dashboard",
@@ -81,6 +82,7 @@ const menu = [
         path: "order-review",
         navMenu: true,
         icon: <CiShoppingBasket className="h-6 w-6" />,
+        component: <AllOrder />
     },
     {
         name: "Finance",

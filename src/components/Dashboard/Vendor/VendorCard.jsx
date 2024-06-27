@@ -1,5 +1,6 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const VendorCard = ({ item }) => {
   return (
@@ -22,9 +23,11 @@ const VendorCard = ({ item }) => {
       <div>
         <img src={item.img} alt="" className="w-40" />
         <div className="ml-10">
-          <button className="bg-primary px-3 py-1.5 rounded-lg text-sm text-white">
-            View More
-          </button>
+          <Link to={`/admin/vendor/${item.id}`}>
+            <button className="bg-primary px-3 py-1.5 rounded-lg text-sm text-white">
+              View More
+            </button>
+          </Link>
         </div>
       </div>
     </div>

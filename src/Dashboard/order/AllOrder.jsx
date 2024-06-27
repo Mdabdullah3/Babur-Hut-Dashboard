@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import InputSearch from "../../common/InputSearch";
-import TableHead from "../../common/TableHead";
-import { vendorOrder } from "../../../utils/constant";
+import InputSearch from "../../components/common/InputSearch";
+import TableHead from "../../components/common/TableHead";
+import { vendorOrder } from "../../utils/constant";
 
-const VendorOrders = () => {
+const AllOrder = () => {
   const [activeMenu, setActiveMenu] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredOrders, setFilteredOrders] = useState(vendorOrder);
@@ -162,7 +162,7 @@ const VendorOrders = () => {
                 </td>
                 <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
                   <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
-                    Shipping
+                    Details
                   </button>
                 </td>
               </tr>
@@ -174,4 +174,4 @@ const VendorOrders = () => {
   );
 };
 
-export default VendorOrders;
+export default AllOrder;

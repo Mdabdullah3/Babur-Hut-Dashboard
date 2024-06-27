@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { customerData } from "../../utils/constant";
 import InputSearch from "../../components/common/InputSearch";
 import TableHead from "../../components/common/TableHead";
+import { Link } from "react-router-dom";
 const Customer = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -53,9 +54,11 @@ const Customer = () => {
                   {"12, 7, 2022"}
                 </td>
                 <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                  <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
-                    More
-                  </button>
+                  <Link to={`/admin/customer/${item.customerId}`}>
+                    <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
+                      More
+                    </button>
+                  </Link>
                 </td>
               </tr>
             </tbody>
