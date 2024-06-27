@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FiPlus, FiEdit, FiTrash } from "react-icons/fi";
 import { vendorProducts } from "../../utils/constant";
+import { Link } from "react-router-dom";
 
 const ProductAdminPanel = () => {
   const [products, setProducts] = useState(vendorProducts);
@@ -10,10 +11,13 @@ const ProductAdminPanel = () => {
       <main className="flex-1 p-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold mb-6">Products</h1>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded mb-6 flex items-center">
+          <Link
+            to="/admin/add-product"
+            className="bg-blue-600 text-white px-4 py-2 rounded mb-6 flex items-center"
+          >
             <FiPlus className="mr-2" />
             Add Product
-          </button>
+          </Link>
         </div>
         <table className="table-auto w-full bg-white shadow-lg rounded-lg overflow-hidden">
           <thead className="bg-gray-800 text-white">
