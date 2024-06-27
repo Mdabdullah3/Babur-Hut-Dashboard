@@ -17,6 +17,7 @@ import Categories from "./Dashboard/categories/Categories";
 import AddProduct from './Dashboard/products/AddProducts'
 import Products from "./Dashboard/products/Products"
 import AllOrder from "./Dashboard/order/AllOrder";
+import VoucherAdminPanel from "./Dashboard/Voucher";
 const menu = [
     {
         name: "Dashboard",
@@ -112,6 +113,7 @@ const menu = [
         path: "vouchers",
         navMenu: true,
         icon: <BsTicketDetailed className="h-6 w-6" />,
+        component: <VoucherAdminPanel />
     },
     {
         name: "Event Manager",
