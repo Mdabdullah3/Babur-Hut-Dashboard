@@ -206,7 +206,7 @@ const AddProducts = () => {
   return (
     <section className="mt-5 grid grid-cols-5 relative">
       <form className="col-span-4 w-11/12" onSubmit={handleSubmit}>
-        <section ref={formRefs.basicInfo}>
+        <div ref={formRefs.basicInfo}>
           <h1 className="text-2xl font-bold tracking-wider">
             Basic Information
           </h1>
@@ -303,7 +303,7 @@ const AddProducts = () => {
               )}
             </div>
           </div>
-          <div className="mt-10">
+          <section className="mt-10">
             <h1 className="text-2xl font-bold tracking-wide">
               Product Information
             </h1>
@@ -319,11 +319,50 @@ const AddProducts = () => {
                   setForm({ ...form, productName: e.target.value })
                 }
               />
+              <SelectField
+                label="Category"
+                options={category}
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+              />
               <InputField
                 label="Brand"
                 placeholder="Brand"
                 value={form.brand}
                 onChange={(e) => setForm({ ...form, brand: e.target.value })}
+              />
+            </div>
+          </section>
+          <section ref={formRefs.description}>
+            <h1 className="text-2xl font-bold tracking-wider mt-10">
+              Description
+            </h1>
+            <ReactQuill
+              theme="snow"
+              value={form.description}
+              onChange={(value) => setForm({ ...form, description: value })}
+              placeholder="Write something amazing..."
+              className="mt-4 mb-8 h-60"
+            />
+          </section>
+          <section ref={formRefs.variants}>
+            <h1 className="text-2xl font-bold tracking-wider pt-10">
+              Price & Variants
+            </h1>
+
+            <div className="grid grid-cols-3 gap-5 mt-5">
+              <InputField
+                label="Quantity"
+                type="number"
+                placeholder="Quantity"
+                value={form.quantity}
+                onChange={(e) => setForm({ ...form, quantity: e.target.value })}
+              />
+              <InputField
+                label="SKU"
+                placeholder="SKU"
+                value={form.sku}
+                onChange={(e) => setForm({ ...form, sku: e.target.value })}
               />
               <InputField
                 label="Price"
@@ -342,47 +381,9 @@ const AddProducts = () => {
                 }
               />
             </div>
-            <div className="grid grid-cols-3 gap-5 mt-5">
-              <InputField
-                label="Quantity"
-                type="number"
-                placeholder="Quantity"
-                value={form.quantity}
-                onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-              />
-              <InputField
-                label="SKU"
-                placeholder="SKU"
-                value={form.sku}
-                onChange={(e) => setForm({ ...form, sku: e.target.value })}
-              />
-              <SelectField
-                label="Category"
-                options={category}
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
-              />
-            </div>
-          </div>
-        </section>
-
-        <section ref={formRefs.description}>
-          <h1 className="text-2xl font-bold tracking-wider mt-10">
-            Description
-          </h1>
-          <ReactQuill
-            theme="snow"
-            value={form.description}
-            onChange={(value) => setForm({ ...form, description: value })}
-            placeholder="Write something amazing..."
-            className="mt-4 mb-8 h-60"
-          />
-        </section>
-
-        <section ref={formRefs.variants} className="pt-10">
-          <h1 className="text-2xl font-bold tracking-wider ">Variants</h1>
-          {renderAdditionalFields()}
-        </section>
+            {renderAdditionalFields()}
+          </section>
+        </div>
 
         <section ref={formRefs.serviceWarranty}>
           <h1 className="text-2xl font-bold tracking-wider mt-10">
@@ -439,6 +440,46 @@ const AddProducts = () => {
           <PrimaryButton type="submit" value="Add Product" />
         </div>
       </form>
+      <section className="sticky top-24 h-72 cursor-pointer">
+        <ul className="steps steps-vertical">
+          <li
+            className={"step " + (activeStep === 0 ? "step-primary" : "")}
+            onClick={() => {
+              setActiveStep(0);
+              scrollToSection(formRefs.basicInfo);
+            }}
+          >
+            Basic Information
+          </li>
+          <li
+            className={"step " + (activeStep === 1 ? "step-primary" : "")}
+            onClick={() => {
+              setActiveStep(1);
+              scrollToSection(formRefs.description);
+            }}
+          >
+            Description
+          </li>
+          <li
+            className={"step " + (activeStep === 2 ? "step-primary" : "")}
+            onClick={() => {
+              setActiveStep(2);
+              scrollToSection(formRefs.variants);
+            }}
+          >
+            Variants, Price, Stock
+          </li>
+          <li
+            className={"step " + (activeStep === 3 ? "step-primary" : "")}
+            onClick={() => {
+              setActiveStep(3);
+              scrollToSection(formRefs.serviceWarranty);
+            }}
+          >
+            Service & Warranty
+          </li>
+        </ul>
+      </section>
     </section>
   );
 };
