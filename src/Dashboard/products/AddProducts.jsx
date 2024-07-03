@@ -204,7 +204,7 @@ const AddProducts = () => {
   };
 
   return (
-    <section className="mt-5 grid grid-cols-5 relative">
+    <section className="mt-5 lg:grid grid-cols-5 relative">
       <form className="col-span-4 w-11/12" onSubmit={handleSubmit}>
         <div ref={formRefs.basicInfo}>
           <h1 className="text-2xl font-bold tracking-wider">
@@ -440,7 +440,7 @@ const AddProducts = () => {
           <PrimaryButton type="submit" value="Add Product" />
         </div>
       </form>
-      <section className="sticky top-24 h-72 cursor-pointer">
+      <section className="sticky top-24 h-72 cursor-pointer hidden lg:block">
         <ul className="steps steps-vertical">
           <li
             className={"step " + (activeStep === 0 ? "step-primary" : "")}
