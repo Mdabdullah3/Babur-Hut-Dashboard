@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import PrimaryButton from "../components/common/PrimaryButton";
 
 const VerifyEmail = () => {
   const [code, setCode] = useState(new Array(6).fill(""));
@@ -56,6 +57,11 @@ const VerifyEmail = () => {
           />
         ))}
       </div>
+      <p className="text-center pt-3">
+        Didn't receive the code?{" "}
+        <span className="text-primary cursor-pointer mb-4">Resend</span>
+      </p>
+      <PrimaryButton type="button" value="Verify" />
     </div>
   );
 };
