@@ -10,18 +10,19 @@ import PrimaryButton from "../../components/common/PrimaryButton";
 
 const AddProducts = () => {
   const [activeVideo, setActiveVideo] = useState("file upload");
-  const [colors, setColors] = useState([]);
-  const [newColor, setNewColor] = useState("");
   const [activeStep, setActiveStep] = useState(0);
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [image3, setImage3] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
   const [form, setForm] = useState({
     videoUrl: "",
-    img: [],
+    img: [image1, image2, image3],
     productName: "",
     category: "",
     brand: "",
-    background: "",
+    coverImage: coverImage,
     description: "",
-    colors: colors,
     price: 0,
     promoPrice: 0,
     quantity: 0,
@@ -33,23 +34,6 @@ const AddProducts = () => {
     packageDimensionHeight: "",
   });
 
-  const addColorField = () => {
-    if (newColor.trim()) {
-      setColors((prevColors) => {
-        const updatedColors = [...prevColors, newColor];
-        return updatedColors;
-      });
-      setNewColor("");
-    }
-  };
-
-  const removeColorField = (index) => {
-    setColors((prevColors) => {
-      const updatedColors = [...prevColors];
-      updatedColors.splice(index, 1);
-      return updatedColors;
-    });
-  };
   const warrantyType = [
     {
       id: 1,
@@ -80,6 +64,7 @@ const AddProducts = () => {
     sectionRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
+  console.log(form);
   return (
     <section className="mt-5 grid grid-cols-5 relative">
       <form className="col-span-4 w-11/12">
@@ -93,9 +78,32 @@ const AddProducts = () => {
               Your product image is the first thing customers will see.
             </p>
             <div className="flex flex-wrap gap-4 mt-3">
-              <FileUpload label="Top Image" name="ProductImage" />
-              <FileUpload label="Product Image 1" name="ProductImage" />
-              <FileUpload label="Product Image 2" name="ProductImage" />
+              <FileUpload
+                file={image1}
+                setFile={setImage1}
+                label="Top Image"
+                name="ProductImage"
+              />
+              <FileUpload
+                file={image2}
+                setFile={setImage2}
+                label="Product Image 1"
+                name="ProductImage"
+              />
+              <FileUpload
+                file={image3}
+                setFile={setImage3}
+                label="Product Image 2"
+                name="ProductImage"
+              />
+            </div>
+            <div className="my-4 flex">
+              <FileUpload
+                name="ProductImage"
+                label={"Cover Image"}
+                file={coverImage}
+                setFile={setCoverImage}
+              />
             </div>
             <h1 className="text-xl text-primary mt-5">Video</h1>
             <div className="flex items-center gap-10 mt-2">
@@ -192,19 +200,6 @@ const AddProducts = () => {
           <p className="text-sm text-gray-500">
             Having Accurate Product Information Raises Discoverilty
           </p>
-          <h1 className="flex items-center gap-2 my-4">
-            Buyer Promotion Image{" "}
-            <span className="px-2  border border-sky-500 text-sky-500 text-sm rounded-full">
-              !
-            </span>
-          </h1>
-          <h1>White Background Image</h1>
-          <p className="text-sm text-gray-500">
-            Upload an Image With a White Background
-          </p>
-          <div className="my-4 flex">
-            <FileUpload name="ProductImage" />
-          </div>
           <h1>
             Description <span className="text-red-500">*</span>
           </h1>
@@ -221,40 +216,6 @@ const AddProducts = () => {
           <h1 className="text-xl tracking-wide mt-16 text-primary">
             Variants, Price, Stock
           </h1>
-          <div className="mt-3">
-            <h1>Product Colors</h1>
-            <div className="flex gap-4">
-              {colors.map((color, index) => (
-                <div key={index} className="flex items-center gap-2 relative">
-                  <div
-                    className="rounded-full w-4 h-4"
-                    style={{ backgroundColor: color }}
-                  ></div>
-                  <span className="">{color}</span>
-                  <button
-                    type="button"
-                    onClick={() => removeColorField(index)}
-                    className="text-red-500  absolute -top-2 -right-2"
-                  >
-                    x
-                  </button>
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center gap-2">
-              <InputField
-                placeholder="New Color"
-                value={newColor}
-                onChange={(e) => setNewColor(e.target.value)}
-              />
-              <button
-                onClick={addColorField}
-                className="px-6 py-3 bg-primary rounded-xl text-white"
-              >
-                Add
-              </button>
-            </div>
-          </div>
           <div className="mt-5 ">
             <h1 className="flex items-center gap-2">
               Price & Stock <span className="text-red-500">*</span>{" "}

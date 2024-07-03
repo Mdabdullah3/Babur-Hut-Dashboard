@@ -1,27 +1,25 @@
-import React, { useState } from "react";
 
-const FileUpload = ({ label, name }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
+const FileUpload = ({ label, name, file, setFile }) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedFile(URL.createObjectURL(file));
+      setFile(URL.createObjectURL(file));
     }
   };
 
   const handleRemoveFile = () => {
-    setSelectedFile(null);
+    setFile(null);
   };
 
   return (
     <div>
       <div>
         <label className="block font-mono text-secondary">{label}</label>
-        {selectedFile ? (
+        {file ? (
           <div className="relative">
             <img
-              src={selectedFile}
+              src={file}
               alt="Selected"
               className="w-32 h-32 rounded-md"
             />
