@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import FileUpload from "../../components/common/FileUpload";
 import VideoUpload from "../../components/common/VideoUpload";
 import InputField from "../../components/common/InputField";
@@ -21,7 +21,7 @@ const AddProducts = () => {
     productName: "",
     category: "",
     brand: "",
-    coverImage: coverImage,
+    coverPhoto: coverImage,
     description: "",
     price: 0,
     promoPrice: 0,
@@ -33,6 +33,14 @@ const AddProducts = () => {
     packageDimensionWidth: "",
     packageDimensionHeight: "",
   });
+
+  useEffect(() => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      img: [image1, image2, image3],
+      coverPhoto: coverImage,
+    }));
+  }, [image1, image2, image3, coverImage]);
 
   const warrantyType = [
     {
@@ -63,11 +71,34 @@ const AddProducts = () => {
   const scrollToSection = (sectionRef) => {
     sectionRef.current.scrollIntoView({ behavior: "smooth" });
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    const formData = {
+      name: form.productName,
+      price: form.price,
+      quantity: form.quantity,
+      summary: form.description.slice(0, 150),
+      description: form.description,
+      category: form.category,
+      brand: form.brand,
+      size: form.size,
+      coverPhoto: coverImage,
+      images: [image1, image2, image3].filter(Boolean),
+    };
+
+    try {
+      await addProduct(formData);
+      toast
+    } catch (error) {
+      console.error(error);
+      // Handle error (e.g., show an error message)
+    }
+  };
   console.log(form);
   return (
     <section className="mt-5 grid grid-cols-5 relative">
-      <form className="col-span-4 w-11/12">
+      <form className="col-span-4 w-11/12" onSubmit={handleSubmit}>
         <section ref={formRefs.basicInfo}>
           <h1 className="text-2xl font-bold tracking-wider">
             Basic Information
@@ -77,11 +108,19 @@ const AddProducts = () => {
             <p className="text-gray-500">
               Your product image is the first thing customers will see.
             </p>
+            <div className="my-4 flex">
+              <FileUpload
+                name="ProductImage"
+                label={"Cover Image"}
+                file={coverImage}
+                setFile={setCoverImage}
+              />
+            </div>
             <div className="flex flex-wrap gap-4 mt-3">
               <FileUpload
                 file={image1}
                 setFile={setImage1}
-                label="Top Image"
+                label="Image 1"
                 name="ProductImage"
               />
               <FileUpload
@@ -97,14 +136,7 @@ const AddProducts = () => {
                 name="ProductImage"
               />
             </div>
-            <div className="my-4 flex">
-              <FileUpload
-                name="ProductImage"
-                label={"Cover Image"}
-                file={coverImage}
-                setFile={setCoverImage}
-              />
-            </div>
+
             <h1 className="text-xl text-primary mt-5">Video</h1>
             <div className="flex items-center gap-10 mt-2">
               <div className="flex items-center gap-3">

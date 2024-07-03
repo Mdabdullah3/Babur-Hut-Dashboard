@@ -1,5 +1,6 @@
 import create from 'zustand';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const useProductStore = create((set) => ({
     products: [],
@@ -11,7 +12,7 @@ const useProductStore = create((set) => ({
     fetchProducts: async (query) => {
         set({ loading: true });
         try {
-            const response = await axios.get(`/api/products`, { params: query });
+            const response = await axios.get(`${API_URL}/products`, { params: query });
             set({ products: response.data.data, totalProducts: response.data.total, loading: false });
         } catch (error) {
             set({ error: error.message, loading: false });
@@ -21,7 +22,7 @@ const useProductStore = create((set) => ({
     fetchProductByIdOrSlug: async (idOrSlug) => {
         set({ loading: true });
         try {
-            const response = await axios.get(`/api/products/${idOrSlug}`);
+            const response = await axios.get(`${API_URL}/products/${idOrSlug}`);
             set({ product: response.data.data, loading: false });
         } catch (error) {
             set({ error: error.message, loading: false });
@@ -31,7 +32,7 @@ const useProductStore = create((set) => ({
     addProduct: async (productData) => {
         set({ loading: true });
         try {
-            const response = await axios.post(`/api/products`, productData);
+            const response = await axios.post(`${API_URL}/products`, productData);
             set((state) => ({ products: [...state.products, response.data.data], loading: false }));
         } catch (error) {
             set({ error: error.message, loading: false });
@@ -41,23 +42,10 @@ const useProductStore = create((set) => ({
     updateProduct: async (idOrSlug, productData) => {
         set({ loading: true });
         try {
-            const response = await axios.patch(`/api/products/${idOrSlug}`, productData);
+            const response = await axios.patch(`${API_URL}/products/${idOrSlug}`, productData);
             set((state) => ({
                 products: state.products.map((product) =>
                     product._id === idOrSlug || product.slug === idOrSlug ? response.data.data : product),
-                loading: false,
-            }));
-        } catch (error) {
-            set({ error: error.message, loading: false });
-        }
-    },
-
-    deleteProduct: async (idOrSlug) => {
-        set({ loading: true });
-        try {
-            await axios.delete(`/api/products/${idOrSlug}`);
-            set((state) => ({
-                products: state.products.filter((product) => product._id !== idOrSlug && product.slug !== idOrSlug),
                 loading: false,
             }));
         } catch (error) {
