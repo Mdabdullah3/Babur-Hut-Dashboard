@@ -1,7 +1,6 @@
 import create from 'zustand';
 import axios from 'axios';
 import { API_URL } from '../config';
-
 const useProductStore = create((set) => ({
     products: [],
     product: null,
@@ -15,7 +14,7 @@ const useProductStore = create((set) => ({
             const response = await axios.get(`${API_URL}/products`, { params: query });
             set({ products: response.data.data, totalProducts: response.data.total, loading: false });
         } catch (error) {
-            set({ error: error.message, loading: false });
+            set({ error: error.response?.data?.message || error.message, loading: false });
         }
     },
 
@@ -25,7 +24,7 @@ const useProductStore = create((set) => ({
             const response = await axios.get(`${API_URL}/products/${idOrSlug}`);
             set({ product: response.data.data, loading: false });
         } catch (error) {
-            set({ error: error.message, loading: false });
+            set({ error: error.response?.data?.message || error.message, loading: false });
         }
     },
 
@@ -35,7 +34,7 @@ const useProductStore = create((set) => ({
             const response = await axios.post(`${API_URL}/products`, productData);
             set((state) => ({ products: [...state.products, response.data.data], loading: false }));
         } catch (error) {
-            set({ error: error.message, loading: false });
+            set({ error: error.response?.data?.message || error.message, loading: false });
         }
     },
 
@@ -49,7 +48,20 @@ const useProductStore = create((set) => ({
                 loading: false,
             }));
         } catch (error) {
-            set({ error: error.message, loading: false });
+            set({ error: error.response?.data?.message || error.message, loading: false });
+        }
+    },
+
+    deleteProduct: async (idOrSlug) => {
+        set({ loading: true });
+        try {
+            await axios.delete(`${API_URL}/products/${idOrSlug}`);
+            set((state) => ({
+                products: state.products.filter((product) => product._id !== idOrSlug && product.slug !== idOrSlug),
+                loading: false,
+            }));
+        } catch (error) {
+            set({ error: error.response?.data?.message || error.message, loading: false });
         }
     },
 }));

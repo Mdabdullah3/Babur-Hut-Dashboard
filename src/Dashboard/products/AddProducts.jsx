@@ -7,6 +7,25 @@ import { category } from "../../utils/constant";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import PrimaryButton from "../../components/common/PrimaryButton";
+import { toast } from "react-toastify";
+import useProductStore from "../../store/ProductStore";
+
+const dummyData = {
+  electronics: {
+    Processor: "",
+    Memory: "",
+    Ram: "",
+    DisplayType: "",
+    Model: "",
+    CameraFront: "",
+    Battery: "",
+  },
+  normal: {
+    Size: "",
+    Material: "",
+    Color: "",
+  },
+};
 
 const AddProducts = () => {
   const [activeVideo, setActiveVideo] = useState("file upload");
@@ -15,8 +34,11 @@ const AddProducts = () => {
   const [image2, setImage2] = useState(null);
   const [image3, setImage3] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
+  const { addProduct } = useProductStore();
+  const [productType, setProductType] = useState("electronics");
   const [form, setForm] = useState({
     videoUrl: "",
+    user: "gsdsf", // Placeholder user data
     img: [image1, image2, image3],
     productName: "",
     category: "",
@@ -32,6 +54,7 @@ const AddProducts = () => {
     packageDimensionLength: "",
     packageDimensionWidth: "",
     packageDimensionHeight: "",
+    ...dummyData[productType],
   });
 
   useEffect(() => {
@@ -41,6 +64,13 @@ const AddProducts = () => {
       coverPhoto: coverImage,
     }));
   }, [image1, image2, image3, coverImage]);
+
+  useEffect(() => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      ...dummyData[productType],
+    }));
+  }, [productType]);
 
   const warrantyType = [
     {
@@ -61,6 +91,7 @@ const AddProducts = () => {
       value: "No Warranty",
     },
   ];
+
   const formRefs = {
     basicInfo: useRef(null),
     description: useRef(null),
@@ -71,10 +102,12 @@ const AddProducts = () => {
   const scrollToSection = (sectionRef) => {
     sectionRef.current.scrollIntoView({ behavior: "smooth" });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = {
+      user: form.user,
       name: form.productName,
       price: form.price,
       quantity: form.quantity,
@@ -89,13 +122,87 @@ const AddProducts = () => {
 
     try {
       await addProduct(formData);
-      toast
+      toast.success("Product added successfully");
     } catch (error) {
       console.error(error);
-      // Handle error (e.g., show an error message)
+      toast.error(error.message);
     }
   };
-  console.log(form);
+
+  const renderAdditionalFields = () => {
+    if (productType === "electronics") {
+      return (
+        <>
+          <InputField
+            label="Processor"
+            placeholder="Processor"
+            value={form.Processor}
+            onChange={(e) => setForm({ ...form, Processor: e.target.value })}
+          />
+          <InputField
+            label="Memory"
+            placeholder="Memory"
+            value={form.Memory}
+            onChange={(e) => setForm({ ...form, Memory: e.target.value })}
+          />
+          <InputField
+            label="RAM"
+            placeholder="RAM"
+            value={form.Ram}
+            onChange={(e) => setForm({ ...form, Ram: e.target.value })}
+          />
+          <InputField
+            label="Display Type"
+            placeholder="Display Type"
+            value={form.DisplayType}
+            onChange={(e) => setForm({ ...form, DisplayType: e.target.value })}
+          />
+          <InputField
+            label="Model"
+            placeholder="Model"
+            value={form.Model}
+            onChange={(e) => setForm({ ...form, Model: e.target.value })}
+          />
+          <InputField
+            label="Camera Front (Megapixels)"
+            placeholder="Camera Front (Megapixels)"
+            value={form.CameraFront}
+            onChange={(e) => setForm({ ...form, CameraFront: e.target.value })}
+          />
+          <InputField
+            label="Battery"
+            placeholder="Battery"
+            value={form.Battery}
+            onChange={(e) => setForm({ ...form, Battery: e.target.value })}
+          />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <InputField
+            label="Size"
+            placeholder="Size"
+            value={form.Size}
+            onChange={(e) => setForm({ ...form, Size: e.target.value })}
+          />
+          <InputField
+            label="Material"
+            placeholder="Material"
+            value={form.Material}
+            onChange={(e) => setForm({ ...form, Material: e.target.value })}
+          />
+          <InputField
+            label="Color"
+            placeholder="Color"
+            value={form.Color}
+            onChange={(e) => setForm({ ...form, Color: e.target.value })}
+          />
+        </>
+      );
+    }
+  };
+
   return (
     <section className="mt-5 grid grid-cols-5 relative">
       <form className="col-span-4 w-11/12" onSubmit={handleSubmit}>
@@ -104,6 +211,15 @@ const AddProducts = () => {
             Basic Information
           </h1>
           <div className="mt-5">
+            <SelectField
+              label="Product Type"
+              options={[
+                { label: "Electronics", value: "electronics" },
+                { label: "Normal", value: "normal" },
+              ]}
+              value={productType}
+              onChange={(e) => setProductType(e.target.value)}
+            />
             <h1 className="text-xl text-primary">Product Image</h1>
             <p className="text-gray-500">
               Your product image is the first thing customers will see.
@@ -191,211 +307,138 @@ const AddProducts = () => {
             <h1 className="text-2xl font-bold tracking-wide">
               Product Information
             </h1>
-            <p className="text-sm text-gray-500 mb-4">
-              Having Accurate Product Information Raises Discoverilty
+            <p className="text-sm text-gray-500 mt-2">
+              Enter the basic details about your product
             </p>
-            <InputField
-              label="Product Name"
-              required
-              placeholder="Product Name"
-              value={form.productName}
-              onChange={(e) =>
-                setForm({ ...form, productName: e.target.value })
-              }
-            />
-            <div className="mt-4">
-              <SelectField
-                required
-                label="Product Category"
-                options={category.map((item) => ({
-                  label: item.name,
-                  value: item.name,
-                }))}
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
-              />
-            </div>
-            <div className="mt-4">
+            <div className="grid grid-cols-2 gap-5 mt-5">
               <InputField
-                label="Brand Name"
-                placeholder="Brand Name"
+                label="Product Name"
+                placeholder="Product Name"
+                value={form.productName}
+                onChange={(e) =>
+                  setForm({ ...form, productName: e.target.value })
+                }
+              />
+              <InputField
+                label="Brand"
+                placeholder="Brand"
                 value={form.brand}
                 onChange={(e) => setForm({ ...form, brand: e.target.value })}
               />
-            </div>
-          </div>
-        </section>
-        <section ref={formRefs.description}>
-          <h1 className="text-2xl font-bold tracking-wide mt-6">
-            Product Highlight
-          </h1>
-          <p className="text-sm text-gray-500">
-            Having Accurate Product Information Raises Discoverilty
-          </p>
-          <h1>
-            Description <span className="text-red-500">*</span>
-          </h1>
-          <div className="mt-4">
-            <ReactQuill
-              theme="snow"
-              value={form.description}
-              onChange={(value) => setForm({ ...form, description: value })}
-              style={{ height: "400px" }}
-            />
-          </div>
-        </section>
-        <section ref={formRefs.variants}>
-          <h1 className="text-xl tracking-wide mt-16 text-primary">
-            Variants, Price, Stock
-          </h1>
-          <div className="mt-5 ">
-            <h1 className="flex items-center gap-2">
-              Price & Stock <span className="text-red-500">*</span>{" "}
-              <span className="px-2  border border-sky-500 text-sky-500 text-sm rounded-full">
-                !
-              </span>
-            </h1>
-            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 items-center mt-5">
               <InputField
-                placeholder="BDT"
+                label="Price"
                 type="number"
-                label={"Price"}
-                required
+                placeholder="Price"
                 value={form.price}
                 onChange={(e) => setForm({ ...form, price: e.target.value })}
               />
               <InputField
-                placeholder="BDT"
-                type="number"
                 label="Promo Price"
+                type="number"
+                placeholder="Promo Price"
                 value={form.promoPrice}
                 onChange={(e) =>
                   setForm({ ...form, promoPrice: e.target.value })
                 }
               />
+            </div>
+            <div className="grid grid-cols-3 gap-5 mt-5">
               <InputField
-                type="number"
                 label="Quantity"
+                type="number"
                 placeholder="Quantity"
-                value={form.stock}
-                onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                value={form.quantity}
+                onChange={(e) => setForm({ ...form, quantity: e.target.value })}
               />
               <InputField
-                label="Seller Sku"
+                label="SKU"
+                placeholder="SKU"
                 value={form.sku}
                 onChange={(e) => setForm({ ...form, sku: e.target.value })}
-                placeholder={"Seller Sku"}
+              />
+              <SelectField
+                label="Category"
+                options={category}
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
               />
             </div>
           </div>
         </section>
-        <section className="mb-5" ref={formRefs.serviceWarranty}>
-          <div>
-            <h1 className="text-xl tracking-wide mt-10 text-primary ">
-              Service & Warranty
-            </h1>
-            <h2 className="font-bold text-md">Service</h2>
-            <p className="text-sm text-gray-500 mb-4">
-              Seller can opt to provide warranty for customers
-            </p>
-            <SelectField
-              label="Warranty Type"
-              required
-              value={form.warranty}
-              options={warrantyType}
-            />
-          </div>
-          <div className="mt-5">
-            <h2 className="font-bold text-md">Delivery</h2>
-            <p className="text-sm text-gray-500 mb-4">
-              Please Ensure you have entered of right package weight (kg) and
-              dimensions (cm) for accurate fee calculation.
-            </p>
-          </div>
-          <div>
+
+        <section ref={formRefs.description}>
+          <h1 className="text-2xl font-bold tracking-wider mt-10">
+            Description
+          </h1>
+          <ReactQuill
+            theme="snow"
+            value={form.description}
+            onChange={(value) => setForm({ ...form, description: value })}
+            placeholder="Write something amazing..."
+            className="mt-4 mb-8 h-60"
+          />
+        </section>
+
+        <section ref={formRefs.variants} className="pt-10">
+          <h1 className="text-2xl font-bold tracking-wider ">Variants</h1>
+          {renderAdditionalFields()}
+        </section>
+
+        <section ref={formRefs.serviceWarranty}>
+          <h1 className="text-2xl font-bold tracking-wider mt-10">
+            Service & Warranty
+          </h1>
+          <SelectField
+            label="Warranty Type"
+            options={warrantyType}
+            value={form.warranty}
+            onChange={(e) => setForm({ ...form, warranty: e.target.value })}
+          />
+          <div className="grid grid-cols-3 gap-5 mt-5">
             <InputField
-              label={"Package Weight (kg)"}
-              placeholder={"Package Weight (kg)"}
+              label="Package Weight (kg)"
+              placeholder="Package Weight"
               value={form.packageWeight}
               onChange={(e) =>
                 setForm({ ...form, packageWeight: e.target.value })
               }
             />
-          </div>
-          <div className="mt-5">
-            <h1>
-              Package Dimensions (cm) : <span>Length</span>{" "}
-              <span className="text-red-500">*</span> <span>Width</span>{" "}
-              <span className="text-red-500">*</span> <span>Height</span>{" "}
-              <span className="text-red-500">*</span>
-            </h1>
-            <div className="grid grid-cols-3 gap-4 mt-2">
-              <InputField
-                placeholder="Length"
-                value={form.packageDimensionLength}
-                onChange={(e) =>
-                  setForm({ ...form, packageDimensionLength: e.target.value })
-                }
-              />
-              <InputField
-                placeholder="Width"
-                value={form.packageDimensionWidth}
-                onChange={(e) =>
-                  setForm({ ...form, packageDimensionWidth: e.target.value })
-                }
-              />
-              <InputField
-                placeholder="Height"
-                value={form.packageDimensionHeight}
-                onChange={(e) =>
-                  setForm({ ...form, packageDimensionHeight: e.target.value })
-                }
-              />
-            </div>
+            <InputField
+              label="Length (cm)"
+              placeholder="Length"
+              value={form.packageDimensionLength}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  packageDimensionLength: e.target.value,
+                })
+              }
+            />
+            <InputField
+              label="Width (cm)"
+              placeholder="Width"
+              value={form.packageDimensionWidth}
+              onChange={(e) =>
+                setForm({ ...form, packageDimensionWidth: e.target.value })
+              }
+            />
+            <InputField
+              label="Height (cm)"
+              placeholder="Height"
+              value={form.packageDimensionHeight}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  packageDimensionHeight: e.target.value,
+                })
+              }
+            />
           </div>
         </section>
-        <PrimaryButton value="Add Products" />
+        <div className="mt-4">
+          <PrimaryButton type="submit" value="Add Product" />
+        </div>
       </form>
-      <section className="sticky top-24 h-72 cursor-pointer">
-        <ul className="steps steps-vertical">
-          <li
-            className={"step " + (activeStep === 0 ? "step-primary" : "")}
-            onClick={() => {
-              setActiveStep(0);
-              scrollToSection(formRefs.basicInfo);
-            }}
-          >
-            Basic Information
-          </li>
-          <li
-            className={"step " + (activeStep === 1 ? "step-primary" : "")}
-            onClick={() => {
-              setActiveStep(1);
-              scrollToSection(formRefs.description);
-            }}
-          >
-            Description
-          </li>
-          <li
-            className={"step " + (activeStep === 2 ? "step-primary" : "")}
-            onClick={() => {
-              setActiveStep(2);
-              scrollToSection(formRefs.variants);
-            }}
-          >
-            Variants, Price, Stock
-          </li>
-          <li
-            className={"step " + (activeStep === 3 ? "step-primary" : "")}
-            onClick={() => {
-              setActiveStep(3);
-              scrollToSection(formRefs.serviceWarranty);
-            }}
-          >
-            Service & Warranty
-          </li>
-        </ul>
-      </section>
     </section>
   );
 };
