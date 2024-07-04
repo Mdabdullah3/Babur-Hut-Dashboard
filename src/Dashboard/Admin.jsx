@@ -9,7 +9,7 @@ import RecentOrder from "../components/Dashboard/RecentOrder";
 const Admin = () => {
   return (
     <section>
-      <div className="grid grid-cols-4 gap-5 rounded-xl items-center">
+      <div className="lg:grid grid-cols-4 gap-5 rounded-xl items-center">
         <div>
           <div className="mt-4 shadow-lg pl-2 h-64">
             <h1 className="text-gray-500 text-lg flex items-center font-bold pt-3">
@@ -19,7 +19,7 @@ const Admin = () => {
               </span>
             </h1>
             <h2 className="text-md text-gray-500">Expected Earning</h2>
-            <div className="-mt-10">
+            <div className="-mt-10 w-80 lg:w-auto">
               <PieChart />
             </div>
           </div>
@@ -54,7 +54,7 @@ const Admin = () => {
               </span>
             </h1>
             <h2 className="text-md text-gray-500">Average Daily Sale</h2>
-            <div className="mt-6">
+            <div className="mt-6 w-72 lg:w-auto">
               <BarChart />
             </div>
           </div>
