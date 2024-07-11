@@ -4,6 +4,65 @@ import InputField from "../../components/common/InputField";
 import PrimaryButton from "../../components/common/PrimaryButton";
 
 const AddRole = () => {
+  const [selectedField, setSelectedField] = useState("");
+  const menu = [
+    {
+      name: "Vendor",
+      status: false,
+    },
+    {
+      name: "Customer",
+      status: false,
+    },
+    {
+      name: "Categories",
+      status: false,
+    },
+    {
+      name: "Products",
+      status: false,
+    },
+    {
+      name: "Orders & Reviews",
+      status: false,
+    },
+    {
+      name: "Vouchers",
+      status: false,
+    },
+    {
+      name: "Ad Manager",
+      status: false,
+    },
+    {
+      name: "Role Manager",
+      status: false,
+    },
+    {
+      name: "Message Center",
+      status: false,
+    },
+    {
+      name: "Finance",
+      status: false,
+    },
+    {
+      name: "Shipment",
+      status: false,
+    },
+    {
+      name: "Support",
+      status: false,
+    },
+    {
+      name: "Event Manager",
+      status: false,
+    },
+    {
+      name: "Email & Message",
+      status: false,
+    },
+  ];
   const [form, setForm] = useState({
     role: "",
     email: "",
@@ -49,8 +108,35 @@ const AddRole = () => {
             required
           />
         </div>
-
-        <PrimaryButton value="Add New Voucher" />
+        <div className="my-4">
+          <h1>Allow Permission</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+            {menu.map((item) => (
+              <div key={item.name} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={item.name}
+                  name={item.name}
+                  value={item.name}
+                  onChange={(e) => {
+                    const newMenu = [...menu];
+                    newMenu.map((menu) => {
+                      if (menu.name === e.target.name) {
+                        menu.status = e.target.checked;
+                      }
+                      return menu;
+                    });
+                    setForm({ ...form, menu: newMenu });
+                  }}
+                />
+                <label htmlFor={item.name} className="ml-2">
+                  {item.name}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+        <PrimaryButton value="Add Role Manager" />
       </form>
     </section>
   );
