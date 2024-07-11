@@ -148,7 +148,7 @@ const menu = [
     {
         name: "Role Manager",
         layout: "/admin",
-        icon: <BiSupport className="h-6 w-6" />,
+        icon: <FaUser className="h-6 w-6" />,
         path: "role-manager",
         navMenu: true,
         component: <RoleManager />
