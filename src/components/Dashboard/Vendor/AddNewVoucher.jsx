@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import InputField from "../../common/InputField";
 import PrimaryButton from "../../common/PrimaryButton";
+import SelectField from "../../common/SelectField";
 const AddNewVoucher = () => {
   const [form, setForm] = useState({
     voucherId: "",
@@ -44,11 +45,16 @@ const AddNewVoucher = () => {
             onChange={(e) => setForm({ ...form, enddate: e.target.value })}
             required
           />
-          <InputField
+          <SelectField
             label="Status"
+            id="status"
+            name="status"
             value={form.status}
-            placeholder="Enter Status"
             onChange={(e) => setForm({ ...form, status: e.target.value })}
+            options={[
+              { value: "Active", label: "Active" },
+              { value: "Expired", label: "Expired" },
+            ]}
             required
           />
         </div>

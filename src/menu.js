@@ -19,6 +19,8 @@ import AllOrder from "./Dashboard/order/AllOrder";
 import VoucherAdminPanel from "./Dashboard/Voucher";
 import SingleVendor from "./Dashboard/vendor/SingleVendor";
 import AddNewVoucher from "./components/Dashboard/Vendor/AddNewVoucher";
+import RoleManager from "./Dashboard/RoleManager/RoleManager";
+import AddRole from "./Dashboard/RoleManager/AddRole";
 const menu = [
     {
         name: "Dashboard",
@@ -143,6 +145,20 @@ const menu = [
         path: "message-center",
         navMenu: true,
     },
+    {
+        name: "Role Manager",
+        layout: "/admin",
+        icon: <BiSupport className="h-6 w-6" />,
+        path: "role-manager",
+        navMenu: true,
+        component: <RoleManager />
+    },
+    {
+        name: "Add Role Manager",
+        layout: "/admin",
+        path: "add-role",
+        component: <AddRole />
+    }
 
 ];
 export default menu;
