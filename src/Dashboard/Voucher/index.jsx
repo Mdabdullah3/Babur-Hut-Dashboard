@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { FiPlus, FiEdit, FiTrash } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import "tailwindcss/tailwind.css";
 
 const VoucherAdminPanel = () => {
@@ -24,10 +25,6 @@ const VoucherAdminPanel = () => {
 
   const header = ["Code", "Discount", "Expiry Date", "Status", "Action"];
 
-  const handleAddVoucher = () => {
-    // Add voucher logic
-  };
-
   const handleEditVoucher = (id) => {
     // Edit voucher logic
   };
@@ -42,12 +39,11 @@ const VoucherAdminPanel = () => {
       <div className="flex-1 p-10">
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-3xl font-bold">Vouchers</h1>
-          <button
-            onClick={handleAddVoucher}
-            className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
-          >
-            <FiPlus className="mr-2" /> Add Voucher
-          </button>
+          <Link to="/admin/add-voucher">
+            <button className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600">
+              <FiPlus className="mr-2" /> Add Voucher
+            </button>
+          </Link>
         </div>
 
         <table className="min-w-full bg-white border border-gray-200">

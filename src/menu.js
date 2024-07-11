@@ -18,6 +18,7 @@ import Products from "./Dashboard/products/Products"
 import AllOrder from "./Dashboard/order/AllOrder";
 import VoucherAdminPanel from "./Dashboard/Voucher";
 import SingleVendor from "./Dashboard/vendor/SingleVendor";
+import AddNewVoucher from "./components/Dashboard/Vendor/AddNewVoucher";
 const menu = [
     {
         name: "Dashboard",
@@ -114,6 +115,12 @@ const menu = [
         navMenu: true,
         icon: <BsTicketDetailed className="h-6 w-6" />,
         component: <VoucherAdminPanel />
+    },
+    {
+        name: "Add Voucher",
+        layout: "/admin",
+        path: "add-voucher",
+        component: <AddNewVoucher />
     },
     {
         name: "Event Manager",
