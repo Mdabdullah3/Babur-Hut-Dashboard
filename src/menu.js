@@ -17,6 +17,7 @@ import AddProduct from './Dashboard/products/AddProducts'
 import Products from "./Dashboard/products/Products"
 import AllOrder from "./Dashboard/order/AllOrder";
 import VoucherAdminPanel from "./Dashboard/Voucher";
+import SingleVendor from "./Dashboard/vendor/SingleVendor";
 const menu = [
     {
         name: "Dashboard",
@@ -33,6 +34,12 @@ const menu = [
         icon: <FaUser className="h-6 w-6" />,
         navMenu: true,
         component: <Vendor />
+    },
+    {
+        name: "Single Vendor",
+        layout: "/admin",
+        path: "vendor/:id",
+        component: <SingleVendor />
     },
     {
         name: "Customer",
