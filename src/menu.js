@@ -114,7 +114,7 @@ const menu = [
         component: <AdManager />
     },
     {
-        name: "Create a Ad",
+        name: "Create Ad",
         layout: "/admin",
         path: "create-ad",
         component: <CreateAd />

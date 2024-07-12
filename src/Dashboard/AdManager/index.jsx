@@ -10,6 +10,7 @@ const AdManager = () => {
       price: "432",
       image: "",
       maxProduct: "10",
+      status: "active",
     },
     {
       id: 1,
@@ -18,10 +19,18 @@ const AdManager = () => {
       price: "432",
       image: "",
       maxProduct: "10",
+      status: "active",
     },
   ];
 
-  const header = ["Package Name", "Duration", "Price", "Max Product", "Action"];
+  const header = [
+    "Package Name",
+    "Duration",
+    "Price",
+    "Max Product",
+    "Status",
+    "Action",
+  ];
 
   const handleEditPackage = (id) => {
     // Edit voucher logic
@@ -32,10 +41,10 @@ const AdManager = () => {
     <div className="flex h-screen">
       <div className="flex-1 p-10">
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-3xl font-bold">Vouchers</h1>
-          <Link to="/admin/add-voucher">
+          <h1 className="text-3xl font-bold">Ad Manager</h1>
+          <Link to="/admin/create-ad">
             <button className="flex items-center px-4 py-2 bg-primary text-white rounded-lg shadow-md hover:bg-primary/80">
-              <FiPlus className="mr-2" /> Add Voucher
+              <FiPlus className="mr-2" /> Create Ad
             </button>
           </Link>
         </div>
@@ -55,10 +64,11 @@ const AdManager = () => {
           <tbody>
             {AdManager?.map((ad) => (
               <tr key={ad.id} className="border-b border-gray-200">
-                <td className="py-4 px-6">{ad.name}</td>
+                <td className="py-4 px-6">{ad.packageName}</td>
                 <td className="py-4 px-6">{ad.duration}</td>
                 <td className="py-4 px-6">{ad.price}</td>
                 <td className="py-4 px-6">{ad.maxProduct}</td>
+                <td className="py-4 px-6">{ad.status}</td>
                 <td className="py-4 px-6 flex space-x-2">
                   <button
                     onClick={() => handleEditPackage(ad.id)}
