@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import InputSearch from "../../components/common/InputSearch";
 import PrimaryButton from "../../components/common/PrimaryButton";

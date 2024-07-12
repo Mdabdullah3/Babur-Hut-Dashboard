@@ -1,3 +1,4 @@
+import React from "react";
 import { PiDressLight } from "react-icons/pi";
 import { GiLipstick } from "react-icons/gi";
 import { GiWatch } from "react-icons/gi";

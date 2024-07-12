@@ -21,6 +21,9 @@ import SingleVendor from "./Dashboard/vendor/SingleVendor";
 import AddNewVoucher from "./components/Dashboard/Vendor/AddNewVoucher";
 import RoleManager from "./Dashboard/RoleManager/RoleManager";
 import AddRole from "./Dashboard/RoleManager/AddRole";
+import AdManager from "./Dashboard/AdManager/index";
+import CreateAd from "./Dashboard/AdManager/CreateAd";
+
 const menu = [
     {
         name: "Dashboard",
@@ -103,11 +106,18 @@ const menu = [
         icon: <ImLocation className="h-6 w-6" />,
     },
     {
-        name: "Ads Manager",
+        name: "Ad Manager",
         layout: "/admin",
         path: "ads-manager",
         navMenu: true,
         icon: <IoIosRocket className="h-6 w-6" />,
+        component: <AdManager />
+    },
+    {
+        name: "Create a Ad",
+        layout: "/admin",
+        path: "create-ad",
+        component: <CreateAd />
     },
 
     {

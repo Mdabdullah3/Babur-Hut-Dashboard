@@ -1,4 +1,4 @@
-
+import React from "react";
 const FileUpload = ({ label, name, file, setFile }) => {
 
   const handleFileChange = (event) => {

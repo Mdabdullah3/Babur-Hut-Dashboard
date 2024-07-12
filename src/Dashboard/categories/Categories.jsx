@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { categoriesData } from "../../utils/constant";
 import InputSearch from "../../components/common/InputSearch";
 import TableHead from "../../components/common/TableHead";
