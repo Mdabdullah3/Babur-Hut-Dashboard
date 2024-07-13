@@ -1,11 +1,11 @@
-"use client";
 import React, { useState } from "react";
-import InputField from "../../common/InputField";
-import PrimaryButton from "../../common/PrimaryButton";
-import SelectField from "../../common/SelectField";
+import InputField from "../../components/common/InputField";
+import SelectField from "../../components/common/SelectField";
+import PrimaryButton from "../../components/common/PrimaryButton";
+
 const AddNewVoucher = () => {
   const [form, setForm] = useState({
-    voucherId: "",
+    voucherCode: "",
     strdate: "",
     enddate: "",
     discount: "",
@@ -16,9 +16,9 @@ const AddNewVoucher = () => {
       <form action="">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <InputField
-            label="Voucher ID"
+            label="Voucher Code"
             value={form.voucherId}
-            placeholder="Enter Voucher ID"
+            placeholder="Enter Voucher Code"
             onChange={(e) => setForm({ ...form, voucherId: e.target.value })}
             required
           />

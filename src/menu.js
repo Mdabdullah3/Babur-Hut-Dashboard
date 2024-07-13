@@ -18,11 +18,12 @@ import Products from "./Dashboard/products/Products"
 import AllOrder from "./Dashboard/order/AllOrder";
 import VoucherAdminPanel from "./Dashboard/Voucher";
 import SingleVendor from "./Dashboard/vendor/SingleVendor";
-import AddNewVoucher from "./components/Dashboard/Vendor/AddNewVoucher";
 import RoleManager from "./Dashboard/RoleManager/RoleManager";
 import AddRole from "./Dashboard/RoleManager/AddRole";
 import AdManager from "./Dashboard/AdManager/index";
 import CreateAd from "./Dashboard/AdManager/CreateAd";
+import Finance from "./Dashboard/Finance/index";
+import AddNewVoucher from "./Dashboard/Voucher/AddVoucher";
 
 const menu = [
     {
@@ -97,6 +98,7 @@ const menu = [
         path: "finance",
         navMenu: true,
         icon: <FaMoneyCheck className="h-6 w-6" />,
+        component: <Finance />
     },
     {
         name: "Shipment",

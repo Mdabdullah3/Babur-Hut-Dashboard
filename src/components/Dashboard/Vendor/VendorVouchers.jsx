@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import InputSearch from "../../common/InputSearch";
 import TableHead from "../../common/TableHead";
-import AddNewVoucher from "./AddNewVoucher";
 import { vendorVouchers } from "../../../utils/constant";
 const VendorVouchers = () => {
   const [activeMenu, setActiveMenu] = useState(1);
@@ -43,7 +42,7 @@ const VendorVouchers = () => {
   ];
 
   const header = [
-    "Voucher ID",
+    "Voucher Code",
     "Shipped",
     "Discount",
     "Date",
@@ -116,7 +115,7 @@ const VendorVouchers = () => {
         </>
       ) : (
         <>
-          <AddNewVoucher />{" "}
+          <h1 className="text-center mt-10">No Vouchers Found</h1>
         </>
       )}
     </section>

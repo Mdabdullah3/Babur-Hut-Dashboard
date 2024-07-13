@@ -21,7 +21,41 @@ export const bannerImage = [
         img: "https://maraviyainfotech.com/projects/carrot/carrot-v2/carrot-html/assets/img/banner/banner.jpg"
     }
 ]
-
+export const financeData = [
+    {
+        id: 1,
+        orderId: "dff123",
+        orderCost: 500,
+        name: "John Doe",
+        phone: "01723243243",
+        email: "NwYkA@example.com",
+        profit: 34,
+        brand: "Samsung",
+        date: "2023-05-01",
+    },
+    {
+        id: 2,
+        orderId: "dff123",
+        orderCost: 500,
+        name: "John Doe",
+        phone: "01723243243",
+        email: "NwYkA@example.com",
+        profit: 34,
+        brand: "Samsung",
+        date: "2023-05-01",
+    },
+    {
+        id: 3,
+        orderId: "dff123",
+        orderCost: 500,
+        name: "John Doe",
+        phone: "01723243243",
+        email: "NwYkA@example.com",
+        profit: 34,
+        brand: "Samsung",
+        date: "2023-05-01",
+    },
+];
 export const category = [
     {
         id: 1,

@@ -40,7 +40,7 @@ const VoucherAdminPanel = () => {
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-3xl font-bold">Vouchers</h1>
           <Link to="/admin/add-voucher">
-            <button className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600">
+            <button className="flex items-center px-4 py-2 bg-primary text-white rounded-lg shadow-md hover:bg-primary/60">
               <FiPlus className="mr-2" /> Add Voucher
             </button>
           </Link>
