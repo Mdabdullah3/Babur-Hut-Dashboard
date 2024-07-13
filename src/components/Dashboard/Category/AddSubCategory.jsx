@@ -36,7 +36,9 @@ const AddSubCategory = () => {
     commission: "",
     vat: "",
   });
-  console.log(categories);
+
+  const categoriesData = [...categories, ...subCategories];
+  console.log(categoriesData);
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addSubCategory(form);
@@ -49,7 +51,11 @@ const AddSubCategory = () => {
     >
       <SelectField
         label="Category"
-        options={categories}
+        options={categoriesData.map((category) => ({
+          key: category._id,
+          label: category.name,
+          value: category._id,
+        }))}
         onChange={(e) => setForm({ ...form, category: e.target.value })}
         value={form.category}
         required
@@ -63,13 +69,11 @@ const AddSubCategory = () => {
       />
       <InputField
         label="Shipping Charge"
-        placeholder="Shipping Charge"
-        required
+        placeholder="Shippingharge"
         value={form.shippingCharge}
         onChange={(e) => setForm({ ...form, shippingCharge: e.target.value })}
       />
       <SelectField
-        required
         label="Status"
         options={status}
         onChange={(e) => setForm({ ...form, status: e.target.value })}
@@ -80,14 +84,12 @@ const AddSubCategory = () => {
         value={form.commission}
         onChange={(e) => setForm({ ...form, commission: e.target.value })}
         placeholder={"Category Commission"}
-        required
       />
       <InputField
         label="Category VAT"
         value={form.vat}
         onChange={(e) => setForm({ ...form, vat: e.target.value })}
         placeholder={"Category VAT"}
-        required
       />
       <PrimaryButton value={loading ? "Adding..." : "Add Sub Category"} />
     </form>
