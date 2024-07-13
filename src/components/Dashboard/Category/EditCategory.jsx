@@ -1,27 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../../common/InputField";
 import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
 import useCategoryStore from "../../../store/categoryStore";
+import { useParams } from "react-router-dom";
 
-const AddMainCategory = () => {
-  const { addCategory, loading } = useCategoryStore();
+const EditCategory = () => {
+  const { id } = useParams();
+  const { fetchCategoryById, category, updateCategory, loading } =
+    useCategoryStore();
   const status = [
     { id: 1, label: "Active", value: "active" },
     { id: 2, label: "Inactive", value: "inactive" },
   ];
+  useEffect(() => {
+    fetchCategoryById(id);
+  }, [fetchCategoryById]);
 
   const [form, setForm] = useState({
-    name: "",
-    shippingCharge: "",
-    status: "",
-    commission: "",
-    vat: "",
+    name: category?.name || "",
+    shippingCharge: category?.shippingCharge || "",
+    status: category?.status || "",
+    commission: category?.commission || "",
+    vat: category?.vat || "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addCategory(form);
+    updateCategory(id, form);
   };
 
   return (
@@ -64,9 +70,9 @@ const AddMainCategory = () => {
         required
       />
       <div></div>
-      <PrimaryButton value={loading ? "Adding..": "Add Category"} />
+      <PrimaryButton value={loading ? "Updating..." : "Update Category"} />
     </form>
   );
 };
 
-export default AddMainCategory;
+export default EditCategory;

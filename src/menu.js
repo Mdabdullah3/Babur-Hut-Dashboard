@@ -24,6 +24,8 @@ import AdManager from "./Dashboard/AdManager/index";
 import CreateAd from "./Dashboard/AdManager/CreateAd";
 import Finance from "./Dashboard/Finance/index";
 import AddNewVoucher from "./Dashboard/Voucher/AddVoucher";
+import EditCategory from "./components/Dashboard/Category/EditCategory";
+import EditSubCategory from "./components/Dashboard/Category/EditSubCategory";
 
 const menu = [
     {
@@ -69,6 +71,18 @@ const menu = [
         navMenu: true,
         icon: <BiSolidCategoryAlt className="h-6 w-6" />,
         component: <Categories />
+    },
+    {
+        name: "Update Category",
+        layout: "/admin",
+        path: "edit-category/:id",
+        component: <EditCategory />
+    },
+    {
+        name: "Update Sub Category",
+        layout: "/admin",
+        path: "edit-sub-category/:id",
+        component: <EditSubCategory />
     },
     {
         name: "Products",

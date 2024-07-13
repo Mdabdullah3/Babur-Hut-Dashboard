@@ -3,19 +3,24 @@ import InputField from "../../common/InputField";
 import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
 import useCategoryStore from "../../../store/categoryStore";
-const AddSubCategory = () => {
+import { useParams } from "react-router-dom";
+const EditSubCategory = () => {
+  const { id } = useParams();
   const {
+    updateSubCategory,
+    subCategory,
+    loading,
     categories,
     subCategories,
+    fetchSubCategoryById,
     fetchCategories,
     fetchSubCategories,
-    addSubCategory,
-    loading,
   } = useCategoryStore();
   useEffect(() => {
     fetchCategories();
     fetchSubCategories();
-  }, [fetchCategories, fetchSubCategories]);
+    fetchSubCategoryById(id);
+  }, [fetchCategories, fetchSubCategories, fetchSubCategoryById, id]);
   const status = [
     {
       id: 1,
@@ -37,10 +42,9 @@ const AddSubCategory = () => {
     vat: "",
   });
 
-  const categoriesData = [...categories, ...subCategories];
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await addSubCategory(form);
+    await updateSubCategory(id, form);
   };
   return (
     <form
@@ -49,7 +53,7 @@ const AddSubCategory = () => {
     >
       <SelectField
         label="Category"
-        options={categoriesData.map((category) => ({
+        options={subCategory?.map((category) => ({
           key: category._id,
           label: category.name,
           value: category._id,
@@ -94,4 +98,4 @@ const AddSubCategory = () => {
   );
 };
 
-export default AddSubCategory;
+export default EditSubCategory;
