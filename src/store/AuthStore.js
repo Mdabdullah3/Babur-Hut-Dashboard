@@ -47,14 +47,14 @@ const useUserStore = create((set, get) => ({
             if (response.status === 200) {
                 await get().fetchUser();
                 toast.success('Login successful');
-                router.push('/admin');
+                router('/admin');
                 console.log(response)
             } else {
                 toast.error('Login failed. Please try again.');
                 set({ loading: false });
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Login failed. Please try again.');
+            toast.error(error.response?.data?.message);
             set({ loading: false });
         }
     },
