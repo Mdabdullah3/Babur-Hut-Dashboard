@@ -2,34 +2,39 @@ import React, { useState } from "react";
 import InputField from "../../common/InputField";
 import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
+import useCategoryStore from "../../../store/categoryStore";
+
 const AddMainCategory = () => {
+  const { addCategory, loading } = useCategoryStore();
   const status = [
-    {
-      id: 1,
-      label: "Active",
-      value: "active",
-    },
-    {
-      id: 2,
-      label: "Inactive",
-      value: "inactive",
-    },
+    { id: 1, label: "Active", value: "active" },
+    { id: 2, label: "Inactive", value: "inactive" },
   ];
+
   const [form, setForm] = useState({
-    categoryName: "",
+    name: "",
     shippingCharge: "",
     status: "",
-    categoryCommission: "",
-    categoryVat: "",
+    commission: "",
+    vat: "",
   });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addCategory(form);
+  };
+
   return (
-    <form className="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <form
+      className="grid grid-cols-1 md:grid-cols-2 gap-5"
+      onSubmit={handleSubmit}
+    >
       <InputField
         label="Category Name"
         placeholder="Category Name"
         required
-        value={form.categoryName}
-        onChange={(e) => setForm({ ...form, categoryName: e.target.value })}
+        value={form.name}
+        onChange={(e) => setForm({ ...form, name: e.target.value })}
       />
       <InputField
         label="Shipping Charge"
@@ -46,18 +51,16 @@ const AddMainCategory = () => {
       />
       <InputField
         label="Category Commission"
-        value={form.categoryCommission}
-        onChange={(e) =>
-          setForm({ ...form, categoryCommission: e.target.value })
-        }
-        placeholder={"Category Commission"}
+        value={form.commission}
+        onChange={(e) => setForm({ ...form, commission: e.target.value })}
+        placeholder="Category Commission"
         required
       />
       <InputField
         label="Category VAT"
-        value={form.categoryVat}
-        onChange={(e) => setForm({ ...form, categoryVat: e.target.value })}
-        placeholder={"Category VAT"}
+        value={form.vat}
+        onChange={(e) => setForm({ ...form, vat: e.target.value })}
+        placeholder="Category VAT"
         required
       />
       <div></div>

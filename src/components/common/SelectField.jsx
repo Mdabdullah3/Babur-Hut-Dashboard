@@ -16,7 +16,7 @@ const SelectField = ({
         htmlFor={id}
         className="block text-gray-600 font-semibold  tracking-wider"
       >
-        {label} <span className="text-red-500">{required && "*"}</span>
+        {label} <span className="text-red-500">{label && required && "*"}</span>
       </label>
       <select
         className="select select-bordered my-2 tracking-wider w-full focus:outline-none bg-transparent text-[16px]"
@@ -24,11 +24,11 @@ const SelectField = ({
         name={name}
         value={value}
         onChange={onChange}
-        placeholder={options[0].label}
+        placeholder={placeholder}
         required={required}
       >
         <option className=" bg-transparent w-full" value="">
-          {placeholder || options[0].label}
+          {placeholder || "Select an option"}
         </option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
