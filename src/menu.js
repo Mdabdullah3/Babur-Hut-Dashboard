@@ -26,6 +26,8 @@ import Finance from "./Dashboard/Finance/index";
 import AddNewVoucher from "./Dashboard/Voucher/AddVoucher";
 import EditCategory from "./components/Dashboard/Category/EditCategory";
 import EditSubCategory from "./components/Dashboard/Category/EditSubCategory";
+import Shipping from "./Dashboard/Shipment";
+import CreateShippingAddress from "./Dashboard/Shipment/CreateShippingAddress";
 
 const menu = [
     {
@@ -120,6 +122,13 @@ const menu = [
         path: "shipment",
         navMenu: true,
         icon: <ImLocation className="h-6 w-6" />,
+        component: <Shipping />
+    },
+    {
+        name: "Create Shipping",
+        layout: "/admin",
+        path: "create-shipping",
+        component: <CreateShippingAddress />
     },
     {
         name: "Ad Manager",

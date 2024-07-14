@@ -23,7 +23,7 @@ const AddMainCategory = () => {
     e.preventDefault();
     addCategory(form);
   };
-
+  console.log(loading);
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"
@@ -64,7 +64,7 @@ const AddMainCategory = () => {
         required
       />
       <div></div>
-      <PrimaryButton value={loading ? "Adding..": "Add Category"} />
+      <PrimaryButton value={"Add Category"} />
     </form>
   );
 };

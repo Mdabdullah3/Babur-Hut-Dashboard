@@ -10,7 +10,6 @@ const AddSubCategory = () => {
     fetchCategories,
     fetchSubCategories,
     addSubCategory,
-    loading,
   } = useCategoryStore();
   useEffect(() => {
     fetchCategories();
@@ -89,7 +88,7 @@ const AddSubCategory = () => {
         onChange={(e) => setForm({ ...form, vat: e.target.value })}
         placeholder={"Category VAT"}
       />
-      <PrimaryButton value={loading ? "Adding..." : "Add Sub Category"} />
+      <PrimaryButton value={"Add Sub Category"} />
     </form>
   );
 };
