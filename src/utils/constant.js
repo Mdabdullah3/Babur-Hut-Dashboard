@@ -25,6 +25,7 @@ export const financeData = [
     {
         id: 1,
         orderId: "dff123",
+        userId: "4313234241431sdfsd",
         orderCost: 500,
         name: "John Doe",
         phone: "01723243243",
@@ -56,6 +57,32 @@ export const financeData = [
         date: "2023-05-01",
     },
 ];
+export const payablePayment = [
+    {
+        id: 1,
+        vendorId: "4313234241431sdfsd",
+        totalEarning: 500,
+        totalOrder: 5,
+        profit: 200,
+        vendorName: "John Doe",
+        phone: "01723243243",
+        email: "NwYkA@example.com",
+        date: "2023-05-01",
+    }
+]
+export const paymentRequest = [
+    {
+        id: 1,
+        orderId: "dff123",
+        vendorId: "4313234241431sdfsd",
+        paymentRequest: 200,
+        name: "John Doe",
+        phone: "01723243243",
+        email: "NwYkA@example.com",
+        brand: "Samsung",
+        date: "2023-05-01",
+    }
+]
 export const category = [
     {
         id: 1,

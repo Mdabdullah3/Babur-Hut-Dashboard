@@ -17,7 +17,9 @@ const CreateAd = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleAddPackage = () => {
+  const handleAddPackage = (e) => {
+    e.preventDefault();
+    console.log(form);
     setForm({
       packageName: "",
       duration: "",
@@ -35,7 +37,7 @@ const CreateAd = () => {
   return (
     <div className="flex h-screen">
       <section className="flex-1 p-10">
-        <form onClick={handleAddPackage} className="mb-5">
+        <form onSubmit={handleAddPackage} className="mb-5">
           <InputField
             label="Package Name"
             id="packageName"
