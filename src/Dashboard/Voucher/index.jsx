@@ -1,38 +1,23 @@
-import React from "react";
-import { useState } from "react";
-import { FiPlus, FiEdit, FiTrash } from "react-icons/fi";
+import React, { useEffect } from "react";
+import { FiPlus, FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "tailwindcss/tailwind.css";
+import useVoucherStore from "../../store/useVoucherStore";
 
 const VoucherAdminPanel = () => {
-  const [vouchers, setVouchers] = useState([
-    // Sample data
-    {
-      id: 1,
-      code: "SAVE20",
-      discount: "20%",
-      expiry: "2024-12-31",
-      status: "Active",
-    },
-    {
-      id: 2,
-      code: "WELCOME10",
-      discount: "10%",
-      expiry: "2024-06-30",
-      status: "Expired",
-    },
-  ]);
-
-  const header = ["Code", "Discount", "Expiry Date", "Status", "Action"];
-
-  const handleEditVoucher = (id) => {
-    // Edit voucher logic
-  };
-
-  const handleDeleteVoucher = (id) => {
-    // Delete voucher logic
-    setVouchers(vouchers.filter((voucher) => voucher.id !== id));
-  };
+  const { vouchers, fetchVouchers } = useVoucherStore();
+  useEffect(() => {
+    fetchVouchers();
+  }, [fetchVouchers]);
+  console.log(vouchers);
+  const header = [
+    "Code",
+    "Discount",
+    "Start Date",
+    "Expiry Date",
+    "Status",
+    "Action",
+  ];
 
   return (
     <div className="flex h-screen">
@@ -61,24 +46,18 @@ const VoucherAdminPanel = () => {
           </thead>
           <tbody>
             {vouchers.map((voucher) => (
-              <tr key={voucher.id} className="border-b border-gray-200">
-                <td className="py-4 px-6">{voucher.code}</td>
+              <tr key={voucher._id} className="border-b border-gray-200">
+                <td className="py-4 px-6">{voucher.voucherCode}</td>
                 <td className="py-4 px-6">{voucher.discount}</td>
-                <td className="py-4 px-6">{voucher.expiry}</td>
+                <td className="py-4 px-6">{voucher.startDate}</td>
+                <td className="py-4 px-6">{voucher.endDate}</td>
                 <td className="py-4 px-6">{voucher.status}</td>
                 <td className="py-4 px-6 flex space-x-2">
-                  <button
-                    onClick={() => handleEditVoucher(voucher.id)}
-                    className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
-                  >
-                    <FiEdit className="mr-1" /> Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteVoucher(voucher.id)}
-                    className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                  >
-                    <FiTrash className="mr-1" /> Delete
-                  </button>
+                  <Link to={`/admin/edit-voucher/${voucher.id}`}>
+                    <button className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
+                      <FiEdit className="mr-1" /> Edit
+                    </button>
+                  </Link>
                 </td>
               </tr>
             ))}

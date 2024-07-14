@@ -29,7 +29,6 @@ const EditCategory = () => {
     e.preventDefault();
     updateCategory(id, form);
   };
-  console.log(category);
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"

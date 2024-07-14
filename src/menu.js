@@ -28,6 +28,7 @@ import EditCategory from "./components/Dashboard/Category/EditCategory";
 import EditSubCategory from "./components/Dashboard/Category/EditSubCategory";
 import Shipping from "./Dashboard/Shipment";
 import CreateShippingAddress from "./Dashboard/Shipment/CreateShippingAddress";
+import EditVoucher from "./Dashboard/Voucher/EditVoucher";
 
 const menu = [
     {
@@ -158,6 +159,12 @@ const menu = [
         layout: "/admin",
         path: "add-voucher",
         component: <AddNewVoucher />
+    },
+    {
+       name: "Edit Voucher",
+       layout: "/admin",
+       path: "edit-voucher/:id",
+       component: <EditVoucher />
     },
     {
         name: "Event Manager",

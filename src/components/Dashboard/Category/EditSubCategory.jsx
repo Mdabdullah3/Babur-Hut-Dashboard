@@ -21,6 +21,8 @@ const EditSubCategory = () => {
     fetchSubCategories();
     fetchSubCategoryById(id);
   }, [fetchCategories, fetchSubCategories, fetchSubCategoryById, id]);
+
+  const categoriesData = [...categories, ...subCategories];
   const status = [
     {
       id: 1,
@@ -34,12 +36,12 @@ const EditSubCategory = () => {
     },
   ];
   const [form, setForm] = useState({
-    category: "",
-    name: "",
-    shippingCharge: "",
-    status: "",
-    commission: "",
-    vat: "",
+    category: subCategory?.category || "",
+    name: subCategory?.name || "",
+    shippingCharge: subCategory?.shippingCharge || "",
+    status: subCategory?.status || "",
+    commission: subCategory?.commission || "",
+    vat: subCategory?.vat || "",
   });
 
   const handleSubmit = async (e) => {
@@ -53,7 +55,7 @@ const EditSubCategory = () => {
     >
       <SelectField
         label="Category"
-        options={subCategory?.map((category) => ({
+        options={categoriesData?.map((category) => ({
           key: category._id,
           label: category.name,
           value: category._id,
