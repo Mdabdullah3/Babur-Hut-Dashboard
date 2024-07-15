@@ -53,7 +53,7 @@ const VoucherAdminPanel = () => {
                 <td className="py-4 px-6">{voucher.endDate}</td>
                 <td className="py-4 px-6">{voucher.status}</td>
                 <td className="py-4 px-6 flex space-x-2">
-                  <Link to={`/admin/edit-voucher/${voucher.id}`}>
+                  <Link to={`/admin/edit-voucher/${voucher._id}`}>
                     <button className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
                       <FiEdit className="mr-1" /> Edit
                     </button>

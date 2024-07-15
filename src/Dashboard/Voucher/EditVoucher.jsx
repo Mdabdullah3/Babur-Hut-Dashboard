@@ -8,15 +8,16 @@ import { useParams } from "react-router-dom";
 
 const EditVoucher = () => {
   const { id } = useParams();
+  const { fetchVoucherById, voucher, updateVoucher } = useVoucherStore();
+
   const [form, setForm] = useState({
     voucherCode: "",
-    startDate: "",
-    endDate: "",
-    discount: "",
-    status: "",
+    startDate: voucher?.startDate || "",
+    endDate: voucher?.endDate || "",
+    discount: voucher?.discount || "",
+    status: voucher?.status || "",
   });
 
-  const { fetchVoucherById, voucher, updateVoucher } = useVoucherStore();
   useEffect(() => {
     fetchVoucherById(id);
   }, [id, fetchVoucherById]);
