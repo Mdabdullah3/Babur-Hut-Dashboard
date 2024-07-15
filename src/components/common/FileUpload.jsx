@@ -1,14 +1,22 @@
-import React from "react";
-const FileUpload = ({ label, name, file, setFile }) => {
+import React, { useState } from "react";
+
+const FileUpload = ({ label, name, setFile,file }) => {
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setFile(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedFile(reader.result);
+        setFile(reader.result); 
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleRemoveFile = () => {
+    setSelectedFile(null);
     setFile(null);
   };
 
@@ -16,10 +24,10 @@ const FileUpload = ({ label, name, file, setFile }) => {
     <div>
       <div>
         <label className="block font-mono text-secondary">{label}</label>
-        {file ? (
+        {selectedFile || file ? (
           <div className="relative">
             <img
-              src={file}
+              src={file || selectedFile}
               alt="Selected"
               className="w-32 h-32 rounded-md"
             />

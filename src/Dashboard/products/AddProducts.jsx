@@ -10,23 +10,6 @@ import PrimaryButton from "../../components/common/PrimaryButton";
 import { toast } from "react-toastify";
 import useProductStore from "../../store/ProductStore";
 
-const dummyData = {
-  electronics: {
-    Processor: "",
-    Memory: "",
-    Ram: "",
-    DisplayType: "",
-    Model: "",
-    CameraFront: "",
-    Battery: "",
-  },
-  normal: {
-    Size: "",
-    Material: "",
-    Color: "",
-  },
-};
-
 const AddProducts = () => {
   const [activeVideo, setActiveVideo] = useState("file upload");
   const [activeStep, setActiveStep] = useState(0);
@@ -38,11 +21,11 @@ const AddProducts = () => {
   const [productType, setProductType] = useState("electronics");
   const [form, setForm] = useState({
     videoUrl: "",
-    user: "gsdsf", // Placeholder user data
-    img: [image1, image2, image3],
+    user: "668bd330bf220f4fa9a60c31",
+    img: [image1, image2, image3].filter(Boolean),
     productName: "",
-    category: "",
-    brand: "",
+    category: "pant",
+    brand: "niki",
     coverPhoto: coverImage,
     description: "",
     price: 0,
@@ -54,22 +37,36 @@ const AddProducts = () => {
     packageDimensionLength: "",
     packageDimensionWidth: "",
     packageDimensionHeight: "",
-    ...dummyData[productType],
   });
 
   useEffect(() => {
     setForm((prevForm) => ({
       ...prevForm,
-      img: [image1, image2, image3],
+      img: [image1, image2, image3].filter(Boolean),
       coverPhoto: coverImage,
     }));
   }, [image1, image2, image3, coverImage]);
 
   useEffect(() => {
-    setForm((prevForm) => ({
-      ...prevForm,
-      ...dummyData[productType],
-    }));
+    if (productType === "electronics") {
+      setForm((prevForm) => ({
+        ...prevForm,
+        Processor: "",
+        Memory: "",
+        Ram: "",
+        DisplayType: "",
+        Model: "",
+        CameraFront: "",
+        Battery: "",
+      }));
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        Size: "",
+        Material: "",
+        Color: "",
+      }));
+    }
   }, [productType]);
 
   const warrantyType = [
@@ -107,27 +104,45 @@ const AddProducts = () => {
     e.preventDefault();
 
     const formData = {
+      vendorId: "12133a5f-0b0d-4d5b-9b5c-0b0d4d5b9b5c",
       user: form.user,
       name: form.productName,
+      slug: form.productName.toLowerCase().split(" ").join("-"),
       price: form.price,
       quantity: form.quantity,
       summary: form.description.slice(0, 150),
       description: form.description,
       category: form.category,
       brand: form.brand,
-      size: form.size,
-      coverPhoto: coverImage,
-      images: [image1, image2, image3].filter(Boolean),
+      coverPhoto: form.coverPhoto,
+      images: form.img.map((file) => `${file}`),
+      video: activeVideo === "file upload" ? form.videoFile : form.videoUrl,
+      videoType: activeVideo === "file upload" ? "file" : "url",
+      ...(productType === "electronics"
+        ? {
+            Processor: form.Processor,
+            Memory: form.Memory,
+            Ram: form.Ram,
+            DisplayType: form.DisplayType,
+            Model: form.Model,
+            CameraFront: form.CameraFront,
+            Battery: form.Battery,
+          }
+        : {
+            Size: form.Size,
+            Material: form.Material,
+            Color: form.Color,
+          }),
     };
 
     try {
       await addProduct(formData);
-      toast.success("Product added successfully");
     } catch (error) {
       console.error(error);
       toast.error(error.message);
     }
   };
+  console.log(form);
 
   const renderAdditionalFields = () => {
     if (productType === "electronics") {
@@ -164,8 +179,8 @@ const AddProducts = () => {
             onChange={(e) => setForm({ ...form, Model: e.target.value })}
           />
           <InputField
-            label="Camera Front (Megapixels)"
-            placeholder="Camera Front (Megapixels)"
+            label="Camera Front"
+            placeholder="Camera Front"
             value={form.CameraFront}
             onChange={(e) => setForm({ ...form, CameraFront: e.target.value })}
           />
@@ -226,31 +241,15 @@ const AddProducts = () => {
             </p>
             <div className="my-4 flex">
               <FileUpload
-                name="ProductImage"
-                label={"Cover Image"}
-                file={coverImage}
+                label="cover"
+                name="coverPhoto"
                 setFile={setCoverImage}
               />
             </div>
-            <div className="flex flex-wrap gap-4 mt-3">
-              <FileUpload
-                file={image1}
-                setFile={setImage1}
-                label="Image 1"
-                name="ProductImage"
-              />
-              <FileUpload
-                file={image2}
-                setFile={setImage2}
-                label="Product Image 1"
-                name="ProductImage"
-              />
-              <FileUpload
-                file={image3}
-                setFile={setImage3}
-                label="Product Image 2"
-                name="ProductImage"
-              />
+            <div className="flex space-x-4">
+              <FileUpload label="Image1" name="img1" setFile={setImage1} />
+              <FileUpload label="Image2" name="img2" setFile={setImage2} />
+              <FileUpload label="Image3" name="img3" setFile={setImage3} />
             </div>
 
             <h1 className="text-xl text-primary mt-5">Video</h1>

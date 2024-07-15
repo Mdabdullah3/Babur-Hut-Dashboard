@@ -1,6 +1,7 @@
 import create from 'zustand';
 import axios from 'axios';
 import { API_URL } from '../config';
+import { toast } from 'react-toastify';
 const useProductStore = create((set) => ({
     products: [],
     product: null,
@@ -31,8 +32,10 @@ const useProductStore = create((set) => ({
     addProduct: async (productData) => {
         set({ loading: true });
         try {
-            const response = await axios.post(`${API_URL}/products`, productData);
+            const response = await axios.post(`${API_URL}/products`, productData, { withCredentials: true });
             set((state) => ({ products: [...state.products, response.data.data], loading: false }));
+            toast.success('Product added successfully');
+            console.log(response);
         } catch (error) {
             set({ error: error.response?.data?.message || error.message, loading: false });
         }

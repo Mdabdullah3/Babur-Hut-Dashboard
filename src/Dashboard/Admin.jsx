@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AiOutlineArrowUp } from "react-icons/ai";
 import PieChart from "../components/charts/PieChart";
 import BarChart from "../components/charts/BarChart";
 import AreaLineChart from "../components/charts/AreaLineChart";
 import PrimaryButton from "../components/common/PrimaryButton";
 import RecentOrder from "../components/Dashboard/RecentOrder";
+import useUserStore from "../store/AuthStore";
 
 const Admin = () => {
+  const { user, loading, fetchUser } = useUserStore();
+
+  useEffect(() => {
+    if (!user) {
+      fetchUser();
+    }
+  }, [user, fetchUser]);
+  console.log(user);
   return (
     <section>
       <div className="lg:grid grid-cols-4 gap-5 rounded-xl items-center">
