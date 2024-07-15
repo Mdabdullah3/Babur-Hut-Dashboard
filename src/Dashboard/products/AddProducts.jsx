@@ -11,19 +11,20 @@ import { toast } from "react-toastify";
 import useProductStore from "../../store/ProductStore";
 
 const AddProducts = () => {
-  const [activeVideo, setActiveVideo] = useState("file upload");
   const [activeStep, setActiveStep] = useState(0);
+  const [video, setVideo] = useState(null);
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
   const [image3, setImage3] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const { addProduct } = useProductStore();
-  const [productType, setProductType] = useState("electronics");
+  const {categor}
   const [form, setForm] = useState({
-    videoUrl: "",
+    video: video,
     user: "668bd330bf220f4fa9a60c31",
     img: [image1, image2, image3].filter(Boolean),
     productName: "",
+    summary: "",
     category: "pant",
     brand: "niki",
     coverPhoto: coverImage,
@@ -31,8 +32,15 @@ const AddProducts = () => {
     price: 0,
     promoPrice: 0,
     quantity: 0,
-    sku: "",
     warranty: "",
+    screenSize: "",
+    batteryLife: "",
+    cameraResolution: "",
+    storageCapacity: "",
+    os: "",
+    size: "",
+    gender: "",
+    material: "",
     packageWeight: "",
     packageDimensionLength: "",
     packageDimensionWidth: "",
@@ -44,30 +52,9 @@ const AddProducts = () => {
       ...prevForm,
       img: [image1, image2, image3].filter(Boolean),
       coverPhoto: coverImage,
+      video: video,
     }));
-  }, [image1, image2, image3, coverImage]);
-
-  useEffect(() => {
-    if (productType === "electronics") {
-      setForm((prevForm) => ({
-        ...prevForm,
-        Processor: "",
-        Memory: "",
-        Ram: "",
-        DisplayType: "",
-        Model: "",
-        CameraFront: "",
-        Battery: "",
-      }));
-    } else {
-      setForm((prevForm) => ({
-        ...prevForm,
-        Size: "",
-        Material: "",
-        Color: "",
-      }));
-    }
-  }, [productType]);
+  }, [image1, image2, image3, coverImage, video]);
 
   const warrantyType = [
     {
@@ -104,35 +91,29 @@ const AddProducts = () => {
     e.preventDefault();
 
     const formData = {
-      vendorId: "12133a5f-0b0d-4d5b-9b5c-0b0d4d5b9b5c",
+      vendorId: "",
       user: form.user,
+      video: form.video,
       name: form.productName,
       slug: form.productName.toLowerCase().split(" ").join("-"),
       price: form.price,
       quantity: form.quantity,
-      summary: form.description.slice(0, 150),
+      summary: form.summary,
       description: form.description,
       category: form.category,
       brand: form.brand,
       coverPhoto: form.coverPhoto,
       images: form.img.map((file) => `${file}`),
-      video: activeVideo === "file upload" ? form.videoFile : form.videoUrl,
-      videoType: activeVideo === "file upload" ? "file" : "url",
-      ...(productType === "electronics"
-        ? {
-            Processor: form.Processor,
-            Memory: form.Memory,
-            Ram: form.Ram,
-            DisplayType: form.DisplayType,
-            Model: form.Model,
-            CameraFront: form.CameraFront,
-            Battery: form.Battery,
-          }
-        : {
-            Size: form.Size,
-            Material: form.Material,
-            Color: form.Color,
-          }),
+      specifications: {
+        screenSize: form?.screenSize,
+        batteryLife: form?.batteryLife,
+        cameraResolution: form?.cameraResolution,
+        storageCapacity: form?.storageCapacity,
+        os: form?.os,
+        size: form?.size,
+        gender: form?.gender,
+        material: form?.material,
+      },
     };
 
     try {
@@ -144,80 +125,6 @@ const AddProducts = () => {
   };
   console.log(form);
 
-  const renderAdditionalFields = () => {
-    if (productType === "electronics") {
-      return (
-        <>
-          <InputField
-            label="Processor"
-            placeholder="Processor"
-            value={form.Processor}
-            onChange={(e) => setForm({ ...form, Processor: e.target.value })}
-          />
-          <InputField
-            label="Memory"
-            placeholder="Memory"
-            value={form.Memory}
-            onChange={(e) => setForm({ ...form, Memory: e.target.value })}
-          />
-          <InputField
-            label="RAM"
-            placeholder="RAM"
-            value={form.Ram}
-            onChange={(e) => setForm({ ...form, Ram: e.target.value })}
-          />
-          <InputField
-            label="Display Type"
-            placeholder="Display Type"
-            value={form.DisplayType}
-            onChange={(e) => setForm({ ...form, DisplayType: e.target.value })}
-          />
-          <InputField
-            label="Model"
-            placeholder="Model"
-            value={form.Model}
-            onChange={(e) => setForm({ ...form, Model: e.target.value })}
-          />
-          <InputField
-            label="Camera Front"
-            placeholder="Camera Front"
-            value={form.CameraFront}
-            onChange={(e) => setForm({ ...form, CameraFront: e.target.value })}
-          />
-          <InputField
-            label="Battery"
-            placeholder="Battery"
-            value={form.Battery}
-            onChange={(e) => setForm({ ...form, Battery: e.target.value })}
-          />
-        </>
-      );
-    } else {
-      return (
-        <>
-          <InputField
-            label="Size"
-            placeholder="Size"
-            value={form.Size}
-            onChange={(e) => setForm({ ...form, Size: e.target.value })}
-          />
-          <InputField
-            label="Material"
-            placeholder="Material"
-            value={form.Material}
-            onChange={(e) => setForm({ ...form, Material: e.target.value })}
-          />
-          <InputField
-            label="Color"
-            placeholder="Color"
-            value={form.Color}
-            onChange={(e) => setForm({ ...form, Color: e.target.value })}
-          />
-        </>
-      );
-    }
-  };
-
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
       <form className="col-span-4 w-11/12" onSubmit={handleSubmit}>
@@ -226,15 +133,6 @@ const AddProducts = () => {
             Basic Information
           </h1>
           <div className="mt-5">
-            <SelectField
-              label="Product Type"
-              options={[
-                { label: "Electronics", value: "electronics" },
-                { label: "Normal", value: "normal" },
-              ]}
-              value={productType}
-              onChange={(e) => setProductType(e.target.value)}
-            />
             <h1 className="text-xl text-primary">Product Image</h1>
             <p className="text-gray-500">
               Your product image is the first thing customers will see.
@@ -252,54 +150,15 @@ const AddProducts = () => {
               <FileUpload label="Image3" name="img3" setFile={setImage3} />
             </div>
 
-            <h1 className="text-xl text-primary mt-5">Video</h1>
+            <h1 className="text-xl mt-5">Video</h1>
+            <p className="text-[13px] text-primary">Video Size Max 100 MB </p>
             <div className="flex items-center gap-10 mt-2">
-              <div className="flex items-center gap-3">
-                <input
-                  id="video"
-                  type="radio"
-                  name="radio-2"
-                  className="radio radio-primary"
-                  checked={activeVideo === "file upload"}
-                  onChange={() => setActiveVideo("file upload")}
-                />
-                <label
-                  htmlFor="video"
-                  onClick={() => setActiveVideo("file upload")}
-                >
-                  Video Upload
-                </label>
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  id="videoUrl"
-                  type="radio"
-                  name="radio-2"
-                  className="radio radio-primary"
-                  checked={activeVideo === "url"}
-                  onChange={() => setActiveVideo("url")}
-                />
-                <label htmlFor="videoUrl" onClick={() => setActiveVideo("url")}>
-                  Video Url
-                </label>
-              </div>
-            </div>
-            <div className="flex mt-5">
-              {activeVideo === "file upload" ? (
-                <VideoUpload
-                  label="Upload Your Product Video"
-                  name="productVideo"
-                />
-              ) : (
-                <InputField
-                  label="Product Video Url"
-                  value={form.videoUrl}
-                  onChange={(e) =>
-                    setForm({ ...form, videoUrl: e.target.value })
-                  }
-                  placeholder="Product Video Url"
-                />
-              )}
+              <FileUpload
+                label="Product Video"
+                acceptType="video"
+                name="video"
+                setFile={setVideo}
+              />
             </div>
           </div>
           <section className="mt-10">
@@ -309,7 +168,7 @@ const AddProducts = () => {
             <p className="text-sm text-gray-500 mt-2">
               Enter the basic details about your product
             </p>
-            <div className="grid grid-cols-2 gap-5 mt-5">
+            <div className="mt-2">
               <InputField
                 label="Product Name"
                 placeholder="Product Name"
@@ -318,17 +177,29 @@ const AddProducts = () => {
                   setForm({ ...form, productName: e.target.value })
                 }
               />
-              <SelectField
-                label="Category"
-                options={category}
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
-              />
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <SelectField
+                  label="Category"
+                  options={category}
+                  value={form.category}
+                  onChange={(e) =>
+                    setForm({ ...form, category: e.target.value })
+                  }
+                />
+                <InputField
+                  label="Brand"
+                  placeholder="Brand"
+                  value={form.brand}
+                  onChange={(e) => setForm({ ...form, brand: e.target.value })}
+                />
+              </div>
               <InputField
-                label="Brand"
-                placeholder="Brand"
-                value={form.brand}
-                onChange={(e) => setForm({ ...form, brand: e.target.value })}
+                label="Product Summery"
+                placeholder="Product Summery"
+                value={form.summary}
+                onChange={(e) =>
+                  setForm({ ...form, summary: e.target.value })
+                }
               />
             </div>
           </section>
@@ -357,12 +228,7 @@ const AddProducts = () => {
                 value={form.quantity}
                 onChange={(e) => setForm({ ...form, quantity: e.target.value })}
               />
-              <InputField
-                label="SKU"
-                placeholder="SKU"
-                value={form.sku}
-                onChange={(e) => setForm({ ...form, sku: e.target.value })}
-              />
+
               <InputField
                 label="Price"
                 type="number"
@@ -379,8 +245,76 @@ const AddProducts = () => {
                   setForm({ ...form, promoPrice: e.target.value })
                 }
               />
+              <InputField
+                label="Size"
+                placeholder="Size"
+                value={form.size}
+                onChange={(e) => setForm({ ...form, size: e.target.value })}
+              />
+              <InputField
+                label="Material"
+                placeholder="Material"
+                value={form.material}
+                onChange={(e) => setForm({ ...form, material: e.target.value })}
+              />
             </div>
-            {renderAdditionalFields()}
+            <h1 className="my-4 font-semibold text-lg">
+              Electronics Product Specification
+            </h1>
+            <div className="grid grid-cols-2 gap-5">
+              <InputField
+                label="Display Size"
+                placeholder="Display Size"
+                value={form.screenSize}
+                onChange={(e) =>
+                  setForm({ ...form, screenSize: e.target.value })
+                }
+              />
+              <InputField
+                label="Battery Capacity"
+                placeholder="Battery Capacity"
+                value={form.batteryLife}
+                onChange={(e) =>
+                  setForm({ ...form, batteryLife: e.target.value })
+                }
+              />
+              {/* <InputField
+                label="RAM"
+                placeholder="RAM"
+                value={form.Ram}
+                onChange={(e) => setForm({ ...form, Ram: e.target.value })}
+              /> */}
+              {/* <InputField
+                label="Display Type"
+                placeholder="Display Type"
+                value={form.DisplayType}
+                onChange={(e) =>
+                  setForm({ ...form, DisplayType: e.target.value })
+                }
+              /> */}
+              <InputField
+                label="Storage"
+                placeholder="Storage"
+                value={form.storageCapacity}
+                onChange={(e) =>
+                  setForm({ ...form, storageCapacity: e.target.value })
+                }
+              />
+              <InputField
+                label="Camera Resolution"
+                placeholder="Camera Resolution"
+                value={form.cameraResolution}
+                onChange={(e) =>
+                  setForm({ ...form, cameraResolution: e.target.value })
+                }
+              />
+              <InputField
+                label="Os"
+                placeholder="Os"
+                value={form.os}
+                onChange={(e) => setForm({ ...form, os: e.target.value })}
+              />
+            </div>
           </section>
         </div>
 
