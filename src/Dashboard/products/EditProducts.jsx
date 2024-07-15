@@ -9,8 +9,11 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import useUserStore from "../../store/AuthStore";
+import { useParams } from "react-router-dom";
+import { SERVER } from "../../config";
 
-const AddProducts = () => {
+const EditProducts = () => {
+  const { id } = useParams();
   const [activeStep, setActiveStep] = useState(0);
   const [video, setVideo] = useState(null);
   const [image1, setImage1] = useState(null);
@@ -20,14 +23,16 @@ const AddProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [subCategories, setSubCategories] = useState([]);
   const { user, fetchUser } = useUserStore();
-  const { addProduct } = useProductStore();
+  const { updateProduct, loading, product, fetchProductByIdOrSlug } =
+    useProductStore();
   const { categories, fetchCategories } = useCategoryStore();
   const genderOption = ["Men", "Women", "Baby", "Unisex"];
   const sizeOptions = ["S", "M", "L", "XL", "XXL"];
   useEffect(() => {
     fetchCategories();
     fetchUser();
-  }, [fetchCategories, fetchUser]);
+    fetchProductByIdOrSlug(id);
+  }, [fetchCategories, fetchUser, fetchProductByIdOrSlug, id]);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -73,7 +78,44 @@ const AddProducts = () => {
       video: video,
     }));
   }, [image1, image2, image3, coverImage, video]);
-
+  useEffect(() => {
+    if (product) {
+      setForm({
+        ...form,
+        img: product.images.map((img) => img.secure_url),
+        productName: product.name,
+        category: product.category,
+        brand: product.brand,
+        coverPhoto: `${SERVER}${product.coverPhoto.secure_url}`,
+        description: product.description,
+        summary: product?.summary,
+        price: product.price,
+        promoPrice: product.promoPrice,
+        quantity: product.quantity,
+        specifications: {
+          screenSize: product?.screenSize,
+          batteryLife: product?.batteryLife,
+          cameraResolution: product?.cameraResolution,
+          storageCapacity: product?.storageCapacity,
+          os: product?.os,
+          size: product?.size,
+          gender: product?.gender,
+          material: product?.material,
+        },
+      });
+      setCoverImage(`${SERVER}${product?.coverPhoto.secure_url}` || null);
+      setImage1(
+        product?.images[0] ? `${SERVER}${product?.images[0].secure_url}` : null
+      );
+      setImage2(
+        product?.images[1] ? `${SERVER}${product?.images[1].secure_url}` : null
+      );
+      setImage3(
+        product?.images[2] ? `${SERVER}${product?.images[2].secure_url}` : null
+      );
+      setVideo(product?.video ? `${SERVER}${product?.video.secure_url}` : null);
+    }
+  }, [product]);
   const warrantyType = [
     {
       id: 1,
@@ -99,6 +141,21 @@ const AddProducts = () => {
 
   const scrollToSection = (sectionRef) => {
     sectionRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleImageUpload = (file, setFile) => {
+    if (!(file instanceof Blob)) {
+      console.error("Invalid file type. Expected a Blob or File.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result.split(",")[1];
+      const imageType = file.type;
+      setFile(`data:${imageType};base64,${base64String}`);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
@@ -128,13 +185,14 @@ const AddProducts = () => {
         material: form?.material,
       },
     };
+
     try {
-      await addProduct(formData);
+      await updateProduct(id, formData);
     } catch (error) {
       toast.error(error.message);
     }
   };
-  console.log(form);
+  console.log(product);
 
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
@@ -150,24 +208,41 @@ const AddProducts = () => {
             </p>
             <div className="my-4 flex">
               <FileUpload
+                file={coverImage}
                 label="Cover Photo "
                 name="coverPhoto"
-                setFile={setCoverImage}
+                setFile={(file) => handleImageUpload(file, setCoverImage)}
               />
             </div>
             <div className="flex space-x-4">
-              <FileUpload label="Image1" name="img1" setFile={setImage1} />
-              <FileUpload label="Image2" name="img2" setFile={setImage2} />
-              <FileUpload label="Image3" name="img3" setFile={setImage3} />
+              <FileUpload
+                file={image1}
+                label="Image1"
+                name="img1"
+                setFile={(file) => handleImageUpload(file, setImage1)}
+              />
+              <FileUpload
+                label="Image2"
+                file={image2}
+                name="img2"
+                setFile={(file) => handleImageUpload(file, setImage2)}
+              />
+              <FileUpload
+                label="Image3"
+                file={image3}
+                name="img3"
+                setFile={(file) => handleImageUpload(file, setImage3)}
+              />
             </div>
             <h1 className="text-xl mt-5">Video</h1>
             <p className="text-[13px] text-primary">Video Size Max 100 MB </p>
             <div className="flex items-center gap-10 mt-2">
               <FileUpload
+                file={video}
                 label="Product Video"
                 acceptType="video"
                 name="video"
-                setFile={setVideo}
+                setFile={(file) => handleImageUpload(file, setVideo)}
               />
             </div>
           </div>
@@ -456,4 +531,4 @@ const AddProducts = () => {
   );
 };
 
-export default AddProducts;
+export default EditProducts;

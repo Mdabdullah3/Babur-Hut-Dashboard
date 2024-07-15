@@ -29,6 +29,7 @@ import EditSubCategory from "./components/Dashboard/Category/EditSubCategory";
 import Shipping from "./Dashboard/Shipment";
 import CreateShippingAddress from "./Dashboard/Shipment/CreateShippingAddress";
 import EditVoucher from "./Dashboard/Voucher/EditVoucher";
+import EditProducts from "./Dashboard/products/EditProducts";
 
 const menu = [
     {
@@ -102,6 +103,12 @@ const menu = [
         component: <AddProduct />
     },
     {
+        name: "Edit Product",
+        layout: "/admin",
+        path: "edit-product/:id",
+        component: <EditProducts />
+    },
+    {
         name: "Order & Review",
         layout: "/admin",
         path: "order-review",
@@ -161,10 +168,10 @@ const menu = [
         component: <AddNewVoucher />
     },
     {
-       name: "Edit Voucher",
-       layout: "/admin",
-       path: "edit-voucher/:id",
-       component: <EditVoucher />
+        name: "Edit Voucher",
+        layout: "/admin",
+        path: "edit-voucher/:id",
+        component: <EditVoucher />
     },
     {
         name: "Event Manager",

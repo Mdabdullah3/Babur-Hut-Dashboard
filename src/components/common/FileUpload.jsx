@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const FileUpload = ({ label, name, acceptType, setFile, file }) => {
-  const [selectedFile, setSelectedFile] = useState(file);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const accept = acceptType === "video" ? "video/*" : "image/*";
 
@@ -26,17 +26,17 @@ const FileUpload = ({ label, name, acceptType, setFile, file }) => {
     <div>
       <div>
         <label className="block font-mono text-secondary">{label}</label>
-        {selectedFile ? (
+        {selectedFile || file ? (
           <div className="relative">
             {accept === "image/*" ? (
               <img
-                src={selectedFile}
+                src={selectedFile || file}
                 alt="Selected"
                 className="w-32 h-32 rounded-md"
               />
             ) : accept === "video/*" ? (
               <video
-                src={selectedFile}
+                src={selectedFile || file}
                 controls
                 className="w-32 h-32 rounded-md"
               />
