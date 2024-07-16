@@ -8,18 +8,25 @@ const withAuth = (WrappedComponent) => {
         const { user, loading, fetchUser } = useUserStore();
 
         useEffect(() => {
-            if (!user) {
-                fetchUser();
-            }
+            const checkAuth = async () => {
+                if (!user) {
+                    await fetchUser();
+                }
+            };
+            checkAuth();
         }, [user, fetchUser]);
 
         useEffect(() => {
-            if (!loading && !user) {
-                navigate('/login');
+            if (!loading) {
+                if (!user) {
+                    navigate('/');
+                } else {
+                    navigate('/admin');
+                }
             }
         }, [loading, user, navigate]);
 
-        if (loading || !user) {
+        if (loading) {
             return <div>Loading...</div>;
         }
 
