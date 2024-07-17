@@ -51,7 +51,7 @@ const useCategoryStore = create((set) => ({
         }
     },
 
-    addCategory: async (categoryData) => {
+    addCategory: async (categoryData, navigate) => {
         set({ loading: true, error: null });
         try {
             const response = await axios.post(`${API_URL}/categories`, categoryData);
@@ -59,6 +59,7 @@ const useCategoryStore = create((set) => ({
                 categories: [...state.categories, response.data.data],
                 loading: false,
             }));
+            navigate("/admin/categories");
             toast.success('Category added successfully!');
         } catch (error) {
             set({ error: error.message, loading: false });
@@ -91,6 +92,7 @@ const useCategoryStore = create((set) => ({
                 ),
                 loading: false,
             }));
+
             toast.success('Category updated successfully!');
         } catch (error) {
             set({ error: error.message, loading: false });

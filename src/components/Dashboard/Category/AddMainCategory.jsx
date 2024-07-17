@@ -3,8 +3,11 @@ import InputField from "../../common/InputField";
 import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
 import useCategoryStore from "../../../store/categoryStore";
+import { useNavigate } from "react-router-dom";
+import FileUpload from "../../common/FileUpload";
 
 const AddMainCategory = () => {
+  const [image, setImage] = useState(null);
   const { addCategory, loading } = useCategoryStore();
   const status = [
     { id: 1, label: "Active", value: "active" },
@@ -17,11 +20,12 @@ const AddMainCategory = () => {
     status: "",
     commission: "",
     vat: "",
+    image: image,
   });
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
-    addCategory(form);
+    addCategory(form, navigate);
   };
   return (
     <form
@@ -62,7 +66,7 @@ const AddMainCategory = () => {
         placeholder="Category VAT"
         required
       />
-      <div></div>
+      <FileUpload label="Category Image" setFile={setImage} name={"image"} />
       <PrimaryButton value={"Add Category"} />
     </form>
   );

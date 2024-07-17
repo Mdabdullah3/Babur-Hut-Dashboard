@@ -63,6 +63,7 @@ const useProductStore = create((set) => ({
                 error: error.response?.data?.message || error.message,
                 loading: false,
             });
+            toast.error(error.response?.data?.message || error.message);
         }
     },
 
