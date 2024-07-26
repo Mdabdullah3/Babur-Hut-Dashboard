@@ -89,6 +89,7 @@ const AddProducts = () => {
     },
     { id: 3, label: "No Warranty", value: "No Warranty" },
   ];
+  console.log(form);
 
   const formRefs = {
     basicInfo: useRef(null),

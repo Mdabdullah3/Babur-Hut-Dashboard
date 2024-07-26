@@ -42,7 +42,7 @@ const Categories = () => {
           <button
             key={index}
             onClick={() => setActiveMenu(item)}
-            className={`font-bold pb-2 ${
+            className={`md:font-bold pb-2 ${
               activeMenu === item
                 ? "text-primary border-b-2 border-primary"
                 : ""
@@ -62,35 +62,37 @@ const Categories = () => {
               onChange={(value) => setSearchTerm(value)}
             />
           </div>
-          <table className="table-auto w-full overflow-auto mt-10">
-            <TableHead header={header} />
-            {categoriesData?.map((item) => (
-              <tbody key={item._id}>
-                <tr className="border-r border-l border-gray-300 border-b">
-                  <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
-                    {item.name}
-                  </td>
+          <div className="overflow-auto">
+            <table className="table-auto w-full  mt-10">
+              <TableHead header={header} />
+              {categoriesData?.map((item) => (
+                <tbody key={item._id}>
+                  <tr className="border-r border-l border-gray-300 border-b">
+                    <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
+                      {item.name}
+                    </td>
 
-                  <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                    {item.status}
-                  </td>
-                  <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                    <button
-                      className="bg-primary text-white px-5 py-1.5 rounded-lg"
-                      onClick={() =>
-                        handleEdit(
-                          item._id,
-                          item.category ? "subCategory" : "category"
-                        )
-                      }
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            ))}
-          </table>
+                    <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
+                      {item.status}
+                    </td>
+                    <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
+                      <button
+                        className="bg-primary text-white px-5 py-1.5 rounded-lg"
+                        onClick={() =>
+                          handleEdit(
+                            item._id,
+                            item.category ? "subCategory" : "category"
+                          )
+                        }
+                      >
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              ))}
+            </table>
+          </div>
         </>
       )}
       {activeMenu === "Add Main Category" && <AddMainCategory />}

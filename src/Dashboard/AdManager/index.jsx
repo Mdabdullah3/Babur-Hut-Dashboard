@@ -1,27 +1,13 @@
-import React from "react";
-import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
+import React, { useEffect } from "react";
+import { FiEdit, FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import usePackageStore from "../../store/PackageStore";
 const AdManager = () => {
-  const AdManager = [
-    {
-      id: 1,
-      packageName: "Basic",
-      duration: "1 Month",
-      price: "432",
-      image: "",
-      maxProduct: "10",
-      status: "active",
-    },
-    {
-      id: 1,
-      packageName: "Basic",
-      duration: "1 Month",
-      price: "432",
-      image: "",
-      maxProduct: "10",
-      status: "active",
-    },
-  ];
+  const { fetchPackages, packages } = usePackageStore();
+  useEffect(() => {
+    fetchPackages();
+  }, [fetchPackages]);
+  console.log(packages);
 
   const header = [
     "Package Name",
@@ -32,11 +18,6 @@ const AdManager = () => {
     "Action",
   ];
 
-  const handleEditPackage = (id) => {
-    // Edit voucher logic
-  };
-
-  const handleDeletePackage = (id) => {};
   return (
     <div className="flex h-screen">
       <div className="flex-1 p-10">
@@ -62,26 +43,20 @@ const AdManager = () => {
             </tr>
           </thead>
           <tbody>
-            {AdManager?.map((ad) => (
-              <tr key={ad.id} className="border-b border-gray-200">
-                <td className="py-4 px-6">{ad.packageName}</td>
-                <td className="py-4 px-6">{ad.duration}</td>
-                <td className="py-4 px-6">{ad.price}</td>
-                <td className="py-4 px-6">{ad.maxProduct}</td>
-                <td className="py-4 px-6">{ad.status}</td>
+            {packages?.map((pack) => (
+              <tr key={pack?._id} className="border-b border-gray-200">
+                <td className="py-4 px-6">{pack.name}</td>
+                <td className="py-4 px-6">{pack.duration}</td>
+                <td className="py-4 px-6">{pack.price}</td>
+                <td className="py-4 px-6">{pack.maxProduct}</td>
+                <td className="py-4 px-6">{pack.status}</td>
                 <td className="py-4 px-6 flex space-x-2">
-                  <button
-                    onClick={() => handleEditPackage(ad.id)}
+                  <Link
+                    to={`/admin/edit-package/${pack?._id}`}
                     className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
                   >
                     <FiEdit className="mr-1" /> Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeletePackage(ad.id)}
-                    className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                  >
-                    <FiTrash className="mr-1" /> Delete
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}

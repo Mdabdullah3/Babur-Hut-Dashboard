@@ -33,7 +33,7 @@ const VendorSetting = () => {
   ];
   return (
     <section>
-      <div className="flex items-center justify-center border-b-2 gap-10 my-10">
+      <div className="flex items-center justify-center border-b-2 gap-10 my-10 flex-wrap">
         {menu.map((item) => (
           <button
             key={item.id}

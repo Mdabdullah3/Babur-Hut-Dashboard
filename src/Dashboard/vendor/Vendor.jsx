@@ -10,7 +10,7 @@ const Vendor = () => {
   };
   return (
     <div>
-      <div className="w-10/12 mx-auto py-6 flex items-center justify-between gap-6">
+      <div className="lg:w-10/12 w-full mx-auto py-6 flex items-center justify-between gap-6">
         <div className="flex-1">
           <InputSearch
             placeholder="Search For Vendor.."
@@ -21,7 +21,7 @@ const Vendor = () => {
         </div>
         <PrimaryButton value="Pending Request" />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:w-11/12 mx-auto w-full mt-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:w-11/12 mx-auto w-full mt-3 md:mt-10">
         {vendor.map((item) => (
           <>
             <VendorCard item={item} />

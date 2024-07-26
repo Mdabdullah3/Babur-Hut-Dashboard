@@ -97,7 +97,7 @@ const Products = () => {
         onChange={(value) => handleSearch(value)}
         onSearch={handleSearch}
       />
-      <div className="flex items-center justify-center border-b-2 gap-10 mt-10">
+      <div className="flex items-center justify-center border-b-2 gap-10 mt-10 flex-wrap">
         {menu.map((item) => (
           <button
             key={item.id}
@@ -120,8 +120,8 @@ const Products = () => {
             </h1>
           </>
         ) : (
-          <>
-            <table className="table-auto w-full overflow-auto mt-10">
+          <div className="overflow-auto">
+            <table className="table-auto w-full  mt-10">
               <TableHead header={header} />
               {filteredProducts.map((item) => (
                 <tbody key={item.id}>
@@ -157,7 +157,7 @@ const Products = () => {
                 </tbody>
               ))}
             </table>
-          </>
+          </div>
         )}
       </div>
     </section>

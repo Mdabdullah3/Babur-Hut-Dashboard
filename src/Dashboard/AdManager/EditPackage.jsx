@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../../components/common/InputField";
 import SelectField from "../../components/common/SelectField";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import usePackageStore from "../../store/PackageStore";
+import { useParams } from "react-router-dom";
 
-const CreateAd = () => {
-  const { addPackages, loading } = usePackageStore();
+const EditPackage = () => {
+  const { id } = useParams();
+  const { updatePackage, singlePackage, fetchPackageById, loading } =
+    usePackageStore();
+
+  useEffect(() => {
+    fetchPackageById(id);
+  }, [fetchPackageById, id]);
+  console.log(singlePackage);
   const [form, setForm] = useState({
-    name: "",
-    user: "668d05a57abb2e4c8bf5c361",
-    duration: "",
-    price: "",
-    maxProduct: "",
-    status: "",
+    name: singlePackage?.name || "",
+    user: singlePackage?.user || "",
+    duration: singlePackage?.duration || "",
+    price: singlePackage?.price || "",
+    maxProduct: singlePackage?.maxProduct || "",
+    status: singlePackage?.status || "",
   });
 
   const handleInputChange = (e) => {
@@ -30,7 +38,7 @@ const CreateAd = () => {
       maxProduct: form.maxProduct,
       status: form.status,
     });
-    addPackages(form);
+    updatePackage(form, id);
     console.log(form);
   };
 
@@ -102,4 +110,4 @@ const CreateAd = () => {
   );
 };
 
-export default CreateAd;
+export default EditPackage;

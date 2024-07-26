@@ -10,8 +10,8 @@ const RecentOrder = () => {
     "Quantity",
   ];
   return (
-    <div>
-      <table className="table-auto w-full overflow-auto">
+    <div className="overflow-auto w-full">
+      <table className="table-auto w-full ">
         <TableHead header={header} />
         {reacentOrder?.map((item) => (
           <tbody key={item?.id}>

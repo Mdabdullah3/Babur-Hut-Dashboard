@@ -52,10 +52,10 @@ const SingleVendor = () => {
   return (
     <section className="w-11/12 mx-auto my-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl text-gray-700 font-bold">Vendor</h1>
-        <h2 className="text-xl font-bold">#509290323523</h2>
+        <h1 className="md:text-3xl text-xl text-gray-700 font-bold">Vendor</h1>
+        <h2 className="md:text-xl  font-bold">#509290323523</h2>
       </div>
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-4 flex-wrap mt-4 md:mt-0">
         <img
           src={vendor[0].img}
           alt="vendor"
@@ -67,7 +67,7 @@ const SingleVendor = () => {
           Verified
         </button>
       </div>
-      <div className="flex mt-8 items-center justify-center gap-10 w-10/12 mx-auto my-4 border-b-2 ">
+      <div className="flex mt-8 items-center justify-center gap-10 w-10/12 mx-auto my-4 border-b-2 flex-wrap">
         {menu.map((item) => (
           <>
             <button

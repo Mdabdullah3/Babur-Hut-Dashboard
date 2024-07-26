@@ -48,7 +48,7 @@ const VendorAds = () => {
         ))}
       </div>
       {filteredAds.length > 0 ? (
-        <div>
+        <div className=" overflow-auto">
           <TableHead header={header} />
           {filteredAds.map((item) => (
             <tbody key={item.id}>

@@ -14,8 +14,8 @@ const ReceivalePayment = () => {
     "Date",
   ];
   return (
-    <div>
-      <table className="min-w-full bg-white border border-gray-200 mt-10">
+    <div className=" overflow-x-auto w-full">
+      <table className="w-full bg-white border border-gray-200 mt-10">
         <thead>
           <tr>
             {header.map((head, index) => (

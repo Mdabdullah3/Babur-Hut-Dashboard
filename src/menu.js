@@ -30,6 +30,12 @@ import Shipping from "./Dashboard/Shipment";
 import CreateShippingAddress from "./Dashboard/Shipment/CreateShippingAddress";
 import EditVoucher from "./Dashboard/Voucher/EditVoucher";
 import EditProducts from "./Dashboard/products/EditProducts";
+import EventManager from "./Dashboard/EventManager/index";
+import CreateEvent from "./Dashboard/EventManager/CreateEvent";
+import EditEvent from "./Dashboard/EventManager/EditEvent";
+import EditPackage from "./Dashboard/AdManager/EditPackage";
+import Supports from "./Dashboard/Support";
+import SupportDetails from "./Dashboard/Support/SupportDetails";
 
 const menu = [
     {
@@ -152,7 +158,12 @@ const menu = [
         path: "create-ad",
         component: <CreateAd />
     },
-
+    {
+        name: "Edit Package",
+        layout: "/admin",
+        path: "edit-package/:id",
+        component: <EditPackage />
+    },
     {
         name: "Vouchers",
         layout: "/admin",
@@ -179,6 +190,19 @@ const menu = [
         path: "event-manager",
         navMenu: true,
         icon: <BsFillHandIndexFill className="h-6 w-6" />,
+        component: <EventManager />
+    },
+    {
+        name: "Create Event",
+        layout: "/admin",
+        path: "create-event",
+        component: <CreateEvent />
+    },
+    {
+        name: "Edit Event",
+        layout: '/admin',
+        path: "edit-event/:id",
+        component: <EditEvent />
     },
     {
         name: "Message Center",
@@ -191,8 +215,15 @@ const menu = [
         name: "Support",
         layout: "/admin",
         icon: <BiSupport className="h-6 w-6" />,
-        path: "message-center",
+        path: "support",
         navMenu: true,
+        component: <Supports />
+    },
+    {
+        name: "Support Details",
+        layout: "/admin",
+        path: "support-details/:id",
+        component: <SupportDetails />
     },
     {
         name: "Role Manager",

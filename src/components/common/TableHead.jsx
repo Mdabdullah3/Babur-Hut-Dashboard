@@ -3,7 +3,7 @@ import React from "react";
 const TableHead = ({ header }) => {
   return (
     <thead>
-      <tr className="bg-primary/40 text-center font-mono ">
+      <tr className="bg-primary/40 text-center">
         {header.map((item, index) => (
           <th
             key={index}

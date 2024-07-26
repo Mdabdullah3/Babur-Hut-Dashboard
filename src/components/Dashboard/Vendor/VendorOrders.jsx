@@ -120,7 +120,7 @@ const VendorOrders = () => {
         onChange={(value) => handleSearch(value)}
         onSearch={handleSearch}
       />
-      <div className="flex items-center justify-center border-b-2 gap-10 mt-10">
+      <div className="flex items-center justify-center border-b-2 gap-10 mt-10 flex-wrap">
         {menu.map((item) => (
           <button
             key={item.id}
@@ -140,35 +140,37 @@ const VendorOrders = () => {
           No Orders Found
         </h1>
       ) : (
-        <table className="table-auto w-full overflow-auto mt-10">
-          <TableHead header={header} />
-          {filteredOrders.map((item) => (
-            <tbody key={item.id}>
-              <tr className="border-r border-l border-gray-300 border-b">
-                <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
-                  {item.orderId}
-                </td>
-                <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                  {item.date}
-                </td>
-                <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                  {item.paymentMethod}
-                </td>
-                <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                  {item.total}
-                </td>
-                <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                  {item.status}
-                </td>
-                <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                  <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
-                    Shipping
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          ))}
-        </table>
+        <div className="overflow-auto">
+          <table className="table-auto w-full  mt-10">
+            <TableHead header={header} />
+            {filteredOrders.map((item) => (
+              <tbody key={item.id}>
+                <tr className="border-r border-l border-gray-300 border-b">
+                  <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
+                    {item.orderId}
+                  </td>
+                  <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
+                    {item.date}
+                  </td>
+                  <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
+                    {item.paymentMethod}
+                  </td>
+                  <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
+                    {item.total}
+                  </td>
+                  <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
+                    {item.status}
+                  </td>
+                  <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
+                    <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
+                      Shipping
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            ))}
+          </table>
+        </div>
       )}
     </section>
   );

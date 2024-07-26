@@ -45,7 +45,7 @@ const VendorCampaign = () => {
         ))}
       </div>
       {vendorEvents.length > 0 ? (
-        <div>
+        <div className=" overflow-auto">
           <TableHead header={header} />
           {vendorEvents.map((item) => (
             <tbody key={item.id}>

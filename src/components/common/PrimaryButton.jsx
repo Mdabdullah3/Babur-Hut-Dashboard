@@ -6,7 +6,7 @@ const PrimaryButton = ({ value, onClick, disabled = false }) => {
       <button
         disabled={disabled}
         onClick={onClick}
-        className="bg-primary hover:bg-primary/70  text-white font-bold py-3 px-4 rounded-lg w-full transition duration-300"
+        className="bg-primary hover:bg-primary/70  text-white font-bold py-3 px-4 rounded-lg w-full shadow shadow-primary transition duration-300 lg:text-sm text-[14px]"
       >
         {value}
       </button>
