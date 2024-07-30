@@ -27,6 +27,7 @@ const AddMainCategory = () => {
     e.preventDefault();
     addCategory(form, navigate);
   };
+  console.log(form);
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"
@@ -66,7 +67,7 @@ const AddMainCategory = () => {
         placeholder="Category VAT"
         required
       />
-      <FileUpload label="Category Image" setFile={setImage} name={"image"} />
+      <FileUpload label="Category Image" setFile={setImage} name="image" />
       <PrimaryButton value={"Add Category"} />
     </form>
   );

@@ -29,13 +29,6 @@ const AddProducts = () => {
     fetchUser();
   }, [fetchCategories, fetchUser]);
 
-  useEffect(() => {
-    if (selectedCategory) {
-      const category = categories.find((cat) => cat.id === selectedCategory);
-      setSubCategories(category?.subCategories || []);
-    }
-  }, [selectedCategory, categories]);
-
   const [form, setForm] = useState({
     video: video,
     user: user?._id,
@@ -135,7 +128,7 @@ const AddProducts = () => {
       toast.error(error.message);
     }
   };
-  console.log(form);
+  console.log(categories);
 
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
@@ -191,7 +184,7 @@ const AddProducts = () => {
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <SelectField
                   label="Category"
-                  options={categories.map((cat) => ({
+                  options={categories?.map((cat) => ({
                     id: cat._id,
                     label: cat.name,
                     value: cat.name,
@@ -204,16 +197,17 @@ const AddProducts = () => {
                 />
                 <SelectField
                   label="Sub-Category"
-                  options={subCategories.map((sub) => ({
-                    key: sub._id,
-                    label: sub.name,
-                    value: sub.id,
+                  options={categories?.map((sub) => ({
+                    key: sub?._id,
+                    label: sub?.name,
+                    value: sub?.name,
                   }))}
                   value={form.subCategory}
                   onChange={(e) =>
                     setForm({ ...form, subCategory: e.target.value })
                   }
                 />
+
                 <InputField
                   label="Brand"
                   placeholder="Brand"
