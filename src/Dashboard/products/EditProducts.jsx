@@ -192,7 +192,6 @@ const EditProducts = () => {
       toast.error(error.message);
     }
   };
-  console.log(product);
 
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
@@ -209,9 +208,9 @@ const EditProducts = () => {
             <div className="my-4 flex">
               <FileUpload
                 file={coverImage}
-                label="Cover Photo "
+                label="Cover Photo"
                 name="coverPhoto"
-                setFile={(file) => handleImageUpload(file, setCoverImage)}
+                setFile={setCoverImage}
               />
             </div>
             <div className="flex space-x-4">
@@ -219,13 +218,13 @@ const EditProducts = () => {
                 file={image1}
                 label="Image1"
                 name="img1"
-                setFile={(file) => handleImageUpload(file, setImage1)}
+                setFile={setImage1}
               />
               <FileUpload
                 label="Image2"
                 file={image2}
                 name="img2"
-                setFile={(file) => handleImageUpload(file, setImage2)}
+                setFile={setImage2}
               />
               <FileUpload
                 label="Image3"
