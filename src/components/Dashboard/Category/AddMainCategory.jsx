@@ -14,6 +14,7 @@ const AddMainCategory = () => {
     { id: 2, label: "Inactive", value: "inactive" },
   ];
 
+  console.log(image);
   const [form, setForm] = useState({
     name: "",
     shippingCharge: "",
@@ -27,7 +28,6 @@ const AddMainCategory = () => {
     e.preventDefault();
     addCategory(form, navigate);
   };
-  console.log(form);
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"
@@ -43,7 +43,6 @@ const AddMainCategory = () => {
       <InputField
         label="Shipping Charge"
         placeholder="Shipping Charge"
-        required
         value={form.shippingCharge}
         onChange={(e) => setForm({ ...form, shippingCharge: e.target.value })}
       />
@@ -58,14 +57,12 @@ const AddMainCategory = () => {
         value={form.commission}
         onChange={(e) => setForm({ ...form, commission: e.target.value })}
         placeholder="Category Commission"
-        required
       />
       <InputField
         label="Category VAT"
         value={form.vat}
         onChange={(e) => setForm({ ...form, vat: e.target.value })}
         placeholder="Category VAT"
-        required
       />
       <FileUpload label="Category Image" setFile={setImage} name="image" />
       <PrimaryButton value={"Add Category"} />

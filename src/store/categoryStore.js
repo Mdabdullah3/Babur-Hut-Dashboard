@@ -31,6 +31,7 @@ const useCategoryStore = create((set) => ({
         }
     },
 
+
     fetchCategoryById: async (categoryId) => {
         set({ loading: true, error: null });
         try {
