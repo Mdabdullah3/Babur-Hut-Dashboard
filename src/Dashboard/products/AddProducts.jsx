@@ -9,7 +9,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import useUserStore from "../../store/AuthStore";
-
+import Select from "react-select";
 const AddProducts = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [video, setVideo] = useState(null);
@@ -18,7 +18,7 @@ const AddProducts = () => {
   const [image3, setImage3] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [subCategories, setSubCategories] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const { user, fetchUser } = useUserStore();
   const { addProduct } = useProductStore();
   const { categories, fetchCategories } = useCategoryStore();
@@ -128,8 +128,14 @@ const AddProducts = () => {
       toast.error(error.message);
     }
   };
-  console.log(categories);
-
+  const categoryOptions = categories.map((category) => ({
+    label: category.name,
+    value: category._id,
+    subCategories: category.subCategories?.map((subCategory) => ({
+      label: subCategory.name,
+      value: subCategory._id,
+    })),
+  }));
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
       <form className="col-span-4 w-11/12" onSubmit={handleSubmit}>
@@ -181,47 +187,45 @@ const AddProducts = () => {
                   setForm({ ...form, productName: e.target.value })
                 }
               />
+              <h1 className="my-2">Product Category</h1>
               <div className="grid grid-cols-2 gap-4 mt-2">
-                <SelectField
-                  label="Category"
-                  options={categories?.map((cat) => ({
-                    id: cat._id,
-                    label: cat.name,
-                    value: cat.name,
-                  }))}
-                  value={form.category}
-                  onChange={(e) => {
-                    setForm({ ...form, category: e.target.value });
-                    setSelectedCategory(e.target.value);
+                <Select
+                  options={categoryOptions}
+                  placeholder="Select Category"
+                  onChange={(selectedOption) => {
+                    setForm({ ...form, category: selectedOption.label });
+                    setSelectedCategory(selectedOption.value);
+                    setSelectedSubCategory(null);
                   }}
                 />
-                <SelectField
-                  label="Sub-Category"
-                  options={categories?.map((sub) => ({
-                    key: sub?._id,
-                    label: sub?.name,
-                    value: sub?.name,
-                  }))}
-                  value={form.subCategory}
-                  onChange={(e) =>
-                    setForm({ ...form, subCategory: e.target.value })
-                  }
-                />
-
-                <InputField
-                  label="Brand"
-                  placeholder="Brand"
-                  value={form.brand}
-                  onChange={(e) => setForm({ ...form, brand: e.target.value })}
-                />
+                {selectedCategory && (
+                  <Select
+                    options={
+                      categoryOptions.find(
+                        (category) => category.value === selectedCategory
+                      ).subCategories
+                    }
+                    placeholder="Select Subcategory"
+                    onChange={(selectedOption) => {
+                      setForm({ ...form, subCategory: selectedOption.label });
+                      setSelectedSubCategory(selectedOption.value);
+                    }}
+                  />
+                )}
               </div>
               <InputField
-                label="Product Summary"
-                placeholder="Product Summary"
-                value={form.summary}
-                onChange={(e) => setForm({ ...form, summary: e.target.value })}
+                label="Brand"
+                placeholder="Brand"
+                value={form.brand}
+                onChange={(e) => setForm({ ...form, brand: e.target.value })}
               />
             </div>
+            <InputField
+              label="Product Summary"
+              placeholder="Product Summary"
+              value={form.summary}
+              onChange={(e) => setForm({ ...form, summary: e.target.value })}
+            />
           </section>
           <section ref={formRefs.description}>
             <h1 className="text-2xl font-bold tracking-wider mt-10">

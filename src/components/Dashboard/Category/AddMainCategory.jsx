@@ -14,7 +14,6 @@ const AddMainCategory = () => {
     { id: 2, label: "Inactive", value: "inactive" },
   ];
 
-  console.log(image);
   const [form, setForm] = useState({
     name: "",
     shippingCharge: "",
