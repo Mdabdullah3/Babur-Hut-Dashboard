@@ -25,7 +25,9 @@ const FileUpload = ({ label, name, acceptType, setFile, file }) => {
   return (
     <div>
       <div>
-        <label className="block font-semibold text-secondary">{label}</label>
+        <label className="block font-semibold text-secondary mb-1">
+          {label}
+        </label>
         {selectedFile || file ? (
           <div className="relative">
             {accept === "image/*" ? (
@@ -42,7 +44,7 @@ const FileUpload = ({ label, name, acceptType, setFile, file }) => {
               />
             ) : null}
             <button
-              className="absolute top-0 right-0 m-2 text-red-600 font-bold rounded-full p-1"
+              className="absolute -top-7 left-28 m-2 text-red-600 font-bold rounded-full p-1"
               onClick={handleRemoveFile}
             >
               ×
@@ -50,7 +52,7 @@ const FileUpload = ({ label, name, acceptType, setFile, file }) => {
           </div>
         ) : (
           <div className="flex w-full  items-center justify-center ">
-            <label className="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue-500 cursor-pointer hover:bg-blue-500 hover:text-white">
+            <label className="w-56 flex flex-col items-center px-4 py-6 bg-white text-blue-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue-500 cursor-pointer hover:bg-blue-500 hover:text-white">
               <svg
                 className="w-8 h-8"
                 fill="currentColor"

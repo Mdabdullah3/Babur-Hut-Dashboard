@@ -11,6 +11,7 @@ import PrimaryButton from "../../components/common/PrimaryButton";
 import useUserStore from "../../store/AuthStore";
 import { useParams } from "react-router-dom";
 import { SERVER } from "../../config";
+import { toDataURL } from "../../utils/DataUrl";
 
 const EditProducts = () => {
   const { id } = useParams();
@@ -103,19 +104,59 @@ const EditProducts = () => {
           material: product?.material,
         },
       });
-      setCoverImage(`${SERVER}${product?.coverPhoto.secure_url}` || null);
-      setImage1(
-        product?.images[0] ? `${SERVER}${product?.images[0].secure_url}` : null
-      );
-      setImage2(
-        product?.images[1] ? `${SERVER}${product?.images[1].secure_url}` : null
-      );
-      setImage3(
-        product?.images[2] ? `${SERVER}${product?.images[2].secure_url}` : null
-      );
-      setVideo(product?.video ? `${SERVER}${product?.video.secure_url}` : null);
+      if (product?.coverPhoto?.secure_url) {
+        const coverImageUrl = `${SERVER}${product?.coverPhoto.secure_url}`;
+        toDataURL(coverImageUrl).then((base64) => {
+          setCoverImage(base64);
+          setForm((prevForm) => ({
+            ...prevForm,
+            coverPhoto: base64,
+          }));
+        });
+      }
+      if (product?.images[0]?.secure_url) {
+        const image1Url = `${SERVER}${product?.images[0].secure_url}`;
+        toDataURL(image1Url).then((base64) => {
+          setImage1(base64);
+          setForm((prevForm) => ({
+            ...prevForm,
+            img: [base64, ...prevForm.img.slice(1)],
+          }));
+        });
+      }
+      if (product?.images[1]?.secure_url) {
+        const image2Url = `${SERVER}${product?.images[1].secure_url}`;
+        toDataURL(image2Url).then((base64) => {
+          setImage2(base64);
+          setForm((prevForm) => ({
+            ...prevForm,
+            img: [prevForm.img[0], base64, prevForm.img[2]],
+          }));
+        });
+      }
+      if (product?.images[2]?.secure_url) {
+        const image3Url = `${SERVER}${product?.images[2].secure_url}`;
+        toDataURL(image3Url).then((base64) => {
+          setImage3(base64);
+          setForm((prevForm) => ({
+            ...prevForm,
+            img: [...prevForm.img.slice(0, 2), base64],
+          }));
+        });
+      }
+      if (product?.video?.secure_url) {
+        const videoUrl = `${SERVER}${product?.video.secure_url}`;
+        toDataURL(videoUrl).then((base64) => {
+          setVideo(base64);
+          setForm((prevForm) => ({
+            ...prevForm,
+            video: base64,
+          }));
+        });
+      }
     }
   }, [product]);
+
   const warrantyType = [
     {
       id: 1,
@@ -141,21 +182,6 @@ const EditProducts = () => {
 
   const scrollToSection = (sectionRef) => {
     sectionRef.current.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleImageUpload = (file, setFile) => {
-    if (!(file instanceof Blob)) {
-      console.error("Invalid file type. Expected a Blob or File.");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = reader.result.split(",")[1];
-      const imageType = file.type;
-      setFile(`data:${imageType};base64,${base64String}`);
-    };
-    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
@@ -185,13 +211,14 @@ const EditProducts = () => {
         material: form?.material,
       },
     };
-
+    console.log(formData);
     try {
       await updateProduct(id, formData);
     } catch (error) {
       toast.error(error.message);
     }
   };
+  console.log(product);
 
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
@@ -230,7 +257,7 @@ const EditProducts = () => {
                 label="Image3"
                 file={image3}
                 name="img3"
-                setFile={(file) => handleImageUpload(file, setImage3)}
+                setFile={setImage3}
               />
             </div>
             <h1 className="text-xl mt-5">Video</h1>
@@ -241,7 +268,7 @@ const EditProducts = () => {
                 label="Product Video"
                 acceptType="video"
                 name="video"
-                setFile={(file) => handleImageUpload(file, setVideo)}
+                setFile={setVideo}
               />
             </div>
           </div>
