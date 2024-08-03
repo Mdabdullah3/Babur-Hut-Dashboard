@@ -23,7 +23,6 @@ const EditProducts = () => {
   const [coverImage, setCoverImage] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [subCategories, setSubCategories] = useState([]);
-  const { user, fetchUser } = useUserStore();
   const { updateProduct, loading, product, fetchProductByIdOrSlug } =
     useProductStore();
   const { categories, fetchCategories } = useCategoryStore();
@@ -31,9 +30,8 @@ const EditProducts = () => {
   const sizeOptions = ["S", "M", "L", "XL", "XXL"];
   useEffect(() => {
     fetchCategories();
-    fetchUser();
     fetchProductByIdOrSlug(id);
-  }, [fetchCategories, fetchUser, fetchProductByIdOrSlug, id]);
+  }, [fetchCategories, fetchProductByIdOrSlug, id]);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -43,14 +41,15 @@ const EditProducts = () => {
   }, [selectedCategory, categories]);
 
   const [form, setForm] = useState({
+    vendorId: product?.customId,
     video: video,
-    user: user?._id,
+    user: product?.user?._id,
     img: [image1, image2, image3].filter(Boolean),
     productName: "",
     summary: "",
     category: "",
     subCategory: "",
-    brand: "niki",
+    brand: "",
     coverPhoto: coverImage,
     description: "",
     price: 0,
@@ -156,7 +155,6 @@ const EditProducts = () => {
       }
     }
   }, [product]);
-
   const warrantyType = [
     {
       id: 1,
@@ -214,12 +212,11 @@ const EditProducts = () => {
     console.log(formData);
     try {
       await updateProduct(id, formData);
+      fetchProductByIdOrSlug(id);
     } catch (error) {
       toast.error(error.message);
     }
   };
-  console.log(product);
-
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
       <form className="col-span-4 w-11/12" onSubmit={handleSubmit}>

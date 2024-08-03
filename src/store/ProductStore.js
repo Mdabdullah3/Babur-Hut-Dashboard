@@ -71,15 +71,15 @@ const useProductStore = create((set) => ({
     updateProduct: async (idOrSlug, productData) => {
         set({ loading: true });
         try {
-            const response = await axios.patch(`${API_URL}/products/${idOrSlug}`, productData);
-            set((state) => ({
-                products: state.products.map((product) =>
-                    product._id === idOrSlug || product.slug === idOrSlug ? response.data.data : product),
-                loading: false,
-            }));
+            const response = await axios.patch(`${API_URL}/products/${idOrSlug}`, productData, {
+                withCredentials: true,
+            });
+            toast.success("Product Updated Successfully");
             console.log(response);
         } catch (error) {
             set({ error: error.response?.data?.message || error.message, loading: false });
+            toast.error(error.response?.data?.message || error.message);
+            console.log(error.response);
         }
     },
 
