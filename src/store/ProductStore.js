@@ -35,7 +35,15 @@ const useProductStore = create((set) => ({
     setLimit: (limit) => set({ limit }),
     setSearchTerm: (searchTerm) => set({ searchTerm }),
     setSort: (sort) => set({ sort }),
-
+    fetchProductByIdForUser: async (userId) => {
+        set({ loading: true });
+        try {
+            const response = await axios.get(`${API_URL}/users/${userId}/products`);
+            set({ product: response.data.data, loading: false });
+        } catch (error) {
+            set({ error: error.response?.data?.message || error.message, loading: false });
+        }
+    },
     fetchProductByIdOrSlug: async (idOrSlug) => {
         set({ loading: true });
         try {
