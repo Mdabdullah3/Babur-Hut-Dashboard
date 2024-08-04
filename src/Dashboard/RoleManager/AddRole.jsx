@@ -72,7 +72,7 @@ const AddRole = () => {
         toast.error("Failed to add Role Manager");
       }
     } catch (error) {
-      toast.error("An error occurred");
+      // toast.error("An error occurred");
     }
   };
 

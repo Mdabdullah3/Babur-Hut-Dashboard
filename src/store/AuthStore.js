@@ -63,7 +63,7 @@ const useUserStore = create((set, get) => ({
         try {
             const response = await axios.post(`${API_URL}/auth/register`, formData);
             if (response.status === 201) {
-                toast.success('Registration successful! Please check your email for verification.');
+                toast.success('Registration successful!');
             } else {
                 toast.error('Registration failed. Please try again.');
             }
