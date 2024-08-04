@@ -5,6 +5,7 @@ import { API_URL } from '../config';
 
 const useUserStore = create((set, get) => ({
     user: null,
+    users: [],
     loading: false,
     error: null,
 
@@ -17,7 +18,15 @@ const useUserStore = create((set, get) => ({
             set({ error: error.message, loading: false });
         }
     },
-
+    fetchAllUser: async () => {
+        set({ loading: true, error: null });
+        try {
+            const response = await axios.get(`${API_URL}/users`, { withCredentials: true });
+            set({ users: response.data.data, loading: false });
+        } catch (error) {
+            set({ error: error.message, loading: false });
+        }
+    },
     updateUser: async (userData) => {
         set({ loading: true, error: null });
         try {

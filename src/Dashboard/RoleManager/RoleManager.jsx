@@ -1,23 +1,16 @@
 import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import useUserStore from "../../store/AuthStore";
+import { useEffect } from "react";
 
 const RoleManager = () => {
-  const roleManager = [
-    {
-      id: 1,
-      role: "Sub Admin",
-      email: "kaT@example.com",
-      status: "Active",
-    },
-    {
-      id: 2,
-      role: "Manager",
-      email: "kaT@example.com",
-      status: "Active",
-    },
-  ];
+  const { users, fetchAllUser } = useUserStore();
 
-  const header = ["Role", "Email", "Status", "Action"];
+  useEffect(() => {
+    fetchAllUser();
+  }, [fetchAllUser]);
+
+  const header = ["Role", "Name", "Email", "Action"];
   return (
     <div className="flex h-screen">
       <div className="flex-1 p-10">
@@ -43,21 +36,29 @@ const RoleManager = () => {
             </tr>
           </thead>
           <tbody>
-            {roleManager.map((voucher) => (
-              <tr key={voucher.id} className="border-b border-gray-200">
-                <td className="py-4 px-6">{voucher.role}</td>
-                <td className="py-4 px-6">{voucher.email}</td>
-                <td className="py-4 px-6">{voucher.status}</td>
-                <td className="py-4 px-6 flex space-x-2">
-                  <button className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
-                    <FiEdit className="mr-1" /> Edit
-                  </button>
-                  <button className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
-                    <FiTrash className="mr-1" /> Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {users.length > 0 ? (
+              <>
+                {users?.map((user) => (
+                  <tr key={user._id} className="border-b border-gray-200">
+                    <td className="py-4 px-6">{user.role}</td>
+                    <td className="py-4 px-6">{user.name}</td>
+                    <td className="py-4 px-6">{user.email}</td>
+                    <td className="py-4 px-6 flex space-x-2">
+                      {/* <button className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
+                        <FiEdit className="mr-1" /> Edit
+                      </button> */}
+                      <button className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                        <FiTrash className="mr-1" /> Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </>
+            ) : (
+              <h1 className="text-center text-xl mt-10 text-red-500">
+                No Users Found{" "}
+              </h1>
+            )}
           </tbody>
         </table>
       </div>

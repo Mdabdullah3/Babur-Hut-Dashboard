@@ -4,7 +4,7 @@ import {
 } from "react-icons/md";
 import { BiSolidCategoryAlt, BiSupport } from "react-icons/bi";
 import { FaCartFlatbed, FaMoneyCheck, FaRocketchat, FaUser, FaUserGroup } from "react-icons/fa6";
-import { CiShoppingBasket } from "react-icons/ci";
+import { CiImageOn, CiShoppingBasket } from "react-icons/ci";
 import { ImLocation } from "react-icons/im";
 import { IoIosRocket } from "react-icons/io";
 import { BsFillHandIndexFill, BsTicketDetailed } from "react-icons/bs";
@@ -36,6 +36,8 @@ import EditEvent from "./Dashboard/EventManager/EditEvent";
 import EditPackage from "./Dashboard/AdManager/EditPackage";
 import Supports from "./Dashboard/Support";
 import SupportDetails from "./Dashboard/Support/SupportDetails";
+import BannerImageUpload from "./Dashboard/BannerImageUpload/BannerImageUpload";
+import UploadImage from "./Dashboard/BannerImageUpload/UploadImage";
 
 const menu = [
     {
@@ -232,6 +234,20 @@ const menu = [
         path: "role-manager",
         navMenu: true,
         component: <RoleManager />
+    },
+    {
+        name: "Banner Image",
+        layout: "/admin",
+        icon: <CiImageOn className="h-6 w-6" />,
+        path: "banner-img",
+        navMenu: true,
+        component: <BannerImageUpload />
+    },
+    {
+        name: "Banner Image Add",
+        layout: "/admin",
+        path: "banner-img-upload",
+        component: <UploadImage />
     },
     {
         name: "Add Role Manager",
