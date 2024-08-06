@@ -24,9 +24,12 @@ const AddMainCategory = () => {
   });
   const navigate = useNavigate();
   const handleSubmit = (e) => {
+    console.log(form);
     e.preventDefault();
     addCategory(form, navigate);
   };
+
+  console.log(image);
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"
