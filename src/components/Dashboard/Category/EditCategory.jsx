@@ -4,8 +4,13 @@ import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
 import useCategoryStore from "../../../store/categoryStore";
 import { useParams } from "react-router-dom";
+import FileUpload from "../../common/FileUpload";
+import { toDataURL } from "";
+import { SERVER } from "../../../config";
 
 const EditCategory = () => {
+  const [image, setImage] = useState(null);
+
   const { id } = useParams();
   const { fetchCategoryById, category, updateCategory, loading } =
     useCategoryStore();
@@ -15,7 +20,16 @@ const EditCategory = () => {
   ];
   useEffect(() => {
     fetchCategoryById(id);
-  }, [fetchCategoryById]);
+  }, [fetchCategoryById, id]);
+
+  useEffect(() => {
+    if (category?.image?.secure_url) {
+      const avatarUrl = `${SERVER}${category.image.secure_url}`;
+      toDataURL(avatarUrl).then((base64) => {
+        setImage(base64);
+      });
+    }
+  }, [category?.image?.secure_url]);
 
   const [form, setForm] = useState({
     name: category?.name || "",
@@ -68,7 +82,12 @@ const EditCategory = () => {
         placeholder="Category VAT"
         required
       />
-      <div></div>
+      <FileUpload
+        label="Category Image"
+        setFile={setImage}
+        name="image"
+        file={image}
+      />
       <PrimaryButton value={loading ? "Updating..." : "Update Category"} />
     </form>
   );

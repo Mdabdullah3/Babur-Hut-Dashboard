@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputField from "../../common/InputField";
 import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
@@ -20,8 +20,14 @@ const AddMainCategory = () => {
     status: "",
     commission: "",
     vat: "",
-    image: image,
+    image: null,
+    icon: "",
   });
+
+  useEffect(() => {
+    setForm((prevForm) => ({ ...prevForm, image }));
+  }, [image]);
+  console.log(form);
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     console.log(form);
@@ -29,7 +35,6 @@ const AddMainCategory = () => {
     addCategory(form, navigate);
   };
 
-  console.log(image);
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"
@@ -65,6 +70,12 @@ const AddMainCategory = () => {
         value={form.vat}
         onChange={(e) => setForm({ ...form, vat: e.target.value })}
         placeholder="Category VAT"
+      />
+      <InputField
+        label="Category Icon"
+        value={form.icon}
+        onChange={(e) => setForm({ ...form, icon: e.target.value })}
+        placeholder="Category Icon"
       />
       <FileUpload label="Category Image" setFile={setImage} name="image" />
       <PrimaryButton value={"Add Category"} />

@@ -1,43 +1,64 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { lazy, Suspense } from "react";
 import InputSearch from "../../components/common/InputSearch";
 import TableHead from "../../components/common/TableHead";
-import AddMainCategory from "../../components/Dashboard/Category/AddMainCategory";
-import AddSubCategory from "../../components/Dashboard/Category/AddSubCategory";
 import useCategoryStore from "../../store/categoryStore";
 import { useNavigate } from "react-router-dom";
+import debounce from "lodash.debounce";
+
+const AddMainCategory = lazy(() =>
+  import("../../components/Dashboard/Category/AddMainCategory")
+);
+const AddSubCategory = lazy(() =>
+  import("../../components/Dashboard/Category/AddSubCategory")
+);
 
 const Categories = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeMenu, setActiveMenu] = useState("All");
-  const {
-    categories,
-    subCategories,
-    fetchCategories,
-    fetchSubCategories,
-    deleteCategory,
-    deleteSubCategory,
-  } = useCategoryStore();
+  const { categories, subCategories, fetchCategories, fetchSubCategories } =
+    useCategoryStore();
+
   useEffect(() => {
     fetchCategories();
     fetchSubCategories();
-  }, [fetchCategories, fetchSubCategories, subCategories, categories]);
-  const navigate = useNavigate();
-  const handleEdit = (id, type) => {
-    if (type === "category") {
-      navigate(`/admin/edit-category/${id}`);
-    } else if (type === "subCategory") {
-      navigate(`/admin/edit-sub-category/${id}`);
-    }
-  };
+  }, [fetchCategories, fetchSubCategories]);
 
-  const categoriesData = [...categories, ...subCategories];
+  const navigate = useNavigate();
+
+  const handleEdit = useCallback(
+    (id, type) => {
+      if (type === "category") {
+        navigate(`/admin/edit-category/${id}`);
+      } else if (type === "subCategory") {
+        navigate(`/admin/edit-sub-category/${id}`);
+      }
+    },
+    [navigate]
+  );
+
+  const categoriesData = useMemo(
+    () => [...categories, ...subCategories],
+    [categories, subCategories]
+  );
+
+  const filteredCategories = useMemo(() => {
+    return categoriesData.filter((item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [categoriesData, searchTerm]);
+
+  const debouncedSearch = useCallback(
+    debounce((value) => setSearchTerm(value), 300),
+    []
+  );
 
   const header = ["Category Name", "Status", "Action"];
   const menu = ["All", "Add Main Category", "Add Sub Category"];
 
   return (
     <section className="w-11/12 mx-auto">
-      <div className="flex mt-8 items-center justify-center gap-10 w-10/12 mx-auto my-4 border-b-2 ">
+      <div className="flex mt-8 items-center justify-center gap-10 w-10/12 mx-auto my-4 border-b-2">
         {menu.map((item, index) => (
           <button
             key={index}
@@ -59,19 +80,18 @@ const Categories = () => {
             <InputSearch
               placeholder="Search For Categories.."
               value={searchTerm}
-              onChange={(value) => setSearchTerm(value)}
+              onChange={(e) => debouncedSearch(e.target.value)}
             />
           </div>
           <div className="overflow-auto">
-            <table className="table-auto w-full  mt-10">
+            <table className="table-auto w-full mt-10">
               <TableHead header={header} />
-              {categoriesData?.map((item) => (
+              {filteredCategories?.map((item) => (
                 <tbody key={item._id}>
                   <tr className="border-r border-l border-gray-300 border-b">
                     <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
                       {item.name}
                     </td>
-
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
                       {item.status}
                     </td>
@@ -95,8 +115,16 @@ const Categories = () => {
           </div>
         </>
       )}
-      {activeMenu === "Add Main Category" && <AddMainCategory />}
-      {activeMenu === "Add Sub Category" && <AddSubCategory />}
+      {activeMenu === "Add Main Category" && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <AddMainCategory />
+        </Suspense>
+      )}
+      {activeMenu === "Add Sub Category" && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <AddSubCategory />
+        </Suspense>
+      )}
     </section>
   );
 };
