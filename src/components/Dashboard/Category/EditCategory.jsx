@@ -5,7 +5,7 @@ import PrimaryButton from "../../common/PrimaryButton";
 import useCategoryStore from "../../../store/categoryStore";
 import { useParams } from "react-router-dom";
 import FileUpload from "../../common/FileUpload";
-import { toDataURL } from "";
+import { toDataURL } from "../../../utils/DataUrl";
 import { SERVER } from "../../../config";
 
 const EditCategory = () => {
@@ -43,6 +43,12 @@ const EditCategory = () => {
     e.preventDefault();
     updateCategory(id, form);
   };
+
+  const handleImageChange = (img) => {
+    setImage(img);
+    setForm({ ...form, image: img });
+  };
+  console.log(form);
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"
@@ -84,7 +90,7 @@ const EditCategory = () => {
       />
       <FileUpload
         label="Category Image"
-        setFile={setImage}
+        setFile={handleImageChange}
         name="image"
         file={image}
       />

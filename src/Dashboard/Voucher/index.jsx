@@ -48,7 +48,7 @@ const VoucherAdminPanel = () => {
             <tbody>
               {vouchers.map((voucher) => (
                 <tr key={voucher._id} className="border-b border-gray-200">
-                  <td className="py-4 px-6">{voucher.voucherCode}</td>
+                  <td className="py-4 px-6">{voucher.redeemCode}</td>
                   <td className="py-4 px-6">{voucher.discount}</td>
                   <td className="py-4 px-6">{voucher.startDate}</td>
                   <td className="py-4 px-6">{voucher.endDate}</td>

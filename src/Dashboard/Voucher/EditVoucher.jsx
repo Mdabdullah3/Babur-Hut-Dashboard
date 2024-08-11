@@ -11,7 +11,7 @@ const EditVoucher = () => {
   const { fetchVoucherById, voucher, updateVoucher } = useVoucherStore();
 
   const [form, setForm] = useState({
-    voucherCode: "",
+    redeemCode: voucher?.redeemCode || "",
     startDate: voucher?.startDate || "",
     endDate: voucher?.endDate || "",
     discount: voucher?.discount || "",
@@ -28,7 +28,7 @@ const EditVoucher = () => {
     await updateVoucher(id, form);
     toast.success("Voucher created successfully!");
     setForm({
-      voucherCode: "",
+      redeemCode: "",
       startDate: "",
       endDate: "",
       discount: "",
@@ -41,10 +41,10 @@ const EditVoucher = () => {
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <InputField
-            label="Voucher Code"
-            value={form.voucherCode}
-            placeholder="Enter Voucher Code"
-            onChange={(e) => setForm({ ...form, voucherCode: e.target.value })}
+            label="Redeem Code"
+            value={form.redeemCode}
+            placeholder="Enter Redeem Code"
+            onChange={(e) => setForm({ ...form, redeemCode: e.target.value })}
             required
           />
           <InputField
