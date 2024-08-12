@@ -1,5 +1,5 @@
 import React from "react";
-import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
+import { FiEdit, FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const EventManager = () => {

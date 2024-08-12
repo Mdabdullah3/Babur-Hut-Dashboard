@@ -48,3 +48,92 @@ export function SidebarLinks(props) {
 }
 
 export default SidebarLinks;
+
+
+// import React from "react";
+// import { Link, useLocation } from "react-router-dom";
+// import useUserStore from "../../store/AuthStore";
+
+// export function SidebarLinks(props) {
+//     const { user } = useUserStore();
+//     let location = useLocation();
+//     const { routes } = props;
+
+//     const activeRoute = (routeName) => {
+//         return location.pathname.includes(routeName);
+//     };
+
+//     const checkPermission = (routeName) => {
+//         switch (routeName) {
+//             case 'vendor':
+//                 return user?.otherPermissions.isVendor;
+//             case 'customer':
+//                 return user?.otherPermissions.isCustomer;
+//             case 'categories':
+//                 return user?.otherPermissions.isCategories;
+//             case 'products':
+//                 return user?.otherPermissions.isProducts;
+//             case 'order-review':
+//                 return user?.otherPermissions.isOrders;
+//             case 'vouchers':
+//                 return user?.otherPermissions.isVouchers;
+//             case 'ads-manager':
+//                 return user?.otherPermissions.isAdManager;
+//             case 'role-manager':
+//                 return user?.otherPermissions.isRoleManager;
+//             case 'message-center':
+//                 return user?.otherPermissions.isMessageCenter;
+//             case 'finance':
+//                 return user?.otherPermissions.isFinance;
+//             case 'shipment':
+//                 return user?.otherPermissions.isShipment;
+//             case 'support':
+//                 return user?.otherPermissions.isSupport;
+//             case 'event-manager':
+//                 return user?.otherPermissions.isEventManager;
+//             default:
+//                 return false;
+//         }
+//     };
+
+//     const createLinks = (routes) => {
+//         return routes.map((route, index) => {
+//             if (route.layout === "/admin" && route?.navMenu === true && checkPermission(route.path)) {
+//                 return (
+//                     <Link key={index} to={route.layout + "/" + route.path}>
+//                         <div className="relative mb-5 flex hover:cursor-pointer">
+//                             <li
+//                                 className="my-[3px] flex cursor-pointer items-center px-8"
+//                                 key={index}
+//                             >
+//                                 <span
+//                                     className={`${activeRoute(route.path) === true
+//                                         ? "font-bold text-primary"
+//                                         : "font-medium"
+//                                         }`}
+//                                 >
+//                                     {route.icon ? route.icon : ""}{" "}
+//                                 </span>
+//                                 <p
+//                                     className={`leading-1 ml-4 flex uppercase tracking-wider ${activeRoute(route.path) === true
+//                                         ? "font-bold text-primary "
+//                                         : "font-medium text-gray-500"
+//                                         }`}
+//                                 >
+//                                     {route.name}
+//                                 </p>
+//                             </li>
+//                             {activeRoute(route.path) ? (
+//                                 <div className="absolute right-0 top-px h-9 w-1 rounded-lg bg-primary" />
+//                             ) : null}
+//                         </div>
+//                     </Link>
+//                 );
+//             }
+//         });
+//     };
+
+//     return createLinks(routes);
+// }
+
+// export default SidebarLinks;
