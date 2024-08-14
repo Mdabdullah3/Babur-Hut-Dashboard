@@ -11,6 +11,7 @@ const EditVoucher = () => {
   const { fetchVoucherById, voucher, updateVoucher } = useVoucherStore();
 
   const [form, setForm] = useState({
+    user: voucher?.user?._id || "",
     redeemCode: voucher?.redeemCode || "",
     startDate: voucher?.startDate || "",
     endDate: voucher?.endDate || "",

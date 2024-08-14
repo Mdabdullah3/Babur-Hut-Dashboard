@@ -177,7 +177,6 @@ const EditProducts = () => {
     variants: useRef(null),
     serviceWarranty: useRef(null),
   };
-
   const scrollToSection = (sectionRef) => {
     sectionRef.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -185,8 +184,8 @@ const EditProducts = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      vendorId: "",
-      user: form.user,
+      vendorId: product.customId,
+      user: product.user._id,
       video: form.video,
       name: form.productName,
       slug: form.productName.toLowerCase().split(" ").join("-"),

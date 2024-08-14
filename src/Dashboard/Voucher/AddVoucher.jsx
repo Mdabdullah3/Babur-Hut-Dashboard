@@ -4,9 +4,12 @@ import InputField from "../../components/common/InputField";
 import SelectField from "../../components/common/SelectField";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import useVoucherStore from "../../store/useVoucherStore";
+import useUserStore from "../../store/AuthStore";
 
 const AddNewVoucher = () => {
+  const { user } = useUserStore();
   const [form, setForm] = useState({
+    user: user?._id,
     redeemCode: "",
     startDate: "",
     endDate: "",
