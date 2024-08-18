@@ -26,24 +26,24 @@ const CreateShippingAddress = () => {
 
   const handleShippingChargeChange = (e, districtName) => {
     const charge = e.target.value;
-    if (selectedDistricts.length === bdDistricts.length) {
-      const newCharges = {};
-      bdDistricts.forEach((district) => {
-        newCharges[district.name] = charge;
-      });
-      setShippingCharges(newCharges);
-    } else {
-      setShippingCharges({
-        ...shippingCharges,
-        [districtName]: charge,
-      });
-    }
+    setShippingCharges({
+      ...shippingCharges,
+      [districtName]: charge,
+    });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (districtName) => {
+    const data = {
+      district: districtName,
+      deliveryFee: shippingCharges[districtName] || 0,
+    };
+    console.log("Single District Data:", data);
+  };
+
+  const handleUpdateAll = () => {
     const selectedWithCharges = selectedDistricts.map((name) => ({
       district: name,
-      shippingCharge: shippingCharges[name] || 0,
+      deliveryFee: shippingCharges[name] || 0,
     }));
     console.log("Selected Districts with Charges:", selectedWithCharges);
   };
@@ -51,7 +51,7 @@ const CreateShippingAddress = () => {
   const header = ["No", "District", "Shipping Charge", "Action"];
 
   return (
-    <div className="container mx-auto mt-8">
+    <div className="container mx-auto mt-8 relative">
       <table className="table-auto w-full">
         <thead>
           <tr>
@@ -91,7 +91,7 @@ const CreateShippingAddress = () => {
               </td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  onClick={handleSubmit}
+                  onClick={() => handleSubmit(item.name)}
                   className="bg-primary text-white px-4 py-2 rounded"
                 >
                   Submit
@@ -101,6 +101,19 @@ const CreateShippingAddress = () => {
           ))}
         </tbody>
       </table>
+
+      <section class="flex border-t gap-4 border-gray-200 p-2 bg-white sticky bottom-0 w-full justify-end items-center">
+        {selectedDistricts.length > 1 && (
+          <div className="my-2">
+            <button
+              onClick={handleUpdateAll}
+              className="bg-secondary text-white px-4 py-2 rounded"
+            >
+              Update All
+            </button>
+          </div>
+        )}
+      </section>
     </div>
   );
 };

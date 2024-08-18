@@ -28,6 +28,8 @@ const EditProducts = () => {
   const { categories, fetchCategories } = useCategoryStore();
   const genderOption = ["Men", "Women", "Baby", "Unisex"];
   const sizeOptions = ["S", "M", "L", "XL", "XXL"];
+
+  console.log(product);
   useEffect(() => {
     fetchCategories();
     fetchProductByIdOrSlug(id);
@@ -90,7 +92,7 @@ const EditProducts = () => {
         description: product.description,
         summary: product?.summary,
         price: product.price,
-        promoPrice: product.promoPrice,
+        promoPrice: product.discount,
         quantity: product.quantity,
         specifications: {
           screenSize: product?.screenSize,

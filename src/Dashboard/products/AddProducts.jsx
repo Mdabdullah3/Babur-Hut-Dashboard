@@ -23,7 +23,7 @@ const AddProducts = () => {
   const { addProduct } = useProductStore();
   const { categories, fetchCategories } = useCategoryStore();
   const genderOption = ["Men", "Women", "Baby", "Unisex"];
-  const sizeOptions = ["S", "M", "L", "XL", "XXL"];
+  const sizeOptions = ["s", "M", "L", "XL", "XXL"];
   useEffect(() => {
     fetchCategories();
     fetchUser();
@@ -41,7 +41,7 @@ const AddProducts = () => {
     coverPhoto: coverImage,
     description: "",
     price: 0,
-    promoPrice: 0,
+    discount: 0,
     quantity: 0,
     warranty: "",
     screenSize: "",
@@ -98,17 +98,19 @@ const AddProducts = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      vendorId: "",
       user: form.user,
       video: form.video,
       name: form.productName,
       slug: form.productName.toLowerCase().split(" ").join("-"),
       price: form.price,
+      discount: form.discount,
       quantity: form.quantity,
       summary: form.summary,
       description: form.description,
-      category: `${form.category}/${form.subCategory}`,
+      subCategory: selectedSubCategory,
+      category: selectedCategory,
       brand: form.brand,
+      warranty: form.warranty,
       coverPhoto: form.coverPhoto,
       images: form.img.map((file) => `${file}`),
       specifications: {
@@ -120,6 +122,12 @@ const AddProducts = () => {
         size: form?.size,
         gender: form?.gender,
         material: form?.material,
+      },
+      packaging: {
+        weight: form?.packageWeight,
+        height: form?.packageDimensionHeight,
+        width: form?.packageDimensionWidth,
+        dimension: form?.packageDimensionLength,
       },
     };
     try {
@@ -136,6 +144,8 @@ const AddProducts = () => {
       value: subCategory._id,
     })),
   }));
+
+  console.log(selectedCategory, selectedSubCategory);
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
       <form className="col-span-4 w-11/12" onSubmit={handleSubmit}>
@@ -262,9 +272,9 @@ const AddProducts = () => {
                 label="Promo Price"
                 type="number"
                 placeholder="Promo Price"
-                value={form.promoPrice}
+                value={form.discount}
                 onChange={(e) =>
-                  setForm({ ...form, promoPrice: e.target.value })
+                  setForm({ ...form, discount: e.target.value })
                 }
               />
               <SelectField
