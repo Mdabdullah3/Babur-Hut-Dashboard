@@ -1,16 +1,36 @@
-import { FiEdit, FiPlus, FiTrash } from "react-icons/fi";
+import React, { useEffect } from "react";
+import { FiPlus, FiTrash } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import useUserStore from "../../store/AuthStore";
-import { useEffect } from "react";
+import InputSearch from "../../components/common/InputSearch";
 
 const RoleManager = () => {
-  const { users, fetchAllUser } = useUserStore();
+  const {
+    users,
+    fetchAllUser,
+    currentPage,
+    totalPages,
+    setPage,
+    setSearchTerm,
+    setSortField,
+  } = useUserStore();
 
   useEffect(() => {
     fetchAllUser();
   }, [fetchAllUser]);
 
-  const header = ["Role", "Name", "Email", "Action"];
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+  };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  const handleSort = (field) => {
+    setSortField(field);
+  };
+
   return (
     <div className="flex h-screen">
       <div className="flex-1 p-10">
@@ -22,45 +42,80 @@ const RoleManager = () => {
             </button>
           </Link>
         </div>
+        <div className="flex-1 mb-4">
+          <InputSearch
+            placeholder="Search For Users.."
+            onChange={handleSearch}
+          />
+        </div>
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
             <tr>
-              {header.map((head, index) => (
-                <th
-                  key={index}
-                  className="py-3 px-6 bg-gray-200 text-left text-xs font-bold uppercase border-b border-gray-200"
-                >
-                  {head}
-                </th>
-              ))}
+              <th
+                onClick={() => handleSort("role")}
+                className="py-3 px-6 bg-gray-200 text-left text-xs font-bold uppercase border-b border-gray-200 cursor-pointer"
+              >
+                Role
+              </th>
+              <th
+                onClick={() => handleSort("name")}
+                className="py-3 px-6 bg-gray-200 text-left text-xs font-bold uppercase border-b border-gray-200 cursor-pointer"
+              >
+                Name
+              </th>
+              <th
+                onClick={() => handleSort("email")}
+                className="py-3 px-6 bg-gray-200 text-left text-xs font-bold uppercase border-b border-gray-200 cursor-pointer"
+              >
+                Email
+              </th>
+              <th className="py-3 px-6 bg-gray-200 text-left text-xs font-bold uppercase border-b border-gray-200">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
             {users.length > 0 ? (
-              <>
-                {users?.map((user) => (
-                  <tr key={user._id} className="border-b border-gray-200">
-                    <td className="py-4 px-6">{user.role}</td>
-                    <td className="py-4 px-6">{user.name}</td>
-                    <td className="py-4 px-6">{user.email}</td>
-                    <td className="py-4 px-6 flex space-x-2">
-                      {/* <button className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
-                        <FiEdit className="mr-1" /> Edit
-                      </button> */}
-                      <button className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
-                        <FiTrash className="mr-1" /> Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </>
+              users.map((user) => (
+                <tr key={user._id} className="border-b border-gray-200">
+                  <td className="py-4 px-6">{user.role}</td>
+                  <td className="py-4 px-6">{user.name}</td>
+                  <td className="py-4 px-6">{user.email}</td>
+                  <td className="py-4 px-6 flex space-x-2">
+                    <button className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                      <FiTrash className="mr-1" /> Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
             ) : (
-              <h1 className="text-center text-xl mt-10 text-red-500">
-                No Users Found{" "}
-              </h1>
+              <tr>
+                <td colSpan={4} className="text-center text-xl py-6">
+                  No Users Found
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
+        <div className="flex justify-end mt-4">
+          <button
+            disabled={currentPage <= 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+            className="px-4 py-2 bg-gray-300 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+          <span className="mx-2 px-4 py-2 border-gray-400 border rounded-lg ">
+            {currentPage}
+          </span>
+          <button
+            disabled={currentPage >= totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+            className="px-4 py-2 bg-gray-300 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

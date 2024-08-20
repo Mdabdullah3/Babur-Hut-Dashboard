@@ -37,6 +37,7 @@ const EditCategory = () => {
     status: category?.status || "",
     commission: category?.commission || "",
     vat: category?.vat || "",
+    icon: category?.icon || "",
   });
 
   const handleSubmit = (e) => {
@@ -87,6 +88,12 @@ const EditCategory = () => {
         onChange={(e) => setForm({ ...form, vat: e.target.value })}
         placeholder="Category VAT"
         required
+      />
+      <InputField
+        label="Category Icon"
+        value={form.icon}
+        onChange={(e) => setForm({ ...form, icon: e.target.value })}
+        placeholder="Category Icon"
       />
       <FileUpload
         label="Category Image"

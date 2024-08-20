@@ -8,7 +8,11 @@ const useUserStore = create((set, get) => ({
     users: [],
     loading: false,
     error: null,
-
+    currentPage: 1,
+    totalPages: 1,
+    searchTerm: '',
+    sortField: 'createdAt',
+    sortOrder: 'asc',
     fetchUser: async () => {
         set({ loading: true, error: null });
         try {
@@ -18,15 +22,29 @@ const useUserStore = create((set, get) => ({
             set({ error: error.message, loading: false });
         }
     },
-    fetchAllUser: async () => {
-        set({ loading: true, error: null });
+    fetchAllUser: async (page = 1, limit = 10, searchTerm = '', sortField = 'createdAt', sortOrder = 'asc') => {
+        set({ loading: true, error: null, searchTerm, sortField, sortOrder });
         try {
-            const response = await axios.get(`${API_URL}/users`, { withCredentials: true });
-            set({ users: response.data.data, loading: false });
+            const response = await axios.get(`${API_URL}/users`, {
+                params: {
+                    _page: page,
+                    _limit: limit,
+                    _search: searchTerm,
+                    _sort: `${sortField},${sortOrder}`
+                },
+                withCredentials: true
+            });
+            set({
+                users: response.data.data,
+                loading: false,
+                currentPage: page,
+                totalPages: response.data.totalPages
+            });
         } catch (error) {
             set({ error: error.message, loading: false });
         }
     },
+
     updateUser: async (userData) => {
         set({ loading: true, error: null });
         try {
@@ -72,7 +90,7 @@ const useUserStore = create((set, get) => ({
         try {
             const response = await axios.post(`${API_URL}/auth/register`, formData);
             if (response.status === 201) {
-                toast.success('Registration successful!');
+                toast.success('Admin Registration successful!');
             } else {
                 toast.error('Registration failed. Please try again.');
             }
@@ -83,7 +101,20 @@ const useUserStore = create((set, get) => ({
             set({ isLoading: false });
         }
     },
+    setSearchTerm: (term) => {
+        set({ searchTerm: term });
+        get().fetchAllUser(1, 10, term, get().sortField, get().sortOrder);
+    },
 
+    setPage: (page) => {
+        get().fetchAllUser(page, 10, get().searchTerm, get().sortField, get().sortOrder);
+    },
+
+    setSortField: (field) => {
+        const order = get().sortOrder === 'asc' ? 'desc' : 'asc';
+        set({ sortField: field, sortOrder: order });
+        get().fetchAllUser(1, 4, get().searchTerm, field, order);
+    }
 }));
 
 export default useUserStore;

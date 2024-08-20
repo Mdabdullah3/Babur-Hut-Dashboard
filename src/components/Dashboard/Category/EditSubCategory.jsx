@@ -4,8 +4,13 @@ import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
 import useCategoryStore from "../../../store/categoryStore";
 import { useParams } from "react-router-dom";
+import { SERVER } from "../../../config";
+import { toDataURL } from "../../../utils/DataUrl";
+import FileUpload from "../../common/FileUpload";
 const EditSubCategory = () => {
   const { id } = useParams();
+  const [image, setImage] = useState(null);
+
   const {
     updateSubCategory,
     subCategory,
@@ -23,6 +28,15 @@ const EditSubCategory = () => {
   }, [fetchCategories, fetchSubCategories, fetchSubCategoryById, id]);
 
   const categoriesData = [...categories, ...subCategories];
+
+  useEffect(() => {
+    if (subCategory?.image?.secure_url) {
+      const avatarUrl = `${SERVER}${subCategory.image.secure_url}`;
+      toDataURL(avatarUrl).then((base64) => {
+        setImage(base64);
+      });
+    }
+  }, [subCategory?.image?.secure_url]);
   const status = [
     {
       id: 1,
@@ -42,11 +56,16 @@ const EditSubCategory = () => {
     status: subCategory?.status || "",
     commission: subCategory?.commission || "",
     vat: subCategory?.vat || "",
+    icon: subCategory?.icon || "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await updateSubCategory(id, form);
+  };
+  const handleImageChange = (img) => {
+    setImage(img);
+    setForm({ ...form, image: img });
   };
   return (
     <form
@@ -94,6 +113,18 @@ const EditSubCategory = () => {
         value={form.vat}
         onChange={(e) => setForm({ ...form, vat: e.target.value })}
         placeholder={"Category VAT"}
+      />
+      <InputField
+        label="Category Icon"
+        value={form.icon}
+        onChange={(e) => setForm({ ...form, icon: e.target.value })}
+        placeholder="Category Icon"
+      />
+      <FileUpload
+        label="Sub Category Image"
+        setFile={handleImageChange}
+        name="image"
+        file={image}
       />
       <PrimaryButton value={loading ? "Adding..." : "Add Sub Category"} />
     </form>

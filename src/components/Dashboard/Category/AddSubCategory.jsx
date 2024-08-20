@@ -3,7 +3,10 @@ import InputField from "../../common/InputField";
 import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
 import useCategoryStore from "../../../store/categoryStore";
+import FileUpload from "../../common/FileUpload";
 const AddSubCategory = () => {
+  const [image, setImage] = useState(null);
+
   const {
     categories,
     subCategories,
@@ -34,8 +37,12 @@ const AddSubCategory = () => {
     status: "",
     commission: "",
     vat: "",
+    image: null,
+    icon: "",
   });
-
+  useEffect(() => {
+    setForm((prevForm) => ({ ...prevForm, image }));
+  }, [image]);
   const categoriesData = [...categories, ...subCategories];
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -88,6 +95,13 @@ const AddSubCategory = () => {
         onChange={(e) => setForm({ ...form, vat: e.target.value })}
         placeholder={"Category VAT"}
       />
+      <InputField
+        label="Category Icon"
+        value={form.icon}
+        onChange={(e) => setForm({ ...form, icon: e.target.value })}
+        placeholder="Category Icon"
+      />
+      <FileUpload label="Sub Category Image" setFile={setImage} name="image" />
       <PrimaryButton value={"Add Sub Category"} />
     </form>
   );
