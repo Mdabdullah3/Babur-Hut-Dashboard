@@ -13,6 +13,7 @@ const RoleManager = () => {
     setPage,
     setSearchTerm,
     setSortField,
+    deleteUser,
   } = useUserStore();
 
   useEffect(() => {
@@ -30,7 +31,14 @@ const RoleManager = () => {
   const handleSort = (field) => {
     setSortField(field);
   };
+  const adminUsers = users.filter((user) => user.role === "admin");
+  const handleDelete = (userId) => {
+    if (window.confirm("Are you sure you want to delete this admin?")) {
+      deleteUser(userId);
+    }
+  };
 
+  console.log(adminUsers, users);
   return (
     <div className="flex h-screen">
       <div className="flex-1 p-10">
@@ -75,14 +83,17 @@ const RoleManager = () => {
             </tr>
           </thead>
           <tbody>
-            {users.length > 0 ? (
-              users.map((user) => (
+            {adminUsers.length > 0 ? (
+              adminUsers?.map((user) => (
                 <tr key={user._id} className="border-b border-gray-200">
                   <td className="py-4 px-6">{user.role}</td>
                   <td className="py-4 px-6">{user.name}</td>
                   <td className="py-4 px-6">{user.email}</td>
                   <td className="py-4 px-6 flex space-x-2">
-                    <button className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                    <button
+                      onClick={() => handleDelete(user?._id)}
+                      className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                    >
                       <FiTrash className="mr-1" /> Delete
                     </button>
                   </td>
@@ -97,7 +108,7 @@ const RoleManager = () => {
             )}
           </tbody>
         </table>
-        <div className="flex justify-end mt-4">
+        {/* <div className="flex justify-end mt-4">
           <button
             disabled={currentPage <= 1}
             onClick={() => handlePageChange(currentPage - 1)}
@@ -115,7 +126,7 @@ const RoleManager = () => {
           >
             Next
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

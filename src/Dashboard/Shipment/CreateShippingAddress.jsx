@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { District } from "../../utils/constant";
+import { API_URL } from "../../config";
 
 const CreateShippingAddress = () => {
   const [bdDistricts] = useState(District);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [shippingCharges, setShippingCharges] = useState({});
-
+  const [shipping, setShipping] = useState([]);
+  useEffect(() => {
+    const url = `${API_URL}/delivery-fees?_limit=64`;
+    fetch(url, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => setShipping(data?.data));
+  }, []);
   const handleSelectAll = (e) => {
     if (e.target.checked) {
       setSelectedDistricts(bdDistricts.map((district) => district.name));
@@ -70,22 +79,22 @@ const CreateShippingAddress = () => {
           </tr>
         </thead>
         <tbody>
-          {bdDistricts.map((item, index) => (
+          {shipping?.map((item, index) => (
             <tr key={index}>
               <td className="border px-4 py-2 text-center">
                 <input
                   type="checkbox"
-                  onChange={(e) => handleSelectDistrict(e, item.name)}
-                  checked={selectedDistricts.includes(item.name)}
+                  onChange={(e) => handleSelectDistrict(e, item.district)}
+                  checked={selectedDistricts.includes(item.district)}
                 />
               </td>
               <td className="border px-4 py-2 text-center">{index + 1}</td>
-              <td className="border px-4 py-2 text-center">{item.name}</td>
+              <td className="border px-4 py-2 text-center">{item.district}</td>
               <td className="border px-4 py-2 text-center">
                 <input
                   type="number"
-                  value={shippingCharges[item.name] || ""}
-                  onChange={(e) => handleShippingChargeChange(e, item.name)}
+                  value={shippingCharges[item.deliveryFee] || ""}
+                  onChange={(e) => handleShippingChargeChange(e, item.district)}
                   className="w-full px-2 py-1 border rounded"
                 />
               </td>

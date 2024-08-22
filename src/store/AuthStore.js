@@ -22,7 +22,7 @@ const useUserStore = create((set, get) => ({
             set({ error: error.message, loading: false });
         }
     },
-    fetchAllUser: async (page = 1, limit = 10, searchTerm = '', sortField = 'createdAt', sortOrder = 'asc') => {
+    fetchAllUser: async (page = 1, limit = 2000, searchTerm = '', sortField = 'createdAt', sortOrder = 'asc') => {
         set({ loading: true, error: null, searchTerm, sortField, sortOrder });
         try {
             const response = await axios.get(`${API_URL}/users`, {
@@ -71,11 +71,11 @@ const useUserStore = create((set, get) => ({
         set({ loading: true, error: null });
         try {
             const response = await axios.post(`${API_URL}/auth/login`, { email, password }, { withCredentials: true });
-            if (response.status === 200) {
+            if (response?.data?.data?.role === "admin") {
                 await get().fetchUser();
                 toast.success('Login successful');
                 router('/admin');
-                console.log(response)
+                console.log(response?.data?.data?.role)
             } else {
                 toast.error('Login failed. Please try again.');
                 set({ loading: false });
@@ -114,7 +114,18 @@ const useUserStore = create((set, get) => ({
         const order = get().sortOrder === 'asc' ? 'desc' : 'asc';
         set({ sortField: field, sortOrder: order });
         get().fetchAllUser(1, 4, get().searchTerm, field, order);
-    }
+    },
+    deleteUser: async (userId) => {
+        set({ loading: true, error: null });
+        try {
+            await axios.delete(`${API_URL}/users/${userId}`, { withCredentials: true });
+            toast.success('User deleted successfully!');
+            get().fetchAllUser();
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to delete user');
+            set({ loading: false });
+        }
+    },
 }));
 
 export default useUserStore;

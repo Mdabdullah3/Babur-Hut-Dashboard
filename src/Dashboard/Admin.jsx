@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineArrowUp } from "react-icons/ai";
 import PieChart from "../components/charts/PieChart";
 import BarChart from "../components/charts/BarChart";
@@ -6,15 +6,30 @@ import AreaLineChart from "../components/charts/AreaLineChart";
 import PrimaryButton from "../components/common/PrimaryButton";
 import RecentOrder from "../components/Dashboard/RecentOrder";
 import useUserStore from "../store/AuthStore";
+import { Navigate } from "react-router-dom";
 
 const Admin = () => {
-  const { user, loading, fetchUser } = useUserStore();
+  const { user, fetchUser } = useUserStore();
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      fetchUser();
-    }
-  }, [user, fetchUser]);
+    const loadUser = async () => {
+      await fetchUser();
+      setLoading(false);
+    };
+
+    loadUser();
+  }, [fetchUser]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user || user.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
+
   console.log(user);
   return (
     <section>
