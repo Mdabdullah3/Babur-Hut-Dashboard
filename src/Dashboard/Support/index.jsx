@@ -1,25 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FiTrash } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import useReportStore from "../../store/ReportStore";
 
 const Supports = () => {
-  const supports = [
-    {
-      id: 1,
-      name: "Jon Smith",
-      email: "jonsmit@gmail.com",
-      title: "Bad Products",
-      message: "very bad products",
-    },
-  ];
+  const { reports, fetchReports, deleteReport } = useReportStore();
+
+  useEffect(() => {
+    fetchReports();
+  }, [fetchReports]);
+
+  const handleDelete = (id) => {
+    deleteReport(id);
+  };
+
   const header = ["Name", "Email", "Report Type", "Message", "Action"];
+
   return (
     <section>
-      <div>
+      <div className="p-10 bg-gray-100 h-screen">
+        <h1 className="text-3xl font-bold mb-6">Reports</h1>
         <table className="min-w-full bg-white border border-gray-200 mt-10">
           <thead>
             <tr>
-              {header.map((head, index) => (
+              {header?.map((head, index) => (
                 <th
                   key={index}
                   className="py-3 px-6 bg-gray-200 text-left text-xs font-bold uppercase border-b border-gray-200"
@@ -30,28 +34,46 @@ const Supports = () => {
             </tr>
           </thead>
           <tbody>
-            {supports?.map((support) => (
-              <tr key={support?.id} className="border-b border-gray-200">
-                <td className="py-4 px-6">{support.name}</td>
-                <td className="py-4 px-6">{support.email}</td>
-                <td className="py-4 px-6">{support.title}</td>
-                <td className="py-4 px-6">{support.message}</td>
-                <td className="py-4 px-6 flex space-x-2">
-                  <Link
-                    to={`/admin/support-details/${support.id}`}
-                    className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                  >
-                    Details
-                  </Link>
-                  <Link
-                    to={`/admin/edit-package/${support?._id}`}
-                    className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
-                  >
-                    <FiTrash className="mr-1" /> Delete
-                  </Link>
+            {reports.length > 0 ? (
+              reports.map((report, index) => (
+                <tr key={index}>
+                  <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
+                    {report?.name}
+                  </td>
+                  <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
+                    {report?.email}
+                  </td>
+                  <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
+                    {report?.reportType}
+                  </td>
+                  <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
+                    {report?.message}
+                  </td>
+                  <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
+                    <Link to={`/admin/support/${report?._id}`}>
+                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        View
+                      </button>
+                    </Link>
+                    <button
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+                      onClick={() => handleDelete(report?._id)}
+                    >
+                      <FiTrash />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="py-3 px-6 text-center whitespace-nowrap border-b border-gray-200"
+                >
+                  No reports found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
