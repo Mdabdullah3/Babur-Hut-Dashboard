@@ -38,6 +38,7 @@ import Supports from "./Dashboard/Support";
 import SupportDetails from "./Dashboard/Support/SupportDetails";
 import BannerImageUpload from "./Dashboard/BannerImageUpload/BannerImageUpload";
 import UploadImage from "./Dashboard/BannerImageUpload/UploadImage";
+import JoinEvents from "./Dashboard/EventManager/JoinEvents";
 
 const menu = [
     {
@@ -193,6 +194,12 @@ const menu = [
         navMenu: true,
         icon: <BsFillHandIndexFill className="h-6 w-6" />,
         component: <EventManager />
+    },
+    {
+        name: "Join Event",
+        layout: "/admin",
+        path: "join-event/:id",
+        component: <JoinEvents />
     },
     {
         name: "Create Event",

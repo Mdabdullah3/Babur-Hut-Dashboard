@@ -1,11 +1,103 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import useEventStore from "../../store/EventStore";
+import InputField from "../../components/common/InputField";
+import FileUpload from "../../components/common/FileUpload";
+import PrimaryButton from "../../components/common/PrimaryButton";
+import { toDataURL } from "../../utils/DataUrl";
+import { SERVER } from "../../config";
 
 const EditEvent = () => {
   const { id } = useParams();
+  const { event, fetchEventById, updateEvent } = useEventStore();
+  const [image, setImage] = useState(null);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    startDate: "",
+    endDate: "",
+  });
+
+  useEffect(() => {
+    const loadEvent = async () => {
+      await fetchEventById(id);
+    };
+    loadEvent();
+  }, [fetchEventById, id]);
+
+  useEffect(() => {
+    if (event) {
+      setFormData({
+        name: event.name || "",
+        startDate: formatDate(event.startDate) || "",
+        endDate: formatDate(event.endDate) || "",
+      });
+    }
+  }, [event]);
+
+  useEffect(() => {
+    if (event?.image?.secure_url) {
+      const avatarUrl = `${SERVER}${event.image.secure_url}`;
+      toDataURL(avatarUrl).then((base64) => {
+        setImage(base64);
+      });
+    }
+  }, [event?.image?.secure_url]);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleImageChange = (img) => {
+    setImage(img);
+    setFormData({ ...formData, image: img });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await updateEvent(id, formData);
+  };
+
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toISOString().split('T')[0]; 
+  };
+
   return (
-    <div>
-      <h1>{id}</h1>
+    <div className="p-10 bg-gray-100 h-screen">
+      <h1 className="text-3xl font-bold mb-6">Edit Event</h1>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <InputField
+          label="Event Name"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Enter event name"
+          required
+        />
+        <FileUpload
+          name="image"
+          label="Event Image"
+          setFile={handleImageChange}
+          file={image}
+        />
+        <InputField
+          label="Starting Date"
+          type="date"
+          name="startDate"
+          value={formData.startDate}
+          onChange={handleChange}
+        />
+        <InputField
+          label="End Date"
+          type="date"
+          name="endDate"
+          value={formData.endDate}
+          onChange={handleChange}
+        />
+        <PrimaryButton type="submit" value="Update Event" />
+      </form>
     </div>
   );
 };
