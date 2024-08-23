@@ -22,7 +22,7 @@ const Shipping = () => {
           <h1 className="text-3xl font-bold">Shipping</h1>
           <Link to="/admin/create-shipping">
             <button className="flex items-center px-4 py-2 bg-primary text-white rounded-lg shadow-md hover:bg-primary/60">
-              <FiPlus className="mr-2" /> Add Shipping
+              <FiPlus className="mr-2" /> Edit Shipping
             </button>
           </Link>
         </div>

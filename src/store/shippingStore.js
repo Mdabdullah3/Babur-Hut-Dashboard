@@ -1,10 +1,10 @@
 import { create } from "zustand";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { API_URL } from "../../config";
+import { API_URL } from '../config';
 
 const useShippingStore = create((set, get) => ({
-    shippingCharges: {}, // Store shipping charges
+    shippingCharges: {},
     loading: false,
     error: null,
 
@@ -15,34 +15,55 @@ const useShippingStore = create((set, get) => ({
             const response = await axios.get(`${API_URL}/delivery-fees?_limit=64`, {
                 withCredentials: true,
             });
-            // Initialize shippingCharges with fetched data
-            const charges = response.data?.data.reduce((acc, item) => {
-                acc[item.district] = item.deliveryFee;
-                return acc;
-            }, {});
-            set({ shippingCharges: charges, loading: false });
+            set({ shippingCharges: response.data.data, loading: false });
         } catch (error) {
             set({ error: error.response?.data?.message || 'Failed to fetch shipping charges', loading: false });
         }
     },
 
     // Function to update multiple shipping charges
+    // Function to update multiple shipping charges
     updateMultipleShippingCharges: async (updates) => {
         set({ loading: true, error: null });
         try {
-            const updatePromises = updates.map(({ district, deliveryFee }) =>
-                axios.patch(`${API_URL}/delivery-fees`,
-                    { district, deliveryFee },
-                    { withCredentials: true }
-                ));
+            // Prepare the request body
+            const deliveryFeeIds = updates.map(update => update.districtId);  
+            const deliveryFee = updates[0].deliveryFee;  // Assuming all selected districts share the same fee
 
-            await Promise.all(updatePromises);
+            if (deliveryFeeIds.length === 0 || deliveryFee === undefined) {
+                throw new Error("No delivery fee or deliveryFeeIds provided");
+            }
+
+            // Send the update request
+            const response = await axios.patch(`${API_URL}/delivery-fees/update-many`, {
+                deliveryFeeIds,
+                deliveryFee
+            }, {
+                withCredentials: true,
+            });
+            console.log(response);
             toast.success("Shipping charges updated successfully!");
-
-            // Optionally refetch the shipping charges to refresh the state
             get().fetchShippingCharges();
         } catch (error) {
             toast.error(error.response?.data?.message || "Failed to update shipping charges");
+            set({ loading: false });
+        }
+    },
+
+
+
+    // Function to update a single shipping charge
+    updateSingleShippingCharge: async (deliveryFeeId, deliveryFee) => {
+        set({ loading: true, error: null });
+        try {
+            await axios.patch(`${API_URL}/delivery-fees/${deliveryFeeId}`, { deliveryFee }, {
+                withCredentials: true,
+            });
+
+            toast.success("Shipping charge updated successfully!");
+            get().fetchShippingCharges();
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to update shipping charge");
             set({ loading: false });
         }
     },

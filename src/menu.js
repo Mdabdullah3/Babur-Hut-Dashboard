@@ -27,7 +27,7 @@ import AddNewVoucher from "./Dashboard/Voucher/AddVoucher";
 import EditCategory from "./components/Dashboard/Category/EditCategory";
 import EditSubCategory from "./components/Dashboard/Category/EditSubCategory";
 import Shipping from "./Dashboard/Shipment";
-import CreateShippingAddress from "./Dashboard/Shipment/CreateShippingAddress";
+import ShippingManagement from "./Dashboard/Shipment/ShippingManagement";
 import EditVoucher from "./Dashboard/Voucher/EditVoucher";
 import EditProducts from "./Dashboard/products/EditProducts";
 import EventManager from "./Dashboard/EventManager/index";
@@ -145,7 +145,7 @@ const menu = [
         name: "Create Shipping",
         layout: "/admin",
         path: "create-shipping",
-        component: <CreateShippingAddress />
+        component: <ShippingManagement />
     },
     {
         name: "Ad Manager",
