@@ -98,12 +98,10 @@ const ShippingManagement = () => {
   };
 
   return (
-    <div className="flex flex-col p-10">
+    <div className="flex flex-col p-10 relative">
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-bold">Shipping Management</h1>
-        <button className="flex items-center px-4 py-2 bg-primary text-white rounded-lg shadow-md hover:bg-primary/60">
-          <FiPlus className="mr-2" /> Add Shipping
-        </button>
+        
       </div>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
@@ -168,23 +166,25 @@ const ShippingManagement = () => {
           )}
         </tbody>
       </table>
-      {selected.length > 0 && (
-        <div className="flex mt-6">
-          <input
-            type="number"
-            placeholder="Set fee for selected..."
-            value={bulkFee}
-            onChange={(e) => handleBulkInputChange(e.target.value)}
-            className="border rounded px-2 py-1 mr-4"
-          />
-          <button
-            onClick={handleBulkUpdate}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-          >
-            Update All Selected
-          </button>
-        </div>
-      )}
+      <section className="sticky flex justify-end bottom-0 bg-gray-200 px-4 p-2 shadow-lg">
+        {selected.length > 0 && (
+          <div className="flex">
+            <input
+              type="number"
+              placeholder="Set fee for selected..."
+              value={bulkFee}
+              onChange={(e) => handleBulkInputChange(e.target.value)}
+              className="border rounded px-2 py-1 mr-4"
+            />
+            <button
+              onClick={handleBulkUpdate}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            >
+              Update All Selected
+            </button>
+          </div>
+        )}
+      </section>
     </div>
   );
 };
