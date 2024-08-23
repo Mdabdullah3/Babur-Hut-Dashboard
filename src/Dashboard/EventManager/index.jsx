@@ -78,7 +78,9 @@ const EventManager = () => {
                     "No Image"
                   )}
                 </td>
-                <td className="py-4 px-6">{event?.products?.length || 0}</td>
+                <td className="py-4 px-6">
+                  {event?.eventProducts?.length || 0}
+                </td>
                 <td className="py-4 px-6">
                   {format(new Date(event?.startDate), "dd/MM/yyyy")}
                 </td>
@@ -95,7 +97,7 @@ const EventManager = () => {
                   {isExpired(event?.endDate) ? "Active" : "Expired"}
                 </td>
                 <td className="py-4 px-6 flex space-x-2">
-                <Link
+                  <Link
                     to={`/admin/edit-event/${event.id}`}
                     className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
                   >

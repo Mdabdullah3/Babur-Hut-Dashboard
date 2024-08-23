@@ -12,10 +12,6 @@ const SingleCustomer = () => {
       name: "Orders",
       items: 5,
     },
-    {
-      id: 2,
-      name: "About & Setting's",
-    },
   ];
   return (
     <section className="px-5">

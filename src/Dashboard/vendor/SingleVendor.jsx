@@ -44,10 +44,10 @@ const SingleVendor = () => {
       name: "Reviews",
       items: 5,
     },
-    {
-      id: 7,
-      name: "About Settings",
-    },
+    // {
+    //   id: 7,
+    //   name: "About Settings",
+    // },
   ];
   return (
     <section className="w-11/12 mx-auto my-6">
@@ -90,7 +90,7 @@ const SingleVendor = () => {
       <div>{activeMenu === 4 && <VendorCampaign />}</div>
       <div>{activeMenu === 5 && <VendorAds />}</div>
       <div>{activeMenu === 6 && <VendorReview />}</div>
-      <div>{activeMenu === 7 && <VendorSetting />}</div>
+      {/* <div>{activeMenu === 7 && <VendorSetting />}</div> */}
     </section>
   );
 };
