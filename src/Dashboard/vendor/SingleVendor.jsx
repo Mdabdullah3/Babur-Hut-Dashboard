@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import VendorProducts from "../../components/Dashboard/Vendor/Products";
 import VendorOrders from "../../components/Dashboard/Vendor/VendorOrders";
@@ -6,10 +6,14 @@ import VendorVouchers from "../../components/Dashboard/Vendor/VendorVouchers";
 import VendorCampaign from "../../components/Dashboard/Vendor/VendorCampaign";
 import VendorAds from "../../components/Dashboard/Vendor/VendorAds";
 import VendorReview from "../../components/Dashboard/Vendor/VendorReview";
-import VendorSetting from "../../components/Dashboard/Vendor/VendorSetting";
 import { vendor } from "../../utils/constant";
+import { useParams } from "react-router-dom";
+import useProductStore from "../../store/ProductStore";
+import useVoucherStore from "../../store/useVoucherStore";
 const SingleVendor = () => {
+  const { id } = useParams();
   const [activeMenu, setActiveMenu] = useState(1);
+
   const handleMenuClick = (id) => {
     setActiveMenu(id);
   };
@@ -49,12 +53,21 @@ const SingleVendor = () => {
     //   name: "About Settings",
     // },
   ];
+  const { product, fetchProductByIdForUser } = useProductStore();
+  const { vouchers, fetchVoucherByUserId } = useVoucherStore();
+  useEffect(() => {
+    fetchProductByIdForUser(id);
+    fetchVoucherByUserId(id);
+  }, [fetchProductByIdForUser, id, fetchVoucherByUserId]);
+
+  console.log(vouchers);
   return (
     <section className="w-11/12 mx-auto my-6">
       <div className="flex items-center justify-between">
         <h1 className="md:text-3xl text-xl text-gray-700 font-bold">Vendor</h1>
         <h2 className="md:text-xl  font-bold">#509290323523</h2>
       </div>
+
       <div className="flex items-center justify-center gap-4 flex-wrap mt-4 md:mt-0">
         <img
           src={vendor[0].img}
@@ -84,12 +97,12 @@ const SingleVendor = () => {
           </>
         ))}
       </div>
-      <div>{activeMenu === 1 && <VendorProducts />}</div>
+      <div>{activeMenu === 1 && <VendorProducts product={product} />}</div>
       <div>{activeMenu === 2 && <VendorOrders />}</div>
-      <div>{activeMenu === 3 && <VendorVouchers />}</div>
+      <div>{activeMenu === 3 && <VendorVouchers vouchers={vouchers} />}</div>
       <div>{activeMenu === 4 && <VendorCampaign />}</div>
       <div>{activeMenu === 5 && <VendorAds />}</div>
-      <div>{activeMenu === 6 && <VendorReview />}</div>
+      <div>{activeMenu === 6 && <VendorReview product={product} />}</div>
       {/* <div>{activeMenu === 7 && <VendorSetting />}</div> */}
     </section>
   );

@@ -39,6 +39,7 @@ import SupportDetails from "./Dashboard/Support/SupportDetails";
 import BannerImageUpload from "./Dashboard/BannerImageUpload/BannerImageUpload";
 import UploadImage from "./Dashboard/BannerImageUpload/UploadImage";
 import JoinEvents from "./Dashboard/EventManager/JoinEvents";
+import VendorRequest from "./Dashboard/vendor/VendorRequest";
 
 const menu = [
     {
@@ -56,6 +57,12 @@ const menu = [
         icon: <FaUser className="h-6 w-6" />,
         navMenu: true,
         component: <Vendor />
+    },
+    {
+        name: "Vendor Pending",
+        layout: "/admin",
+        path: "vendor-pending",
+        component: <VendorRequest />
     },
     {
         name: "Single Vendor",

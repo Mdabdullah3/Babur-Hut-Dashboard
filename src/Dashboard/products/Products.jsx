@@ -73,11 +73,11 @@ const ProductAdminPanel = () => {
               </thead>
               <tbody>
                 {products.map((product) => (
-                  <tr key={product._id} className="border-b">
+                  <tr key={product?._id} className="border-b">
                     <td className="px-4 py-2">
                       <img
-                        src={`${SERVER}${product?.coverPhoto.secure_url}`}
-                        alt={product.name}
+                        src={`${SERVER}${product?.coverPhoto?.secure_url}`}
+                        alt={product?.name}
                         className="w-12 h-12 rounded"
                       />
                     </td>

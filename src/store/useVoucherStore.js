@@ -28,6 +28,15 @@ const useVoucherStore = create((set) => ({
             return null;
         }
     },
+    fetchVoucherByUserId: async (userId) => {
+        set({ loading: true });
+        try {
+            const response = await axios.get(`${API_URL}/users/${userId}/vouchers`, { withCredentials: true });
+            set({ vouchers: response.data.data, loading: false });
+        } catch (error) {
+            set({ error: error.response?.data?.message || "An error occurred", loading: false });
+        }
+    },
 
     addVoucher: async (voucher) => {
         set({ loading: true });

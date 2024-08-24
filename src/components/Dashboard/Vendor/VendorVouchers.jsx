@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import InputSearch from "../../common/InputSearch";
 import TableHead from "../../common/TableHead";
 import { vendorVouchers } from "../../../utils/constant";
-const VendorVouchers = () => {
+const VendorVouchers = ({ vouchers }) => {
   const [activeMenu, setActiveMenu] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredVouchers, setFilteredVouchers] = useState(vendorVouchers);
@@ -35,20 +35,9 @@ const VendorVouchers = () => {
       id: 1,
       name: "All",
     },
-    {
-      id: 2,
-      name: "Add New Voucher",
-    },
   ];
 
-  const header = [
-    "Voucher Code",
-    "Shipped",
-    "Discount",
-    "Date",
-    "Status",
-    "Action",
-  ];
+  const header = ["Voucher Code", "Discount", "Date", "Status"];
 
   return (
     <section className="py-5">
@@ -84,28 +73,21 @@ const VendorVouchers = () => {
               <div className="overflow-auto">
                 <table className="table-auto w-full  mt-10">
                   <TableHead header={header} />
-                  {filteredVouchers.map((item) => (
+                  {vouchers?.map((item) => (
                     <tbody key={item.id}>
                       <tr className="border-r border-l border-gray-300 border-b">
                         <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
-                          {item.voucherId}
+                          {item?.redeemCode}
                         </td>
+
                         <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                          {item.shipped}
-                        </td>
-                        <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                          {item.discount}
+                          {item?.discount}
                         </td>
                         <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                          {item.strdate} - {item.expirDate}
+                          {item?.startDate} - {item?.endDate}
                         </td>
                         <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                          {item.status}
-                        </td>
-                        <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                          <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
-                            Edit
-                          </button>
+                          {item?.status}
                         </td>
                       </tr>
                     </tbody>
