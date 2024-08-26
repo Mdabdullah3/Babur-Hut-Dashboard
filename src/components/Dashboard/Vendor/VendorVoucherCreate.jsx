@@ -31,6 +31,7 @@ const VendorVoucherCreate = ({ id }) => {
       discountType: "percentage",
       discount: "",
       status: "",
+      minimumPurchase:""
     });
   };
 
@@ -51,6 +52,13 @@ const VendorVoucherCreate = ({ id }) => {
             value={form.redeemCode}
             placeholder="Enter Redeem Code"
             onChange={(e) => setForm({ ...form, redeemCode: e.target.value })}
+            required
+          />
+            <InputField
+            label="Minimum Purchase"
+            value={form.minimumPurchase}
+            placeholder="Enter Minimum Purchase"
+            onChange={(e) => setForm({ ...form, minimumPurchase: e.target.value })}
             required
           />
           <div className="flex items-start">

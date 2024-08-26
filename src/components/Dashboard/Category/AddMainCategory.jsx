@@ -19,6 +19,7 @@ const AddMainCategory = () => {
     shippingCharge: "",
     status: "",
     commission: "",
+    transactionCose: "",
     vat: "",
     image: null,
     icon: "",
@@ -64,6 +65,12 @@ const AddMainCategory = () => {
         value={form.commission}
         onChange={(e) => setForm({ ...form, commission: e.target.value })}
         placeholder="Category Commission"
+      />
+      <InputField
+        label="Transaction Cost"
+        value={form.transactionCose}
+        onChange={(e) => setForm({ ...form, transactionCose: e.target.value })}
+        placeholder="Category Transaction Cost"
       />
       <InputField
         label="Category VAT"
