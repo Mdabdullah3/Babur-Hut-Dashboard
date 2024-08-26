@@ -10,7 +10,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const { login, loading } = useUserStore();
   const router = useNavigate();
-  console.log(process.env.SERVER_PRODUCTION);
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import InputField from "../../components/common/InputField";
 import SelectField from "../../components/common/SelectField";
 import PrimaryButton from "../../components/common/PrimaryButton";
@@ -11,23 +10,39 @@ const EditVoucher = () => {
   const { fetchVoucherById, voucher, updateVoucher } = useVoucherStore();
 
   const [form, setForm] = useState({
-    user: voucher?.user?._id || "",
-    redeemCode: voucher?.redeemCode || "",
-    startDate: voucher?.startDate || "",
-    endDate: voucher?.endDate || "",
-    discount: voucher?.discount || "",
-    status: voucher?.status || "",
+    user: "",
+    redeemCode: "",
+    startDate: "",
+    endDate: "",
+    discount: "",
+    status: "",
   });
 
   useEffect(() => {
     fetchVoucherById(id);
   }, [id, fetchVoucherById]);
-  console.log(voucher);
+
+  useEffect(() => {
+    if (voucher) {
+      setForm({
+        user: voucher.user?._id || "",
+        redeemCode: voucher.redeemCode || "",
+        startDate: voucher.startDate
+          ? new Date(voucher.startDate).toISOString().split("T")[0]
+          : "",
+        endDate: voucher.endDate
+          ? new Date(voucher.endDate).toISOString().split("T")[0]
+          : "",
+        discount: voucher.discount || "",
+        status: voucher.status || "",
+      });
+    }
+  }, [voucher]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     await updateVoucher(id, form);
-    toast.success("Voucher created successfully!");
     setForm({
       redeemCode: "",
       startDate: "",
