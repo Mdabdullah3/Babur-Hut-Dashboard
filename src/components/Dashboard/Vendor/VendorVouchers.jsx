@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import InputSearch from "../../common/InputSearch";
 import TableHead from "../../common/TableHead";
 import { vendorVouchers } from "../../../utils/constant";
-const VendorVouchers = ({ vouchers }) => {
+import VendorVoucherCreate from "./VendorVoucherCreate";
+const VendorVouchers = ({ vouchers, id }) => {
   const [activeMenu, setActiveMenu] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredVouchers, setFilteredVouchers] = useState(vendorVouchers);
@@ -34,6 +35,10 @@ const VendorVouchers = ({ vouchers }) => {
     {
       id: 1,
       name: "All",
+    },
+    {
+      id: 2,
+      name: "Add New Voucher",
     },
   ];
 
@@ -98,9 +103,7 @@ const VendorVouchers = ({ vouchers }) => {
           </div>
         </>
       ) : (
-        <>
-          <h1 className="text-center mt-10">No Vouchers Found</h1>
-        </>
+        <VendorVoucherCreate id={id} />
       )}
     </section>
   );

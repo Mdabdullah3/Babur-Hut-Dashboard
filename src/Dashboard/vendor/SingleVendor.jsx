@@ -99,7 +99,9 @@ const SingleVendor = () => {
       </div>
       <div>{activeMenu === 1 && <VendorProducts product={product} />}</div>
       <div>{activeMenu === 2 && <VendorOrders />}</div>
-      <div>{activeMenu === 3 && <VendorVouchers vouchers={vouchers} />}</div>
+      <div>
+        {activeMenu === 3 && <VendorVouchers vouchers={vouchers} id={id} />}
+      </div>
       <div>{activeMenu === 4 && <VendorCampaign />}</div>
       <div>{activeMenu === 5 && <VendorAds />}</div>
       <div>{activeMenu === 6 && <VendorReview product={product} />}</div>
