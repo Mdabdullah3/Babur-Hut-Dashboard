@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import InputField from "../../common/InputField";
-import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
 import useVoucherStore from "../../../store/useVoucherStore";
+import SelectField from "../../common/SelectField";
 
 const VendorVoucherCreate = ({ id }) => {
-  console.log(id);
   const [form, setForm] = useState({
     user: id,
     redeemCode: "",
     startDate: "",
     endDate: "",
+    discountType: "percentage", // Default to percentage
     discount: "",
     status: "",
   });
@@ -21,16 +21,25 @@ const VendorVoucherCreate = ({ id }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     await addVoucher(form);
     toast.success("Voucher created successfully!");
     setForm({
+      user: id,
       redeemCode: "",
       startDate: "",
       endDate: "",
+      discountType: "percentage",
       discount: "",
       status: "",
     });
+  };
+
+  const toggleDiscountType = () => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      discountType:
+        prevForm.discountType === "percentage" ? "flat" : "percentage",
+    }));
   };
 
   return (
@@ -44,13 +53,28 @@ const VendorVoucherCreate = ({ id }) => {
             onChange={(e) => setForm({ ...form, redeemCode: e.target.value })}
             required
           />
-          <InputField
-            label="Discount"
-            value={form.discount}
-            placeholder="Enter Discount"
-            onChange={(e) => setForm({ ...form, discount: e.target.value })}
-            required
-          />
+          <div className="flex items-start">
+            <InputField
+              label={`Discount (${
+                form.discountType === "percentage" ? "%" : "Flat Amount"
+              })`}
+              value={form.discount}
+              placeholder={`Enter ${
+                form.discountType === "percentage"
+                  ? "Percentage"
+                  : "Flat Amount"
+              } Discount`}
+              onChange={(e) => setForm({ ...form, discount: e.target.value })}
+              required
+            />
+            <button
+              type="button"
+              className="px-4 py-3 border rounded mt-7"
+              onClick={toggleDiscountType}
+            >
+              {form.discountType === "percentage" ? "%" : "Flat"}
+            </button>
+          </div>
           <InputField
             label="Start Date"
             type="date"
