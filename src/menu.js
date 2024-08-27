@@ -40,6 +40,7 @@ import BannerImageUpload from "./Dashboard/BannerImageUpload/BannerImageUpload";
 import UploadImage from "./Dashboard/BannerImageUpload/UploadImage";
 import JoinEvents from "./Dashboard/EventManager/JoinEvents";
 import VendorRequest from "./Dashboard/vendor/VendorRequest";
+import VendorDetails from "./Dashboard/vendor/VendorDetails";
 
 const menu = [
     {
@@ -69,6 +70,12 @@ const menu = [
         layout: "/admin",
         path: "vendor/:id",
         component: <SingleVendor />
+    },
+    {
+        name: "Vendor Details",
+        layout: "/admin",
+        path: "vendor-details/:id",
+        component: <VendorDetails />
     },
     {
         name: "Customer",
