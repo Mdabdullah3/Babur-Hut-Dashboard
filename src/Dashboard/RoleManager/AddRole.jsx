@@ -28,6 +28,14 @@ const AddRole = () => {
     { label: "Support", value: "isSupport" },
     { label: "Event Manager", value: "isEventManager" },
     { label: "Email & Message", value: "isMessage" },
+    {
+      label: "Dashboard",
+      value: "isHasDashboard",
+    },
+    {
+      label: "Banner Image Upload",
+      value: "isHasBanner",
+    },
   ];
 
   const { register } = useUserStore();

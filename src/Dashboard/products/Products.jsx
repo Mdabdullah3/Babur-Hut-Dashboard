@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import InputSearch from "../../components/common/InputSearch";
 import useProductStore from "../../store/ProductStore";
 import { SERVER } from "../../config";
+import useUserStore from "../../store/AuthStore";
 
 const ProductAdminPanel = () => {
+  const { user, fetchUser } = useUserStore();
   const {
-    products,
-    fetchProducts,
+    product,
+    fetchProductByIdForUser,
     totalProducts,
     page,
     limit,
@@ -21,8 +23,9 @@ const ProductAdminPanel = () => {
   } = useProductStore();
 
   useEffect(() => {
-    fetchProducts();
-  }, [page, limit, searchTerm, setSort]);
+    fetchProductByIdForUser();
+    fetchUser();
+  }, [page, limit, fetchUser, fetchProductByIdForUser, searchTerm, setSort]);
 
   const handleSearch = (value) => {
     setSearchTerm(value);
@@ -72,34 +75,45 @@ const ProductAdminPanel = () => {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => (
-                  <tr key={product?._id} className="border-b">
-                    <td className="px-4 py-2">
-                      <img
-                        src={`${SERVER}${product?.coverPhoto?.secure_url}`}
-                        alt={product?.name}
-                        className="w-12 h-12 rounded"
-                      />
-                    </td>
-                    <td className="px-4 py-2">{product.name}</td>
-                    <td className="px-4 py-2">{product.quantity}</td>
-                    <td className="px-4 py-2">{product.vendorId}</td>
-                    <td className="px-4 py-2">${product.price}</td>
-                    <td className="px-4 py-2">
-                      {formatDate(product.createdAt)}
-                    </td>
-                    <td className="px-4 py-2 ">
-                      <Link to={`/admin/edit-product/${product._id}`}>
-                        <div className="flex items-center space-x-2 cursor-pointer">
-                          <button className="text-yellow-500">
-                            <FiEdit />
-                          </button>
-                          <h1>Edit</h1>
-                        </div>
-                      </Link>
+                {product?.length > 0 ? (
+                  product?.map((product) => (
+                    <tr key={product?._id} className="border-b">
+                      <td className="px-4 py-2">
+                        <img
+                          src={`${SERVER}${product?.coverPhoto?.secure_url}`}
+                          alt={product?.name}
+                          className="w-12 h-12 rounded"
+                        />
+                      </td>
+                      <td className="px-4 py-2">{product.name}</td>
+                      <td className="px-4 py-2">{product.quantity}</td>
+                      <td className="px-4 py-2">{product.vendorId}</td>
+                      <td className="px-4 py-2">${product.price}</td>
+                      <td className="px-4 py-2">
+                        {formatDate(product.createdAt)}
+                      </td>
+                      <td className="px-4 py-2 ">
+                        <Link to={`/admin/edit-product/${product._id}`}>
+                          <div className="flex items-center space-x-2 cursor-pointer">
+                            <button className="text-yellow-500">
+                              <FiEdit />
+                            </button>
+                            <h1>Edit</h1>
+                          </div>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={7}
+                      className="px-4 py-2 text-center my-3 text-semibold text-red-500"
+                    >
+                      No Products Found
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
