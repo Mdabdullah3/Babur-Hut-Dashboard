@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
 const VendorRequest = () => {
   const [vendors, setVendors] = useState([]);
+  const [filteredVendors, setFilteredVendors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchAllVendors = async () => {
     try {
@@ -27,6 +28,7 @@ const VendorRequest = () => {
         (vendor) => vendor?.status === "pending"
       );
       setVendors(pendingVendors);
+      setFilteredVendors(pendingVendors);
       setLoading(false);
     } catch (error) {
       setError(error.message);
@@ -36,23 +38,32 @@ const VendorRequest = () => {
 
   const handleApprove = async (vendorId) => {
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `${API_URL}/users/${vendorId}`,
         { status: "approved" },
         { withCredentials: true }
       );
-      if (response.status === 200) {
-        toast.success(`Vendor ${vendorId} approved successfully.`);
-      }
       setVendors((prevVendors) =>
         prevVendors.map((vendor) =>
           vendor._id === vendorId ? { ...vendor, status: "approved" } : vendor
         )
       );
+      setFilteredVendors((prevVendors) =>
+        prevVendors.map((vendor) =>
+          vendor._id === vendorId ? { ...vendor, status: "approved" } : vendor
+        )
+      );
     } catch (error) {
-      toast.error("Error approving vendor:", error);
       setError("Failed to approve vendor. Please try again.");
     }
+  };
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    const searchResult = vendors.filter((vendor) =>
+      vendor.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setFilteredVendors(searchResult);
   };
 
   useEffect(() => {
@@ -67,6 +78,17 @@ const VendorRequest = () => {
       <h1 className="text-xl font-semibold my-6 text-center">
         Pending Vendor Requests
       </h1>
+
+      <div className="my-4">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearch}
+          placeholder="Search vendors..."
+          className="w-full px-4 py-2 border rounded-lg"
+        />
+      </div>
+
       <table className="min-w-full bg-white border rounded-lg overflow-hidden">
         <thead>
           <tr>
@@ -78,7 +100,7 @@ const VendorRequest = () => {
           </tr>
         </thead>
         <tbody>
-          {vendors.map((vendor) => (
+          {filteredVendors.map((vendor) => (
             <tr key={vendor._id} className="border-b">
               <td className="py-2 px-4">{vendor.name}</td>
               <td className="py-2 px-4">{vendor.phone}</td>
