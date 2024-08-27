@@ -7,7 +7,7 @@ import InputSearch from "../../components/common/InputSearch";
 const RoleManager = () => {
   const {
     users,
-    fetchAllUser,
+    fetchAdminUser,
     currentPage,
     totalPages,
     setPage,
@@ -17,8 +17,8 @@ const RoleManager = () => {
   } = useUserStore();
 
   useEffect(() => {
-    fetchAllUser();
-  }, [fetchAllUser]);
+    fetchAdminUser();
+  }, [fetchAdminUser]);
 
   const handleSearch = (value) => {
     setSearchTerm(value);
@@ -38,7 +38,6 @@ const RoleManager = () => {
     }
   };
 
-  console.log(adminUsers, users);
   return (
     <div className="flex h-screen">
       <div className="flex-1 p-10">
