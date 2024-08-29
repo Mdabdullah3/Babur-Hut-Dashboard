@@ -93,7 +93,6 @@ const EditSubCategory = () => {
     e.preventDefault();
     try {
       await updateSubCategory(id, form);
-      toast.success("Sub Category updated successfully!");
     } catch (error) {
       toast.error("Failed to update sub category. Please try again.");
     }

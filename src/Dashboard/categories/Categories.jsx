@@ -62,9 +62,22 @@ const Categories = () => {
   const header = ["Category Name", "Status", "Action"];
   const menu = ["All", "Add Main Category", "Add Sub Category"];
 
-  const handleDelete = () => {
-    
-  }
+  const handleDelete = useCallback(
+    (id, isSubCategory) => {
+      const confirmed = window.confirm(
+        "Are you sure you want to delete this category?"
+      );
+      if (confirmed) {
+        if (isSubCategory) {
+          deleteSubCategory(id);
+        } else {
+          deleteCategory(id);
+        }
+      }
+    },
+    [deleteCategory, deleteSubCategory]
+  );
+
   return (
     <section className="w-11/12 mx-auto">
       <div className="flex mt-8 items-center justify-center gap-10 w-10/12 mx-auto my-4 border-b-2">
@@ -104,20 +117,20 @@ const Categories = () => {
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
                       {item.status}
                     </td>
-                    <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                      <button
+                    <td className="text-center text-dark font-medium text-secondary py-5  px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
+                      {/* <button
                         onClick={() =>
-                          deleteCategory(
+                          handleDelete(
                             item._id,
                             item.category ? "subCategory" : "category"
                           )
                         }
-                        className="bg-red-500 text-white px-5 py-1.5 rounded-lg"
+                        className="bg-red-500 text-white px-4 py-1.5 rounded-lg mr-2"
                       >
                         Delete
-                      </button>
+                      </button> */}
                       <button
-                        className="bg-primary text-white px-5 py-1.5 rounded-lg"
+                        className="bg-yellow-500 text-white px-4 py-1.5 rounded-lg shadow-md"
                         onClick={() =>
                           handleEdit(
                             item._id,

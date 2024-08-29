@@ -24,7 +24,7 @@ const useCategoryStore = create((set) => ({
     fetchSubCategories: async () => {
         set({ loading: true, error: null });
         try {
-            const response = await axios.get(`${API_URL}/sub-categories`);
+            const response = await axios.get(`${API_URL}/sub-categories?_limit=100`);
             set({ subCategories: response.data.data, loading: false });
         } catch (error) {
             set({ error: error.message, loading: false });
@@ -66,6 +66,7 @@ const useCategoryStore = create((set) => ({
             toast.error(error.message);
         }
     },
+
 
     addSubCategory: async (subCategoryData) => {
         set({ loading: true, error: null });
