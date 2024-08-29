@@ -16,8 +16,14 @@ const AddSubCategory = lazy(() =>
 const Categories = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeMenu, setActiveMenu] = useState("All");
-  const { categories, subCategories, fetchCategories, fetchSubCategories } =
-    useCategoryStore();
+  const {
+    categories,
+    deleteCategory,
+    deleteSubCategory,
+    subCategories,
+    fetchCategories,
+    fetchSubCategories,
+  } = useCategoryStore();
 
   useEffect(() => {
     fetchCategories();
@@ -56,6 +62,9 @@ const Categories = () => {
   const header = ["Category Name", "Status", "Action"];
   const menu = ["All", "Add Main Category", "Add Sub Category"];
 
+  const handleDelete = () => {
+    
+  }
   return (
     <section className="w-11/12 mx-auto">
       <div className="flex mt-8 items-center justify-center gap-10 w-10/12 mx-auto my-4 border-b-2">
@@ -96,6 +105,17 @@ const Categories = () => {
                       {item.status}
                     </td>
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
+                      <button
+                        onClick={() =>
+                          deleteCategory(
+                            item._id,
+                            item.category ? "subCategory" : "category"
+                          )
+                        }
+                        className="bg-red-500 text-white px-5 py-1.5 rounded-lg"
+                      >
+                        Delete
+                      </button>
                       <button
                         className="bg-primary text-white px-5 py-1.5 rounded-lg"
                         onClick={() =>

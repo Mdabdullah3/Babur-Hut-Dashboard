@@ -15,6 +15,7 @@ const AddSubCategory = () => {
     fetchCategories,
     fetchSubCategories,
     addSubCategory,
+    loading,
   } = useCategoryStore();
 
   useEffect(() => {
@@ -22,23 +23,23 @@ const AddSubCategory = () => {
     fetchSubCategories();
   }, [fetchCategories, fetchSubCategories]);
 
-  const status = [
-    { id: 1, label: "Active", value: "active" },
-    { id: 2, label: "Inactive", value: "inactive" },
-  ];
+  // const status = [
+  //   { id: 1, label: "Active", value: "active" },
+  //   { id: 2, label: "Inactive", value: "inactive" },
+  // ];
 
   const [form, setForm] = useState({
     category: "",
     name: "",
     shippingCharge: "",
-    shippingChargeType: "percentage", // Default to percentage
-    transactionCose: "",
-    transactionCoseType: "percentage", // Default to percentage
+    shippingChargeType: "percentage",
+    transactionCost: "",
+    transactionCostType: "percentage",
     status: "",
     commission: "",
-    commissionType: "percentage", // Default to percentage
+    commissionType: "percentage",
     vat: "",
-    vatType: "percentage", // Default to percentage
+    vatType: "percentage",
     image: null,
     icon: "",
   });
@@ -59,30 +60,13 @@ const AddSubCategory = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Create a FormData object to handle file upload
-    const formData = new FormData();
-    formData.append("category", form.category);
-    formData.append("name", form.name);
-    formData.append("shippingCharge", form.shippingCharge);
-    formData.append("shippingChargeType", form.shippingChargeType);
-    formData.append("transactionCose", form.transactionCose);
-    formData.append("transactionCoseType", form.transactionCoseType);
-    formData.append("status", form.status);
-    formData.append("commission", form.commission);
-    formData.append("commissionType", form.commissionType);
-    formData.append("vat", form.vat);
-    formData.append("vatType", form.vatType);
-    formData.append("icon", form.icon);
-    if (form.image) {
-      formData.append("image", form.image);
-    }
-
     try {
-      await addSubCategory(formData); 
+      await addSubCategory(form);
     } catch (error) {
       toast.error("Failed to add sub category. Please try again.");
     }
   };
+  console.log(form);
 
   return (
     <form
@@ -131,14 +115,14 @@ const AddSubCategory = () => {
       <div className="flex items-start">
         <InputField
           label={`Transaction Cost (${
-            form.transactionCoseType === "percentage" ? "%" : "Flat Amount"
+            form.transactionCostType === "percentage" ? "%" : "Flat Amount"
           })`}
-          value={form.transactionCose}
+          value={form.transactionCost}
           onChange={(e) =>
-            setForm({ ...form, transactionCose: e.target.value })
+            setForm({ ...form, transactionCost: e.target.value })
           }
           placeholder={`Enter ${
-            form.transactionCoseType === "percentage"
+            form.transactionCostType === "percentage"
               ? "Percentage"
               : "Flat Amount"
           } Transaction Cost`}
@@ -146,9 +130,9 @@ const AddSubCategory = () => {
         <button
           type="button"
           className="px-4 py-3 border rounded mt-7"
-          onClick={() => toggleDiscountType("transactionCose")}
+          onClick={() => toggleDiscountType("transactionCost")}
         >
-          {form.transactionCoseType === "percentage" ? "%" : "Flat"}
+          {form.transactionCostType === "percentage" ? "%" : "Flat"}
         </button>
       </div>
       <div className="flex items-start">
@@ -170,6 +154,7 @@ const AddSubCategory = () => {
           {form.commissionType === "percentage" ? "%" : "Flat"}
         </button>
       </div>
+      
       <div className="flex items-start">
         <InputField
           label={`Category VAT (${
@@ -196,7 +181,7 @@ const AddSubCategory = () => {
         placeholder="Category Icon"
       />
       <FileUpload label="Sub Category Image" setFile={setImage} name="image" />
-      <PrimaryButton value={"Add Sub Category"} />
+      <PrimaryButton value={loading ? "Adding..." : "Add Sub Category"} disabled={loading} />
     </form>
   );
 };

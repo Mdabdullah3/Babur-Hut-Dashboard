@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { SERVER } from "../../../config";
 import { toDataURL } from "../../../utils/DataUrl";
 import FileUpload from "../../common/FileUpload";
+import { toast } from "react-toastify";
+
 const EditSubCategory = () => {
   const { id } = useParams();
   const [image, setImage] = useState(null);
@@ -21,13 +23,12 @@ const EditSubCategory = () => {
     fetchCategories,
     fetchSubCategories,
   } = useCategoryStore();
+
   useEffect(() => {
     fetchCategories();
     fetchSubCategories();
     fetchSubCategoryById(id);
   }, [fetchCategories, fetchSubCategories, fetchSubCategoryById, id]);
-
-  const categoriesData = [...categories, ...subCategories];
 
   useEffect(() => {
     if (subCategory?.image?.secure_url) {
@@ -37,36 +38,67 @@ const EditSubCategory = () => {
       });
     }
   }, [subCategory?.image?.secure_url]);
-  const status = [
-    {
-      id: 1,
-      label: "Active",
-      value: "active",
-    },
-    {
-      id: 2,
-      label: "Inactive",
-      value: "inactive",
-    },
-  ];
+
   const [form, setForm] = useState({
-    category: subCategory?.category || "",
-    name: subCategory?.name || "",
-    shippingCharge: subCategory?.shippingCharge || "",
-    status: subCategory?.status || "",
-    commission: subCategory?.commission || "",
-    vat: subCategory?.vat || "",
-    icon: subCategory?.icon || "",
+    category: "",
+    name: "",
+    shippingCharge: "",
+    shippingChargeType: "percentage",
+    transactionCost: "",
+    transactionCostType: "percentage",
+    status: "",
+    commission: "",
+    commissionType: "percentage",
+    vat: "",
+    vatType: "percentage",
+    image: null,
+    icon: "",
   });
+
+  useEffect(() => {
+    if (subCategory) {
+      setForm({
+        category: subCategory.category || "",
+        name: subCategory.name || "",
+        shippingCharge: subCategory.shippingCharge || "",
+        shippingChargeType: subCategory.shippingChargeType || "percentage",
+        transactionCost: subCategory.transactionCost || "",
+        transactionCostType: subCategory.transactionCostType || "percentage",
+        status: subCategory.status || "",
+        commission: subCategory.commission || "",
+        commissionType: subCategory.commissionType || "percentage",
+        vat: subCategory.vat || "",
+        vatType: subCategory.vatType || "percentage",
+        image: subCategory.image?.secure_url || null,
+        icon: subCategory.icon || "",
+      });
+    }
+  }, [subCategory]);
+
+  useEffect(() => {
+    setForm((prevForm) => ({ ...prevForm, image }));
+  }, [image]);
+
+  const categoriesData = [...categories, ...subCategories];
+
+  const toggleDiscountType = (field) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      [`${field}Type`]:
+        prevForm[`${field}Type`] === "percentage" ? "flat" : "percentage",
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateSubCategory(id, form);
+    try {
+      await updateSubCategory(id, form);
+      toast.success("Sub Category updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update sub category. Please try again.");
+    }
   };
-  const handleImageChange = (img) => {
-    setImage(img);
-    setForm({ ...form, image: img });
-  };
+
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"
@@ -74,7 +106,7 @@ const EditSubCategory = () => {
     >
       <SelectField
         label="Category"
-        options={categoriesData?.map((category) => ({
+        options={categoriesData.map((category) => ({
           key: category._id,
           label: category.name,
           value: category._id,
@@ -90,30 +122,88 @@ const EditSubCategory = () => {
         value={form.name}
         onChange={(e) => setForm({ ...form, name: e.target.value })}
       />
-      <InputField
-        label="Shipping Charge"
-        placeholder="Shippingharge"
-        value={form.shippingCharge}
-        onChange={(e) => setForm({ ...form, shippingCharge: e.target.value })}
-      />
-      <SelectField
-        label="Status"
-        options={status}
-        onChange={(e) => setForm({ ...form, status: e.target.value })}
-        value={form.status}
-      />
-      <InputField
-        label="Category Commission"
-        value={form.commission}
-        onChange={(e) => setForm({ ...form, commission: e.target.value })}
-        placeholder={"Category Commission"}
-      />
-      <InputField
-        label="Category VAT"
-        value={form.vat}
-        onChange={(e) => setForm({ ...form, vat: e.target.value })}
-        placeholder={"Category VAT"}
-      />
+      <div className="flex items-start">
+        <InputField
+          label={`Shipping Charge (${
+            form.shippingChargeType === "percentage" ? "%" : "Flat Amount"
+          })`}
+          value={form.shippingCharge}
+          onChange={(e) => setForm({ ...form, shippingCharge: e.target.value })}
+          placeholder={`Enter ${
+            form.shippingChargeType === "percentage"
+              ? "Percentage"
+              : "Flat Amount"
+          } Shipping Charge`}
+        />
+        <button
+          type="button"
+          className="px-4 py-3 border rounded mt-7"
+          onClick={() => toggleDiscountType("shippingCharge")}
+        >
+          {form.shippingChargeType === "percentage" ? "%" : "Flat"}
+        </button>
+      </div>
+      <div className="flex items-start">
+        <InputField
+          label={`Transaction Cost (${
+            form.transactionCostType === "percentage" ? "%" : "Flat Amount"
+          })`}
+          value={form.transactionCost}
+          onChange={(e) =>
+            setForm({ ...form, transactionCost: e.target.value })
+          }
+          placeholder={`Enter ${
+            form.transactionCostType === "percentage"
+              ? "Percentage"
+              : "Flat Amount"
+          } Transaction Cost`}
+        />
+        <button
+          type="button"
+          className="px-4 py-3 border rounded mt-7"
+          onClick={() => toggleDiscountType("transactionCost")}
+        >
+          {form.transactionCostType === "percentage" ? "%" : "Flat"}
+        </button>
+      </div>
+      <div className="flex items-start">
+        <InputField
+          label={`Category Commission (${
+            form.commissionType === "percentage" ? "%" : "Flat Amount"
+          })`}
+          value={form.commission}
+          onChange={(e) => setForm({ ...form, commission: e.target.value })}
+          placeholder={`Enter ${
+            form.commissionType === "percentage" ? "Percentage" : "Flat Amount"
+          } Commission`}
+        />
+        <button
+          type="button"
+          className="px-4 py-3 border rounded mt-7"
+          onClick={() => toggleDiscountType("commission")}
+        >
+          {form.commissionType === "percentage" ? "%" : "Flat"}
+        </button>
+      </div>
+      <div className="flex items-start">
+        <InputField
+          label={`Category VAT (${
+            form.vatType === "percentage" ? "%" : "Flat Amount"
+          })`}
+          value={form.vat}
+          onChange={(e) => setForm({ ...form, vat: e.target.value })}
+          placeholder={`Enter ${
+            form.vatType === "percentage" ? "Percentage" : "Flat Amount"
+          } VAT`}
+        />
+        <button
+          type="button"
+          className="px-4 py-3 border rounded mt-7"
+          onClick={() => toggleDiscountType("vat")}
+        >
+          {form.vatType === "percentage" ? "%" : "Flat"}
+        </button>
+      </div>
       <InputField
         label="Category Icon"
         value={form.icon}
@@ -122,11 +212,14 @@ const EditSubCategory = () => {
       />
       <FileUpload
         label="Sub Category Image"
-        setFile={handleImageChange}
-        name="image"
+        setFile={setImage}
         file={image}
+        name="image"
       />
-      <PrimaryButton value={loading ? "Adding..." : "Add Sub Category"} />
+      <PrimaryButton
+        value={loading ? "Updating..." : "Update Sub Category"}
+        disabled={loading}
+      />
     </form>
   );
 };

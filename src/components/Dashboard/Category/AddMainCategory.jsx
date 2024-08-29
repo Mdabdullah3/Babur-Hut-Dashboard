@@ -1,33 +1,30 @@
 import React, { useState, useEffect } from "react";
 import InputField from "../../common/InputField";
-import SelectField from "../../common/SelectField";
 import PrimaryButton from "../../common/PrimaryButton";
 import useCategoryStore from "../../../store/categoryStore";
-import { useNavigate } from "react-router-dom";
 import FileUpload from "../../common/FileUpload";
 import { toast } from "react-toastify";
 
 const AddMainCategory = () => {
   const [image, setImage] = useState(null);
   const { addCategory, loading } = useCategoryStore();
-  const navigate = useNavigate();
 
-  const status = [
-    { id: 1, label: "Active", value: "active" },
-    { id: 2, label: "Inactive", value: "inactive" },
-  ];
+  // const status = [
+  //   { id: 1, label: "Active", value: "active" },
+  //   { id: 2, label: "Inactive", value: "inactive" },
+  // ];
 
   const [form, setForm] = useState({
     name: "",
     shippingCharge: "",
-    shippingChargeType: "percentage", // Default to percentage
+    shippingChargeType: "percentage",
     status: "",
     commission: "",
-    commissionType: "percentage", // Default to percentage
-    transactionCose: "",
-    transactionCoseType: "percentage", // Default to percentage
+    commissionType: "percentage",
+    transactionCost: "",
+    transactionCostType: "percentage",
     vat: "",
-    vatType: "percentage", // Default to percentage
+    vatType: "percentage",
     image: null,
     icon: "",
   });
@@ -47,31 +44,14 @@ const AddMainCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create a FormData object to handle file upload
-    const formData = new FormData();
-    formData.append("name", form.name);
-    formData.append("shippingCharge", form.shippingCharge);
-    formData.append("shippingChargeType", form.shippingChargeType);
-    formData.append("status", form.status);
-    formData.append("commission", form.commission);
-    formData.append("commissionType", form.commissionType);
-    formData.append("transactionCose", form.transactionCose);
-    formData.append("transactionCoseType", form.transactionCoseType);
-    formData.append("vat", form.vat);
-    formData.append("vatType", form.vatType);
-    formData.append("icon", form.icon);
-    if (form.image) {
-      formData.append("image", form.image);
-    }
-
     try {
-      await addCategory(formData);
-      navigate("/categories");
+      await addCategory(form);
     } catch (error) {
       toast.error("Failed to add category. Please try again.");
     }
   };
 
+  console.log(form);
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"
@@ -127,14 +107,14 @@ const AddMainCategory = () => {
       <div className="flex items-start">
         <InputField
           label={`Transaction Cost (${
-            form.transactionCoseType === "percentage" ? "%" : "Flat Amount"
+            form.transactionCostType === "percentage" ? "%" : "Flat Amount"
           })`}
-          value={form.transactionCose}
+          value={form.transactionCost}
           onChange={(e) =>
-            setForm({ ...form, transactionCose: e.target.value })
+            setForm({ ...form, transactionCost: e.target.value })
           }
           placeholder={`Enter ${
-            form.transactionCoseType === "percentage"
+            form.transactionCostType === "percentage"
               ? "Percentage"
               : "Flat Amount"
           } Transaction Cost`}
@@ -142,9 +122,9 @@ const AddMainCategory = () => {
         <button
           type="button"
           className="px-4 py-3 border rounded mt-7"
-          onClick={() => toggleDiscountType("transactionCose")}
+          onClick={() => toggleDiscountType("transactionCost")}
         >
-          {form.transactionCoseType === "percentage" ? "%" : "Flat"}
+          {form.transactionCostType === "percentage" ? "%" : "Flat"}
         </button>
       </div>
       <div className="flex items-start">
