@@ -1,6 +1,7 @@
 import create from "zustand";
 import axios from "axios";
 import { API_URL } from "../config";
+import { toast } from "react-toastify";
 
 const useVoucherStore = create((set) => ({
     vouchers: [],
@@ -46,8 +47,10 @@ const useVoucherStore = create((set) => ({
                 vouchers: [...state.vouchers, response.data.data],
                 loading: false,
             }));
+            toast.success(response.data?.message || "Voucher created successfully");
         } catch (error) {
             set({ error: error.response?.data?.message || "An error occurred", loading: false });
+            toast.error(error.response?.data?.message || "An error occurred");
         }
     },
 
@@ -77,8 +80,10 @@ const useVoucherStore = create((set) => ({
                 loading: false,
                 selectedVoucher: null,
             }));
+            toast.success(response.data?.message || "Voucher updated successfully");
         } catch (error) {
             set({ error: error.response?.data?.message || "An error occurred", loading: false });
+            toast.error(error.response?.data?.message || "An error occurred");
         }
     },
 }));

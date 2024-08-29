@@ -7,13 +7,16 @@ import { useParams } from "react-router-dom";
 
 const EditVoucher = () => {
   const { id } = useParams();
-  const { fetchVoucherById, voucher, updateVoucher } = useVoucherStore();
+  const { fetchVoucherById, voucher, updateVoucher, loading } =
+    useVoucherStore();
 
   const [form, setForm] = useState({
     user: "",
     redeemCode: "",
     startDate: "",
     endDate: "",
+    discountType: "percentage",
+    minimumPurchase: "",
     discount: "",
     status: "",
   });
@@ -33,20 +36,33 @@ const EditVoucher = () => {
         endDate: voucher.endDate
           ? new Date(voucher.endDate).toISOString().split("T")[0]
           : "",
+        discountType: voucher.discountType || "percentage", // Populate discountType
+        minimumPurchase: voucher.minimumPurchase || "", // Populate minimumPurchase
         discount: voucher.discount || "",
         status: voucher.status || "",
       });
     }
   }, [voucher]);
 
+  const toggleDiscountType = () => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      discountType:
+        prevForm.discountType === "percentage" ? "flat" : "percentage",
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     await updateVoucher(id, form);
     setForm({
+      user: "",
       redeemCode: "",
       startDate: "",
       endDate: "",
+      discountType: "percentage",
+      minimumPurchase: "",
       discount: "",
       status: "",
     });
@@ -64,12 +80,36 @@ const EditVoucher = () => {
             required
           />
           <InputField
-            label="Discount"
-            value={form.discount}
-            placeholder="Enter Discount"
-            onChange={(e) => setForm({ ...form, discount: e.target.value })}
+            label="Minimum Purchase"
+            value={form.minimumPurchase}
+            placeholder="Enter Minimum Purchase"
+            onChange={(e) =>
+              setForm({ ...form, minimumPurchase: e.target.value })
+            }
             required
           />
+          <div className="flex items-start">
+            <InputField
+              label={`Discount (${
+                form.discountType === "percentage" ? "%" : "Flat Amount"
+              })`}
+              value={form.discount}
+              placeholder={`Enter ${
+                form.discountType === "percentage"
+                  ? "Percentage"
+                  : "Flat Amount"
+              } Discount`}
+              onChange={(e) => setForm({ ...form, discount: e.target.value })}
+              required
+            />
+            <button
+              type="button"
+              className="px-4 py-3 border rounded mt-7"
+              onClick={toggleDiscountType}
+            >
+              {form.discountType === "percentage" ? "%" : "Flat"}
+            </button>
+          </div>
           <InputField
             label="Start Date"
             type="date"
@@ -100,7 +140,10 @@ const EditVoucher = () => {
           />
         </div>
 
-        <PrimaryButton value={"Update Voucher"} />
+        <PrimaryButton
+          value={loading ? "Loading..." : "Update Voucher"}
+          disabled={loading}
+        />
       </form>
     </section>
   );
