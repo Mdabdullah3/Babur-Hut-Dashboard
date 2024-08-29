@@ -16,6 +16,7 @@ const CreateEvent = () => {
     image: null,
     strDate: "",
     endDate: "",
+    details: "",
     // status: "",
   });
 
@@ -35,6 +36,7 @@ const CreateEvent = () => {
       user: user?._id,
       name: form.name,
       image: image,
+      details: form.details,
       // status: form.status,
       startDate: new Date(form.strDate),
       endDate: new Date(form.endDate),
@@ -103,6 +105,16 @@ const CreateEvent = () => {
             onChange={handleInputChange}
             required
           />
+
+          <textarea
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter details"
+            name="details"
+            value={form.details}
+            onChange={handleInputChange}
+            required
+          />
+
           {/* <SelectField
             label="Status"
             id="status"
