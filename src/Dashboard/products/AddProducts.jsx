@@ -10,10 +10,8 @@ import "react-quill/dist/quill.snow.css";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import useUserStore from "../../store/AuthStore";
 import Select from "react-select";
-import axios from "axios";
-import { API_URL, SERVER } from "../../config";
-import { FaBangladeshiTakaSign } from "react-icons/fa6";
-import { toDataURL } from "../../utils/DataUrl";
+import { FaBangladeshiTakaSign, FaTrash } from "react-icons/fa6";
+import { BiEdit } from "react-icons/bi";
 const AddProducts = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [video, setVideo] = useState(null);
@@ -39,7 +37,6 @@ const AddProducts = () => {
     fetchUser();
   }, [fetchCategories, fetchUser]);
 
-  console.log(variants);
   const [form, setForm] = useState({
     video: video,
     productVariants: variants.map((item) => item._id),
@@ -83,7 +80,7 @@ const AddProducts = () => {
       img: [image1, image2, image3].filter(Boolean),
       coverPhoto: coverImage,
       video: video,
-      productVariants: variants.map((item) => item._id),
+      productVariants: variants,
     }));
   }, [image1, image2, user, image3, coverImage, video, variants]);
 
@@ -103,6 +100,8 @@ const AddProducts = () => {
     { id: 3, label: "No Warranty", value: "No Warranty" },
   ];
 
+  const uniqueId = Math.random().toString(36).substring(2);
+
   const formRefs = {
     basicInfo: useRef(null),
     description: useRef(null),
@@ -117,10 +116,8 @@ const AddProducts = () => {
   console.log(form);
   const handleAddVariant = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
     const variantData = {
-      user: user?._id,
+      id: uniqueId,
       name: variantForm.productName,
       price: variantForm.price,
       discount: variantForm.discount,
@@ -131,32 +128,21 @@ const AddProducts = () => {
       color: variantForm.color,
       image: variantImage,
     };
+    toast.success("Product variant added successfully");
+    setEditingVariant(null);
+    setVariants((prevVariants) => [...prevVariants, variantData]);
 
-    try {
-      const response = await axios.post(
-        `${API_URL}/product-variants`,
-        variantData
-      );
-      const data = response.data.data;
-      setLoading(false);
-      setVariants((prevVariants) => [...prevVariants, data]);
-      toast.success("Product variant added successfully!");
-      setVariantForm((prevForm) => ({
-        ...prevForm,
-        quantity: 0,
-        price: 0,
-        discount: 0,
-        material: "",
-        size: "",
-        gender: "",
-        color: "",
-      }));
-      setVariantImage(null);
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.message);
-      console.log(error);
-    }
+    setVariantForm({
+      price: 0,
+      discount: 0,
+      quantity: 0,
+      color: "",
+      size: "",
+      image: null,
+      gender: "",
+      material: "",
+    });
+    setVariantImage(null);
   };
 
   const handleSubmit = async (e) => {
@@ -164,7 +150,17 @@ const AddProducts = () => {
     e.preventDefault();
     const formData = {
       user: form.user,
-      productVariants: form.productVariants,
+      productVariants: form.productVariants.map((variant) => ({
+        name: variant.name,
+        price: variant.price,
+        discount: variant.discount,
+        quantity: variant.quantity,
+        gender: variant.gender,
+        color: variant.color,
+        material: variant.material,
+        size: variant.size,
+        image: variant.image,
+      })),
       video: form.video,
       name: form.productName,
       slug: form.productName.toLowerCase().split(" ").join("-"),
@@ -209,11 +205,12 @@ const AddProducts = () => {
   }));
 
   const handleEditVariant = (id) => {
-    const variantToEdit = variants.find((variant) => variant._id === id);
+    const variantToEdit = variants.find((variant) => variant.id === id);
     console.log(variantToEdit);
     if (variantToEdit) {
       setEditingVariant(variantToEdit);
       setVariantForm({
+        id: variantToEdit.id,
         price: variantToEdit.price,
         discount: variantToEdit.discount,
         quantity: variantToEdit.quantity,
@@ -222,24 +219,15 @@ const AddProducts = () => {
         gender: variantToEdit.gender,
         material: variantToEdit.material,
       });
-      if (variantToEdit?.image?.secure_url) {
-        const image1Url = `${SERVER}${variantToEdit?.image?.secure_url}`;
-        toDataURL(image1Url).then((base64) => {
-          setVariantImage(base64);
-          setVariantForm((prevForm) => ({
-            ...prevForm,
-            image: base64,
-          }));
-        });
-      }
-      setVariantImage(variantToEdit.image);
     }
+    setVariantImage(variantToEdit.image);
+    scrollToSection(formRefs.variants);
   };
   const handleUpdateVariant = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     const updatedVariantData = {
+      id: variantForm.id,
       user: user?._id,
       price: variantForm.price,
       discount: variantForm.discount,
@@ -250,40 +238,31 @@ const AddProducts = () => {
       gender: variantForm.gender,
       material: variantForm.material,
     };
-
-    try {
-      const response = await axios.patch(
-        `${API_URL}/product-variants/${editingVariant._id}`,
-        updatedVariantData
-      );
-      const updatedVariant = response.data.data;
-      setLoading(false);
-      setVariants((prevVariants) =>
-        prevVariants.map((variant) =>
-          variant._id === updatedVariant._id ? updatedVariant : variant
-        )
-      );
-      toast.success("Product variant updated successfully!");
-      setEditingVariant(null);
-      setVariantForm({
-        price: 0,
-        discount: 0,
-        quantity: 0,
-        color: "",
-        size: "",
-        image: null,
-        gender: "",
-        material: "",
-      });
-      setVariantImage(null);
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.message);
-      console.log(error);
-    }
+    setVariants((prevVariants) =>
+      prevVariants.map((variant) =>
+        variant.id === updatedVariantData.id ? updatedVariantData : variant
+      )
+    );
+    toast.success("Product variant updated successfully!");
+    setEditingVariant(null);
+    setVariantForm({
+      price: 0,
+      discount: 0,
+      quantity: 0,
+      color: "",
+      size: "",
+      image: null,
+      gender: "",
+      material: "",
+    });
+    setVariantImage(null);
   };
 
-  console.log(variantImage);
+  const handleDeleteVariant = (id) => {
+    setVariants((prevVariants) =>
+      prevVariants.filter((variant) => variant.id !== id)
+    );
+  };
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
       <section className="col-span-4 w-11/12">
@@ -479,17 +458,15 @@ const AddProducts = () => {
                 <button
                   onClick={handleUpdateVariant}
                   className="btn btn-primary text-white"
-                  disabled={loading}
                 >
-                  {loading ? "Updating..." : "Update Variant"}
+                  {"Update Variant"}
                 </button>
               ) : (
                 <button
                   onClick={handleAddVariant}
                   className="btn btn-primary text-white"
-                  disabled={loading}
                 >
-                  {loading ? "Adding..." : "Add Variant"}
+                  {"Add Variant"}
                 </button>
               )}
             </div>
@@ -512,12 +489,12 @@ const AddProducts = () => {
 
                 {variants?.map((variant) => (
                   <div
-                    key={variant._id}
+                    key={variant.id}
                     className="grid grid-cols-9 gap-4 items-center border-b py-4 hover:bg-gray-50 transition-colors capitalize"
                   >
                     <img
                       className="w-14 h-14 object-cover rounded-lg mx-auto"
-                      src={`${SERVER}${variant?.image?.secure_url}`}
+                      src={variant?.image}
                       alt={variant?.size}
                     />
                     <p className="text-center">{variant?.size}</p>
@@ -527,17 +504,26 @@ const AddProducts = () => {
                       <FaBangladeshiTakaSign />
                       {variant?.price}
                     </p>
-                    <p className="text-center text-green-600">
-                      {variant?.discount}%
+                    <p className="text-center text-green-600 flex items-center">
+                      <FaBangladeshiTakaSign />
+                      {variant?.discount}
                     </p>
                     <p className="text-center">{variant?.material}</p>
                     <p className="text-center">{variant?.gender}</p>
-                    <button
-                      onClick={() => handleEditVariant(variant?._id)}
-                      className="btn btn-error text-white px-3 py-1 rounded-md"
-                    >
-                      Edit
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleEditVariant(variant?.id)}
+                        className="bg-yellow-500 text-white px-3 py-2 rounded-md text-lg"
+                      >
+                        <BiEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteVariant(variant?.id)}
+                        className="bg-red-500 text-white px-3 py-2 rounded-md text-lg"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </section>
@@ -654,7 +640,7 @@ const AddProducts = () => {
           </section>
           <div className="my-10">
             <PrimaryButton
-              value={loading ? "Submiting..." : "submit"}
+              value={loading ? "Submiting..." : "Submit"}
               disabled={loading}
               onClick={handleSubmit}
             />

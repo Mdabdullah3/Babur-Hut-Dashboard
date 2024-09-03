@@ -9,32 +9,25 @@ import useUserStore from "../../store/AuthStore";
 const ProductAdminPanel = () => {
   const { user, fetchUser } = useUserStore();
   const {
-    product,
+    products,
     fetchProductByIdForUser,
-    totalProducts,
-    page,
+    totalPages,
     limit,
     searchTerm,
-    setPage,
-    setLimit,
     setSearchTerm,
-    setSort,
-    loading,
+    page,
+    setPage,
   } = useProductStore();
 
   useEffect(() => {
-    fetchProductByIdForUser(user?._id);
     fetchUser();
-  }, [
-    page,
-    limit,
-    fetchUser,
-    user?._id,
-    fetchProductByIdForUser,
-    searchTerm,
-    setSort,
-  ]);
 
+    if (user?._id) {
+      fetchProductByIdForUser(user._id, page, limit, searchTerm);
+    }
+  }, [user?._id, fetchUser, page, limit, searchTerm, fetchProductByIdForUser]);
+
+  console.log(products, user);
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
@@ -46,8 +39,11 @@ const ProductAdminPanel = () => {
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
-  // if (loading) return <h1>Loading...</h1>;
-
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
   return (
     <section>
       <div className="flex">
@@ -83,8 +79,8 @@ const ProductAdminPanel = () => {
                 </tr>
               </thead>
               <tbody>
-                {product?.length > 0 ? (
-                  product?.map((product) => (
+                {products?.length > 0 ? (
+                  products?.map((product) => (
                     <tr key={product?._id} className="border-b">
                       <td className="px-4 py-2">
                         <img
@@ -93,12 +89,12 @@ const ProductAdminPanel = () => {
                           className="w-12 h-12 rounded"
                         />
                       </td>
-                      <td className="px-4 py-2">{product.name}</td>
-                      <td className="px-4 py-2">{product.quantity}</td>
-                      <td className="px-4 py-2">{product.vendorId}</td>
-                      <td className="px-4 py-2">${product.price}</td>
+                      <td className="px-4 py-2">{product?.name}</td>
+                      <td className="px-4 py-2">{product?.quantity}</td>
+                      <td className="px-4 py-2">{product?.vendorId}</td>
+                      <td className="px-4 py-2">${product?.price}</td>
                       <td className="px-4 py-2">
-                        {formatDate(product.createdAt)}
+                        {formatDate(product?.createdAt)}
                       </td>
                       <td className="px-4 py-2 ">
                         <Link to={`/admin/edit-product/${product._id}`}>
@@ -125,26 +121,43 @@ const ProductAdminPanel = () => {
               </tbody>
             </table>
           </div>
-          <div className="mt-8 flex justify-center">
-            <div>
-              <button
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1}
-                className="bg-gray-300 px-4 py-2 rounded"
-              >
-                Previous
-              </button>
-              <span className="mx-2 px-4 py-2 border-gray-400 border rounded-lg ">
-                {page}
-              </span>
-              <button
-                onClick={() => setPage(page + 1)}
-                disabled={page * limit >= totalProducts}
-                className="bg-gray-300 px-4 py-2 rounded"
-              >
-                Next
-              </button>
-            </div>
+          <div className="flex justify-center items-center mt-12">
+            {/* Previous Button */}
+            <button
+              className="px-4 py-2 mx-1 text-sm bg-primary rounded hover:bg-primary/70 text-white"
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page <= 1}
+            >
+              Previous
+            </button>
+
+            {/* Page Numbers */}
+            {Array.from({ length: totalPages }, (_, index) => {
+              const pageNumber = index + 1;
+              return (
+                <button
+                  key={pageNumber}
+                  className={`px-4 py-2 mx-1 text-sm rounded ${
+                    pageNumber === page
+                      ? "bg-primary text-white"
+                      : "bg-gray-300 hover:bg-gray-400"
+                  }`}
+                  onClick={() => handlePageChange(pageNumber)}
+                  disabled={pageNumber === page} // Disable the active page button
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+
+            {/* Next Button */}
+            <button
+              className="px-4 py-2 mx-1 text-sm bg-primary rounded hover:bg-primary/70 text-white"
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page >= totalPages}
+            >
+              Next
+            </button>
           </div>
         </main>
       </div>
