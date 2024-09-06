@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-const FileUpload = ({ label, name, acceptType = "image/*", setFile, file }) => {
+const FileUpload = ({
+  label,
+  imageSize,
+  name,
+  acceptType = "image/*",
+  setFile,
+  file,
+}) => {
   const [selectedFile, setSelectedFile] = useState(file);
 
   useEffect(() => {
@@ -28,6 +35,7 @@ const FileUpload = ({ label, name, acceptType = "image/*", setFile, file }) => {
   return (
     <div>
       <label className="block font-semibold mb-2 text-secondary">{label}</label>
+      <p className="my-2 text-primary">{imageSize && imageSize}</p>
       {selectedFile ? (
         <div className="relative">
           {accept === "image/*" ? (

@@ -60,7 +60,7 @@ const EditEvent = () => {
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    return date.toISOString().split('T')[0]; 
+    return date.toISOString().split("T")[0];
   };
 
   return (
@@ -81,6 +81,9 @@ const EditEvent = () => {
           label="Event Image"
           setFile={handleImageChange}
           file={image}
+          imageSize={
+            "Image size should be less than 5 MB, and Minimum Height and Width should be 300px1200px "
+          }
         />
         <InputField
           label="Starting Date"

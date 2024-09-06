@@ -35,12 +35,12 @@ import CreateEvent from "./Dashboard/EventManager/CreateEvent";
 import EditEvent from "./Dashboard/EventManager/EditEvent";
 import EditPackage from "./Dashboard/AdManager/EditPackage";
 import Supports from "./Dashboard/Support";
-import SupportDetails from "./Dashboard/Support/SupportDetails";
 import BannerImageUpload from "./Dashboard/BannerImageUpload/BannerImageUpload";
 import UploadImage from "./Dashboard/BannerImageUpload/UploadImage";
 import JoinEvents from "./Dashboard/EventManager/JoinEvents";
 import VendorRequest from "./Dashboard/vendor/VendorRequest";
 import VendorDetails from "./Dashboard/vendor/VendorDetails";
+import ReportDetails from "./Dashboard/Support/SupportDetails";
 
 const menu = [
     {
@@ -246,7 +246,7 @@ const menu = [
         name: "Support Details",
         layout: "/admin",
         path: "support-details/:id",
-        component: <SupportDetails />
+        component: <ReportDetails />
     },
     {
         name: "Role Manager",

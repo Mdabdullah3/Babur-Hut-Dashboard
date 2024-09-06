@@ -20,10 +20,10 @@ const useReportStore = create((set, get) => ({
         }
     },
 
-    fetchReportById: async (reportId) => {
+    fetchReportById: async (id) => {
         set({ loading: true, error: null });
         try {
-            const response = await axios.get(`${API_URL}/reports/${reportId}`);
+            const response = await axios.get(`${API_URL}/reports/${id}`);
             set({ report: response?.data?.data, loading: false });
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to fetch report');

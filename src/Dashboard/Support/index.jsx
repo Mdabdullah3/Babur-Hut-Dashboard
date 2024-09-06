@@ -2,39 +2,20 @@ import React, { useEffect } from "react";
 import { FiTrash } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import useReportStore from "../../store/ReportStore";
-import useProductStore from "../../store/ProductStore";
-import useUserStore from "../../store/AuthStore";
+import { SERVER } from "../../config";
 
 const Supports = () => {
-  const { user, fetchUser } = useUserStore();
-  const { products, fetchAllProducts } = useProductStore();
   const { reports, fetchReports, deleteReport } = useReportStore();
 
   useEffect(() => {
     fetchReports();
-    fetchAllProducts();
-    fetchUser();
-  }, [fetchReports, fetchAllProducts, fetchUser]);
+  }, [fetchReports]);
 
   const handleDelete = (id) => {
     deleteReport(id);
   };
 
-  const header = [
-    "Product Image",
-    "Name",
-    "Email",
-    "Report Type",
-    "Message",
-    "Action",
-  ];
-
-  const filteredReports = reports?.filter((report) => {
-    const product = products?.find((prod) => prod._id === report?.product);
-    return product && product?.user?._id === user?._id;
-  });
-
-  console.log(filteredReports);
+  const header = ["Product Image", "Report Type", "Message", "Action"];
 
   return (
     <section>
@@ -58,31 +39,21 @@ const Supports = () => {
               reports.map((report, index) => {
                 return (
                   <tr key={index}>
-                    {/* <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
-                      {report?.coverPhoto?.secure_url ? (
-                        <img
-                          src={report.coverPhoto.secure_url}
-                          alt={report.name}
-                          className="w-16 h-16 object-cover"
-                        />
-                      ) : (
-                        "No Image"
-                      )}
-                    </td> */}
-                    {/* <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
-                      {report?.name || "Unknown"}
+                    <td>
+                      <img
+                        src={`${SERVER}${report?.image?.secure_url}`}
+                        alt=""
+                        className="w-20 h-20 "
+                      />
                     </td>
                     <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
-                      {report?.email || "Unknown"}
-                    </td> */}
-                    <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
-                      {report?.reportType}
+                      {report?.title}
                     </td>
                     <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
                       {report?.message}
                     </td>
                     <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">
-                      <Link to={`/admin/support/${report?._id}`}>
+                      <Link to={`/admin/support-details/${report?._id}`}>
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                           View
                         </button>

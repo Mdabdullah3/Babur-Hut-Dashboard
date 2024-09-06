@@ -86,6 +86,9 @@ const CreateEvent = () => {
           <FileUpload
             name="image"
             label="Event Image"
+            imageSize={
+              "Image size should be less than 5 MB, and Minimum Height and Width should be 300px1200px "
+            }
             setFile={setImage} // Pass setImage to update the image state
             required
           />
