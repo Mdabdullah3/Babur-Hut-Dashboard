@@ -9,10 +9,10 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import { useParams } from "react-router-dom";
-import { API_URL, SERVER } from "../../config";
+import { SERVER } from "../../config";
 import { toDataURL } from "../../utils/DataUrl";
-import axios from "axios";
-import { FaBangladeshiTakaSign } from "react-icons/fa6";
+import { FaBangladeshiTakaSign, FaTrash } from "react-icons/fa6";
+import { BiEdit } from "react-icons/bi";
 
 const EditProducts = () => {
   const { id } = useParams();
@@ -28,14 +28,13 @@ const EditProducts = () => {
     useProductStore();
   const [variantImage, setVariantImage] = useState(null);
   const [editingVariant, setEditingVariant] = useState(null);
-  const [variants, setVariants] = useState(product?.productVariants || []);
+  const [variants, setVariants] = useState(product?.productVariants);
+  const uniqueId = Math.random().toString(36).substring(2);
 
-  console.log(variants);
   const { categories, fetchCategories } = useCategoryStore();
   const genderOption = ["men", "women", "baby", "unisex"];
-  const sizeOptions = ["s", "m", "m", "xl", "xxl"];
+  const sizeOptions = ["s", "m", "l", "xl", "2xl", "3xl", "4xl", "5xl"];
   const colorOptions = ["red", "blue", "green", "yellow", "black", "white"];
-  console.log(product);
   useEffect(() => {
     fetchCategories();
     fetchProductByIdOrSlug(id);
@@ -62,6 +61,7 @@ const EditProducts = () => {
     vendorId: product?.customId,
     video: video,
     user: product?.user?._id,
+    productVariants: variants || [],
     img: [image1, image2, image3].filter(Boolean),
     productName: "",
     summary: "",
@@ -89,8 +89,9 @@ const EditProducts = () => {
       img: [image1, image2, image3].filter(Boolean),
       coverPhoto: coverImage,
       video: video,
+      productVariants: variants,
     }));
-  }, [image1, image2, image3, coverImage, video]);
+  }, [image1, image2, image3, coverImage, video, variants]);
   useEffect(() => {
     if (product) {
       setForm({
@@ -118,6 +119,7 @@ const EditProducts = () => {
         width: product?.packaging?.width,
         dimension: product?.packaging?.dimension,
       });
+
       if (product?.coverPhoto?.secure_url) {
         const coverImageUrl = `${SERVER}${product.coverPhoto.secure_url}`;
         toDataURL(coverImageUrl).then((base64) => {
@@ -129,7 +131,6 @@ const EditProducts = () => {
         });
       }
 
-     
       if (product?.images?.length > 0 && product.images[0]?.secure_url) {
         const image1Url = `${SERVER}${product.images[0].secure_url}`;
         toDataURL(image1Url).then((base64) => {
@@ -208,7 +209,17 @@ const EditProducts = () => {
       user: product.user?._id,
       video: form.video,
       name: form.productName,
-      productVariants: variants?.map((item) => item?._id),
+      productVariants: form?.productVariants?.map((variant) => ({
+        name: variant.name,
+        price: variant.price,
+        discount: variant.discount,
+        quantity: variant.quantity,
+        gender: variant.gender,
+        color: variant.color,
+        material: variant.material,
+        size: variant.size,
+        image: variant.image,
+      })),
       slug: form.productName.toLowerCase().split(" ").join("-"),
       price: form.price,
       quantity: form.quantity,
@@ -248,10 +259,12 @@ const EditProducts = () => {
   };
 
   const handleEditVariant = (id) => {
-    const variantToEdit = variants?.find((variant) => variant?._id === id);
+    const variantToEdit = variants.find((variant) => variant.id === id);
+    console.log(variantToEdit);
     if (variantToEdit) {
       setEditingVariant(variantToEdit);
       setVariantForm({
+        id: variantToEdit.id,
         price: variantToEdit.price,
         discount: variantToEdit.discount,
         quantity: variantToEdit.quantity,
@@ -260,24 +273,14 @@ const EditProducts = () => {
         gender: variantToEdit.gender,
         material: variantToEdit.material,
       });
-      if (variantToEdit?.image?.secure_url) {
-        const image1Url = `${SERVER}${variantToEdit?.image?.secure_url}`;
-        toDataURL(image1Url).then((base64) => {
-          setVariantImage(base64);
-          setVariantForm((prevForm) => ({
-            ...prevForm,
-            image: base64,
-          }));
-        });
-      }
-      setVariantImage(variantToEdit.image);
     }
+    setVariantImage(variantToEdit.image);
+    scrollToSection(formRefs.variants);
   };
   const handleUpdateVariant = async (e) => {
     e.preventDefault();
-
     const updatedVariantData = {
-      user: product?.user?._id,
+      id: variantForm.id,
       price: variantForm.price,
       discount: variantForm.discount,
       quantity: variantForm.quantity,
@@ -287,41 +290,36 @@ const EditProducts = () => {
       gender: variantForm.gender,
       material: variantForm.material,
     };
+    setVariants((prevVariants) =>
+      prevVariants.map((variant) =>
+        variant.id === updatedVariantData.id ? updatedVariantData : variant
+      )
+    );
+    toast.success("Product variant updated successfully!");
+    setEditingVariant(null);
+    setVariantForm({
+      price: 0,
+      discount: 0,
+      quantity: 0,
+      color: "",
+      size: "",
+      image: null,
+      gender: "",
+      material: "",
+    });
+    setVariantImage(null);
+  };
 
-    try {
-      const response = await axios.patch(
-        `${API_URL}/product-variants/${editingVariant._id}`,
-        updatedVariantData
-      );
-      const updatedVariant = response.data.data;
-      setVariants((prevVariants) =>
-        prevVariants.map((variant) =>
-          variant._id === updatedVariant._id ? updatedVariant : variant
-        )
-      );
-      toast.success("Product variant updated successfully!");
-      setEditingVariant(null);
-      setVariantForm({
-        price: 0,
-        discount: 0,
-        quantity: 0,
-        color: "",
-        size: "",
-        image: null,
-        gender: "",
-        material: "",
-      });
-      setVariantImage(null);
-    } catch (error) {
-      toast.error(error.message);
-      console.log(error);
-    }
+  const handleDeleteVariant = (id) => {
+    setVariants((prevVariants) =>
+      prevVariants.filter((variant) => variant.id !== id)
+    );
   };
 
   const handleAddVariant = async (e) => {
     e.preventDefault();
     const variantData = {
-      user: product?.user?._id,
+      id: uniqueId,
       name: variantForm.productName,
       price: variantForm.price,
       discount: variantForm.discount,
@@ -333,29 +331,21 @@ const EditProducts = () => {
       image: variantImage,
     };
 
-    try {
-      const response = await axios.post(
-        `${API_URL}/product-variants`,
-        variantData
-      );
-      const data = response.data.data;
-      setVariants((prevVariants) => [...prevVariants, data]);
-      toast.success("Product variant added successfully!");
-      setVariantForm((prevForm) => ({
-        ...prevForm,
-        quantity: 0,
-        price: 0,
-        discount: 0,
-        material: "",
-        size: "",
-        gender: "",
-        color: "",
-      }));
-      setVariantImage(null);
-    } catch (error) {
-      toast.error(error.message);
-      console.log(error);
-    }
+    toast.success("Product variant added successfully");
+    setEditingVariant(null);
+    setVariants((prevVariants) => [...prevVariants, variantData]);
+
+    setVariantForm({
+      price: 0,
+      discount: 0,
+      quantity: 0,
+      color: "",
+      size: "",
+      image: null,
+      gender: "",
+      material: "",
+    });
+    setVariantImage(null);
   };
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
@@ -582,7 +572,7 @@ const EditProducts = () => {
                 </button>
               )}
             </div>
-            {variants.length > 0 && (
+            {variants?.length > 0 && (
               <section className="p-4 bg-white rounded-lg shadow-md mt-4">
                 <div className="mb-4">
                   <h1 className="text-2xl font-bold text-gray-800">Variants</h1>
@@ -604,11 +594,19 @@ const EditProducts = () => {
                     key={variant?._id}
                     className="grid grid-cols-9 gap-4 items-center border-b py-4 hover:bg-gray-50 transition-colors capitalize"
                   >
-                    <img
-                      className="w-14 h-14 object-cover rounded-lg mx-auto"
-                      src={`${SERVER}${variant?.image?.secure_url}`}
-                      alt={variant?.size}
-                    />
+                    {variant?.image?.secure_url ? (
+                      <img
+                        className="w-14 h-14 object-cover rounded-lg mx-auto"
+                        src={`${SERVER}${variant?.image?.secure_url}`}
+                        alt={variant?.size}
+                      />
+                    ) : (
+                      <img
+                        className="w-14 h-14 object-cover rounded-lg mx-auto"
+                        src={variant?.image}
+                        alt={variant?.size}
+                      />
+                    )}
                     <p className="text-center">{variant?.size}</p>
                     <p className="text-center">{variant?.color}</p>
                     <p className="text-center">{variant?.quantity}</p>
@@ -616,17 +614,26 @@ const EditProducts = () => {
                       <FaBangladeshiTakaSign />
                       {variant?.price}
                     </p>
-                    <p className="text-center text-green-600">
-                      {variant?.discount}%
+                    <p className="text-center text-green-600 flex items-center">
+                      <FaBangladeshiTakaSign />
+                      {variant?.discount}
                     </p>
                     <p className="text-center">{variant?.material}</p>
                     <p className="text-center">{variant?.gender}</p>
-                    <button
-                      onClick={() => handleEditVariant(variant?._id)}
-                      className="btn btn-error text-white px-3 py-1 rounded-md"
-                    >
-                      Edit
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleEditVariant(variant?.id)}
+                        className="bg-yellow-500 text-white px-3 py-2 rounded-md text-lg"
+                      >
+                        <BiEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteVariant(variant?.id)}
+                        className="bg-red-500 text-white px-3 py-2 rounded-md text-lg"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </section>

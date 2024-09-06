@@ -113,7 +113,6 @@ const AddProducts = () => {
     sectionRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  console.log(form);
   const handleAddVariant = async (e) => {
     e.preventDefault();
     const variantData = {
