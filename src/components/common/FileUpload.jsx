@@ -51,7 +51,7 @@ const FileUpload = ({ label, name, acceptType = "image/*", setFile, file }) => {
           </button>
         </div>
       ) : (
-        <div className="flex w-full  items-center justify-center ">
+        <div className="flex w-full  ">
           <label className="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue-500 cursor-pointer hover:bg-blue-500 hover:text-white">
             <svg
               className="w-8 h-8"

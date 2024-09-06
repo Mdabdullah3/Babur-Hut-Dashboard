@@ -10,6 +10,7 @@ import { vendor } from "../../utils/constant";
 import { useParams } from "react-router-dom";
 import useProductStore from "../../store/ProductStore";
 import useVoucherStore from "../../store/useVoucherStore";
+import VendorSetting from "../../components/Dashboard/Vendor/VendorSetting";
 const SingleVendor = () => {
   const { id } = useParams();
   const [activeMenu, setActiveMenu] = useState(1);
@@ -48,10 +49,10 @@ const SingleVendor = () => {
       name: "Reviews",
       items: 5,
     },
-    // {
-    //   id: 7,
-    //   name: "About Settings",
-    // },
+    {
+      id: 7,
+      name: "About Settings",
+    },
   ];
   const { product, fetchProductByIdForUser } = useProductStore();
   const { vouchers, fetchVoucherByUserId } = useVoucherStore();
@@ -105,7 +106,7 @@ const SingleVendor = () => {
       <div>{activeMenu === 4 && <VendorCampaign />}</div>
       <div>{activeMenu === 5 && <VendorAds />}</div>
       <div>{activeMenu === 6 && <VendorReview product={product} />}</div>
-      {/* <div>{activeMenu === 7 && <VendorSetting />}</div> */}
+      <div>{activeMenu === 7 && <VendorSetting id={id} />}</div>
     </section>
   );
 };

@@ -9,6 +9,7 @@ const InputField = ({
   placeholder,
   type = "text",
   required = false,
+  disabled = false,
 }) => {
   return (
     <div className="w-full">
@@ -16,6 +17,7 @@ const InputField = ({
         {label} <span className="text-primary">{label && required && "*"}</span>
       </label>
       <input
+        disabled={disabled}
         type={type}
         id={id}
         name={name}

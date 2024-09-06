@@ -87,6 +87,18 @@ const useUserStore = create((set, get) => ({
             set({ error: error.message, loading: false });
         }
     },
+    updateSingleUser: async (userData, id) => {
+        set({ loading: true, error: null });
+        try {
+            const response = await axios.patch(`${API_URL}/users/${id}`, userData, {
+                withCredentials: true,
+            });
+            set({ user: response.data.data, loading: false });
+            toast.success('User updated successfully!');
+        } catch (error) {
+            set({ error: error.message, loading: false });
+        }
+    },
 
     logout: async () => {
         set({ loading: true, error: null });
