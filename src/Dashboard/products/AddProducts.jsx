@@ -147,6 +147,10 @@ const AddProducts = () => {
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
+    if (!user) {
+      toast.error("Please login first");
+      return;
+    }
     const formData = {
       user: form.user,
       productVariants: form.productVariants.map((variant) => ({
@@ -396,7 +400,7 @@ const AddProducts = () => {
                 }
               />
               <InputField
-                label="Discount"
+                label="Discount Price"
                 type="number"
                 placeholder="Discount Price"
                 value={variantForm.discount}
@@ -649,7 +653,7 @@ const AddProducts = () => {
       <section className="sticky top-24 h-72 cursor-pointer hidden lg:block">
         <ul className="steps steps-vertical">
           <li
-            className={"step " + (activeStep === 0 ? "step-primary" : "")}
+            className={"step" + (activeStep === 0 ? "step-primary " : "")}
             onClick={() => {
               setActiveStep(0);
               scrollToSection(formRefs.basicInfo);

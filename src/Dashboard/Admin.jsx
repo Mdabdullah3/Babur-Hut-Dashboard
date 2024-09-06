@@ -10,9 +10,8 @@ import { Navigate } from "react-router-dom";
 
 const Admin = () => {
   const { user, fetchUser } = useUserStore();
-
   const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
     const loadUser = async () => {
       await fetchUser();

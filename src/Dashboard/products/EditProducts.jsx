@@ -274,7 +274,14 @@ const EditProducts = () => {
         material: variantToEdit.material,
       });
     }
-    setVariantImage(variantToEdit.image);
+    if (variantToEdit?.image?.secure_url) {
+      const imageUrl = `${SERVER}${variantToEdit?.image?.secure_url}`;
+      toDataURL(imageUrl).then((base64) => {
+        setVariantImage(base64);
+      });
+    } else {
+      setVariantImage(variantToEdit?.image);
+    }
     scrollToSection(formRefs.variants);
   };
   const handleUpdateVariant = async (e) => {
@@ -499,7 +506,7 @@ const EditProducts = () => {
                 }
               />
               <InputField
-                label="Discount"
+                label="Discount Price"
                 type="number"
                 placeholder="Discount Price"
                 value={variantForm.discount}
@@ -743,7 +750,7 @@ const EditProducts = () => {
           </section>
           <div className="my-10">
             <PrimaryButton
-              value={`${loading}` ? "Submit" : "Submiting..."}
+              value={loading ? "Submitting.." : "Submit"}
               onClick={handleSubmit}
             />
           </div>

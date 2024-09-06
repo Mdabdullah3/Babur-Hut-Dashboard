@@ -72,7 +72,7 @@ const ProductAdminPanel = () => {
                   <th className="px-4 py-2">Image</th>
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">Quantity</th>
-                  <th className="px-4 py-2">SKU</th>
+                  <th className="px-4 py-2">Status</th>
                   <th className="px-4 py-2">Price</th>
                   <th className="px-4 py-2">Date</th>
                   <th className="px-4 py-2">Actions</th>
@@ -90,9 +90,13 @@ const ProductAdminPanel = () => {
                         />
                       </td>
                       <td className="px-4 py-2">{product?.name}</td>
-                      <td className="px-4 py-2">{product?.quantity}</td>
-                      <td className="px-4 py-2">{product?.vendorId}</td>
-                      <td className="px-4 py-2">${product?.price}</td>
+                      <td className="px-4 py-2">
+                        {product?.productVariants[0].quantity}
+                      </td>
+                      <td className="px-4 py-2">{product?.status}</td>
+                      <td className="px-4 py-2">
+                        BDT{product?.productVariants[0].price}
+                      </td>
                       <td className="px-4 py-2">
                         {formatDate(product?.createdAt)}
                       </td>
