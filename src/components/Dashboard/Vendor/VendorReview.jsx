@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API_URL, SERVER } from "../../../config";
 import axios from "axios";
+
 const VendorReview = ({ product }) => {
   const [reviews, setReviews] = useState([]);
   useEffect(() => {

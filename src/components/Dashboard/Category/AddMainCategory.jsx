@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 const AddMainCategory = () => {
   const [image, setImage] = useState(null);
   const { addCategory, loading } = useCategoryStore();
-
+  // const [iconImage, setIconImage] = useState(null);
   // const status = [
   //   { id: 1, label: "Active", value: "active" },
   //   { id: 2, label: "Inactive", value: "inactive" },
@@ -25,8 +25,10 @@ const AddMainCategory = () => {
     transactionCostType: "percentage",
     vat: "",
     vatType: "percentage",
-    image: null,
+    image: image,
     icon: "",
+    // iconImage: iconImage,
+    // isHomeShow: false,
   });
 
   useEffect(() => {
@@ -153,6 +155,7 @@ const AddMainCategory = () => {
         placeholder="Category Icon"
       />
       <FileUpload label="Category Image" setFile={setImage} name="image" />
+      {/* <FileUpload label="Icon Image" setFile={setIconImage} name="iconImage" /> */}
       <PrimaryButton
         value={loading ? "Adding..." : "Add Category"}
         disabled={loading}

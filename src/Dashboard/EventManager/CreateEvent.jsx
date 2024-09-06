@@ -17,6 +17,7 @@ const CreateEvent = () => {
     strDate: "",
     endDate: "",
     description: "",
+    price: "",
     // status: "",
   });
 
@@ -36,8 +37,9 @@ const CreateEvent = () => {
       user: user?._id,
       name: form.name,
       image: image,
+      price: form.price,
       description: form.description,
-      // status: form.status,
+      status: "active",
       startDate: new Date(form.strDate),
       endDate: new Date(form.endDate),
     };
@@ -53,6 +55,8 @@ const CreateEvent = () => {
       // Reset the form after successful creation
       setForm({
         name: "",
+        description: "",
+        price: "",
         image: null,
         strDate: "",
         endDate: "",
@@ -71,8 +75,8 @@ const CreateEvent = () => {
   // ];
 
   return (
-    <div className="flex h-screen">
-      <section className="flex-1 p-10 bg-white rounded-lg shadow-md m-5">
+    <div className="flex ">
+      <section className="flex-1 p-10  m-5">
         <form onSubmit={handleAddEvent} className="space-y-5">
           <InputField
             label="Event Name"
@@ -90,6 +94,15 @@ const CreateEvent = () => {
               "Image size should be less than 5 MB, and Minimum Height and Width should be 300px1200px "
             }
             setFile={setImage} // Pass setImage to update the image state
+            required
+          />
+          <InputField
+            label="Price"
+            type="number"
+            placeholder={"Enter price"}
+            name="price"
+            value={form.price}
+            onChange={handleInputChange}
             required
           />
           <InputField
@@ -111,8 +124,8 @@ const CreateEvent = () => {
 
           <textarea
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter details"
-            name="details"
+            placeholder="Enter Details"
+            name="description"
             value={form.description}
             onChange={handleInputChange}
             required

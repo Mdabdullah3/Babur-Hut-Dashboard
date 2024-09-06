@@ -3,14 +3,14 @@ import InputSearch from "../../common/InputSearch";
 import TableHead from "../../../components/common/TableHead";
 import { SERVER } from "../../../config";
 
-const Products = ({ product }) => {
+const Products = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  // const [activeMenu, setActiveMenu] = useState(1);
-  const [filteredProducts, setFilteredProducts] = useState(product);
+  const [activeMenu, setActiveMenu] = useState(1);
+  const [filteredProducts, setFilteredProducts] = useState(products);
 
-  // const handleMenuClick = (id) => {
-  //   setActiveMenu(id);
-  // };
+  const handleMenuClick = (id) => {
+    setActiveMenu(id);
+  };
 
   const handleSearch = (value) => {
     setSearchTerm(value);
@@ -18,7 +18,7 @@ const Products = ({ product }) => {
 
   useEffect(() => {
     const filterProducts = () => {
-      let filtered = product;
+      let filtered = products;
 
       if (searchTerm) {
         filtered = filtered.filter((product) =>
@@ -29,38 +29,34 @@ const Products = ({ product }) => {
     };
 
     setFilteredProducts(filterProducts());
-  }, [searchTerm, product]);
+  }, [searchTerm, products]);
 
-  console.log(filteredProducts);
   const header = ["Image", "Product Name", "Quantity", "Price", "Date"];
 
-  // const menu = [
-  //   { id: 1, name: "All", items: vendorProducts.length },
-  //   {
-  //     id: 2,
-  //     name: "Online",
-  //     items: vendorProducts.filter((product) => product.status === "approved")
-  //       .length,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Pending",
-  //     items: vendorProducts.filter((product) => product.status === "pending")
-  //       .length,
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Suspended",
-  //     items: vendorProducts.filter((product) => product.status === "suspend")
-  //       .length,
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Deleted",
-  //     items: vendorProducts.filter((product) => product.status === "delete")
-  //       .length,
-  //   },
-  // ];
+  const menu = [
+    { id: 1, name: "All", items: products?.length },
+    {
+      id: 2,
+      name: "Online",
+      items: products?.filter((product) => product.status === "approved")
+        .length,
+    },
+    {
+      id: 3,
+      name: "Pending",
+      items: products?.filter((product) => product.status === "pending").length,
+    },
+    {
+      id: 4,
+      name: "Suspended",
+      items: products?.filter((product) => product.status === "suspend").length,
+    },
+    {
+      id: 5,
+      name: "Deleted",
+      items: products?.filter((product) => product.status === "delete").length,
+    },
+  ];
 
   return (
     <section className="py-5">
@@ -70,7 +66,7 @@ const Products = ({ product }) => {
         onChange={(value) => handleSearch(value)}
         onSearch={handleSearch}
       />
-      {/* <div className="flex items-center justify-center border-b-2 gap-10 mt-10 flex-wrap">
+      <div className="flex items-center justify-center border-b-2 gap-10 mt-10 flex-wrap">
         {menu.map((item) => (
           <button
             key={item.id}
@@ -84,7 +80,7 @@ const Products = ({ product }) => {
             {item.name} ({item.items})
           </button>
         ))}
-      </div> */}
+      </div>
       <div>
         {filteredProducts?.length === 0 ? (
           <>
@@ -97,27 +93,32 @@ const Products = ({ product }) => {
             <table className="table-auto w-full  mt-10">
               <TableHead header={header} />
               {filteredProducts?.map((item) => (
-                <tbody key={item.id}>
+                <tbody key={item?.id}>
                   <tr className="border-r border-l border-gray-300 border-b">
                     <td>
                       <img
                         className="w-20 h-20 mx-auto"
                         src={`${SERVER}${item?.coverPhoto?.secure_url}`}
-                        alt={item.name.slice(0, 5)}
+                        alt={item?.name}
                       />
                     </td>
                     <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
-                      {item.name.slice(0, 10)}..
+                      {item?.name}
                     </td>
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                      {item.quantity}
+                      {item?.productVariants
+                        ? item?.productVariants[0]?.quantity
+                        : 0}
                     </td>
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                      {item.price}
+                      BDT
+                      {item?.productVariants
+                        ? item?.productVariants[0]?.price
+                        : 0}
                     </td>
 
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                      {item.createdAt}
+                      {item?.createdAt}
                     </td>
                   </tr>
                 </tbody>

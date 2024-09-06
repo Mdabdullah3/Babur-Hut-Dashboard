@@ -14,6 +14,8 @@ const EditEvent = () => {
 
   const [formData, setFormData] = useState({
     name: "",
+    description: "",
+    price: "",
     startDate: "",
     endDate: "",
   });
@@ -28,6 +30,8 @@ const EditEvent = () => {
   useEffect(() => {
     if (event) {
       setFormData({
+        description: event.description || "",
+        price: event.price || "",
         name: event.name || "",
         startDate: formatDate(event.startDate) || "",
         endDate: formatDate(event.endDate) || "",
@@ -64,7 +68,7 @@ const EditEvent = () => {
   };
 
   return (
-    <div className="p-10 bg-gray-100 h-screen">
+    <div className="p-10 ">
       <h1 className="text-3xl font-bold mb-6">Edit Event</h1>
       <form onSubmit={handleSubmit} className="space-y-5">
         <InputField
@@ -86,6 +90,14 @@ const EditEvent = () => {
           }
         />
         <InputField
+          label={"Price"}
+          type="number"
+          placeholder={"Enter price"}
+          name="price"
+          value={formData.price}
+          onChange={handleChange}
+        />
+        <InputField
           label="Starting Date"
           type="date"
           name="startDate"
@@ -98,6 +110,14 @@ const EditEvent = () => {
           name="endDate"
           value={formData.endDate}
           onChange={handleChange}
+        />
+        <textarea
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter Details"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          required
         />
         <PrimaryButton type="submit" value="Update Event" />
       </form>

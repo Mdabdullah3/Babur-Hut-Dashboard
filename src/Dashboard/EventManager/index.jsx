@@ -29,6 +29,7 @@ const EventManager = () => {
   const header = [
     "Event Name",
     "Image",
+    "Price",
     "Product Count",
     "Start Date",
     "End Date",
@@ -78,6 +79,7 @@ const EventManager = () => {
                     "No Image"
                   )}
                 </td>
+                <td className="py-4 px-6">{event?.price || 0}</td>
                 <td className="py-4 px-6">
                   {event?.eventProducts?.length || 0}
                 </td>
