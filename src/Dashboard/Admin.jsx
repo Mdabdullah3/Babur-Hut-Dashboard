@@ -25,11 +25,10 @@ const Admin = () => {
     return <div>Loading...</div>;
   }
 
-  if (!user || user.role !== "admin") {
-    return <Navigate to="/" replace />;
-  }
+  // if (!user || user.role !== "admin") {
+  //   return <Navigate to="/" replace />;
+  // }
 
-  console.log(user);
   return (
     <section>
       <div className="lg:grid grid-cols-4 gap-5 rounded-xl items-center">
