@@ -11,7 +11,7 @@ import { Navigate } from "react-router-dom";
 const Admin = () => {
   const { user, fetchUser } = useUserStore();
   const [loading, setLoading] = useState(true);
- 
+
   useEffect(() => {
     const loadUser = async () => {
       await fetchUser();
@@ -25,9 +25,9 @@ const Admin = () => {
     return <div>Loading...</div>;
   }
 
-  // if (!user || user.role !== "admin") {
-  //   return <Navigate to="/" replace />;
-  // }
+  if (!user || user.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <section>
