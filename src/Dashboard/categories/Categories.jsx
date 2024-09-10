@@ -18,8 +18,7 @@ const Categories = () => {
   const [activeMenu, setActiveMenu] = useState("All");
   const {
     categories,
-    deleteCategory,
-    deleteSubCategory,
+   
     subCategories,
     fetchCategories,
     fetchSubCategories,
@@ -59,24 +58,8 @@ const Categories = () => {
     []
   );
 
-  const header = ["Category Name", "Status", "Action"];
+  const header = ["Category Name", "Action"];
   const menu = ["All", "Add Main Category", "Add Sub Category"];
-
-  const handleDelete = useCallback(
-    (id, isSubCategory) => {
-      const confirmed = window.confirm(
-        "Are you sure you want to delete this category?"
-      );
-      if (confirmed) {
-        if (isSubCategory) {
-          deleteSubCategory(id);
-        } else {
-          deleteCategory(id);
-        }
-      }
-    },
-    [deleteCategory, deleteSubCategory]
-  );
 
   return (
     <section className="w-11/12 mx-auto">
@@ -111,12 +94,12 @@ const Categories = () => {
               {filteredCategories?.map((item) => (
                 <tbody key={item._id}>
                   <tr className="border-r border-l border-gray-300 border-b">
-                    <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
+                    <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent capitalize border-b border-l border-r border-gray-300">
                       {item.name}
                     </td>
-                    <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
+                    {/* <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
                       {item.status}
-                    </td>
+                    </td> */}
                     <td className="text-center text-dark font-medium text-secondary py-5  px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
                       {/* <button
                         onClick={() =>
