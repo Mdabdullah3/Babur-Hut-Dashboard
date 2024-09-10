@@ -41,6 +41,7 @@ import JoinEvents from "./Dashboard/EventManager/JoinEvents";
 import VendorRequest from "./Dashboard/vendor/VendorRequest";
 import VendorDetails from "./Dashboard/vendor/VendorDetails";
 import ReportDetails from "./Dashboard/Support/SupportDetails";
+import OrderDetails from "./Dashboard/order/OrderDetails";
 
 const menu = [
     {
@@ -138,6 +139,12 @@ const menu = [
         navMenu: true,
         icon: <CiShoppingBasket className="h-6 w-6" />,
         component: <AllOrder />
+    },
+    {
+        name: "Order Details",
+        layout: "/admin",
+        path: "order-details/:id",
+        component: <OrderDetails />
     },
     {
         name: "Finance",

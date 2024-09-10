@@ -3,6 +3,7 @@ import InputSearch from "../../components/common/InputSearch";
 import TableHead from "../../components/common/TableHead";
 import useOrderStore from "../../store/OrderStore";
 import Loading from "../../components/common/Loading";
+import { Link } from "react-router-dom";
 
 const AllOrder = () => {
   const [activeMenu, setActiveMenu] = useState("all"); // Default to 'All'
@@ -119,9 +120,11 @@ const AllOrder = () => {
                     </select>
                   </td>
                   <td className="text-center text-dark font-medium py-5">
-                    <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
-                      Details
-                    </button>
+                    <Link to={`/admin/order-details/${item?._id}`}>
+                      <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
+                        Details
+                      </button>
+                    </Link>
                   </td>
                 </tr>
               </tbody>

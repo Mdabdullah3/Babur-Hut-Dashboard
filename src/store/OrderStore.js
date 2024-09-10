@@ -52,7 +52,7 @@ const useOrderStore = create((set) => ({
         set({ loading: true });
         try {
             const response = await axios.get(`${API_URL}/orders/${orderId}`, { withCredentials: true });
-            set({ singleOrder: response.data, loading: false });
+            set({ singleOrder: response.data.data, loading: false });
         } catch (error) {
             set({ error: error.response?.data?.message || 'Error fetching order', loading: false });
         }
@@ -63,7 +63,7 @@ const useOrderStore = create((set) => ({
         set({ loading: true });
         try {
             const response = await axios.post(`${API_URL}/api/orders/many`, { orderIds }, { withCredentials: true });
-            set({ orders: response.data, loading: false });
+            set({ orders: response.data.data, loading: false });
         } catch (error) {
             set({ error: error.response?.data?.message || 'Error fetching multiple orders', loading: false });
         }
@@ -74,7 +74,7 @@ const useOrderStore = create((set) => ({
         set({ loading: true });
         try {
             const response = await axios.get(`${API_URL}/users/${userId}/orders`, { withCredentials: true });
-            set({ userOrders: response.data, loading: false });
+            set({ userOrders: response.data.data, loading: false });
         } catch (error) {
             set({ error: error.response?.data?.message || 'Error fetching user orders', loading: false });
         }
@@ -96,7 +96,7 @@ const useOrderStore = create((set) => ({
         set({ loading: true });
         try {
             const response = await axios.post(`${API_URL}/orders`, orderData, { withCredentials: true });
-            set({ orders: [...response.data], loading: false });
+            set({ orders: [...response.data.data], loading: false });
         } catch (error) {
             set({ error: error.response?.data?.message || 'Error creating order', loading: false });
         }
