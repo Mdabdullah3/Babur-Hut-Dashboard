@@ -193,17 +193,22 @@ const AddProducts = () => {
     }
     const formData = {
       user: form.user,
-      productVariants: form.productVariants.map((variant) => ({
-        name: variant.name,
-        price: variant.price,
-        discount: variant.discount,
-        quantity: variant.quantity,
-        gender: variant.gender,
-        color: variant.color,
-        material: variant.material,
-        size: variant.size,
-        image: variant.image,
-      })),
+      productVariants: form?.productVariants?.map((variant) => {
+        const variantData = {
+          name: variant.name,
+          price: variant.price,
+          discount: variant.discount,
+          quantity: variant.quantity,
+          gender: variant.gender,
+          color: variant.color,
+          material: variant.material,
+          size: variant.size,
+        };
+        if (variant.image !== null) {
+          variantData.image = `${variant.image}`;
+        }
+        return variantData;
+      }),
       video: form.video,
       name: form.productName,
       slug: form.productName.toLowerCase().split(" ").join("-"),
@@ -230,6 +235,7 @@ const AddProducts = () => {
         dimension: form?.packageDimensionLength,
       },
     };
+    console.log(formData);
     try {
       await addProduct(formData);
       setLoading(false);
@@ -306,6 +312,7 @@ const AddProducts = () => {
       prevVariants.filter((variant) => variant.id !== id)
     );
   };
+
   return (
     <section className="mt-5 lg:grid grid-cols-5 relative">
       <section className="col-span-4 w-11/12">
