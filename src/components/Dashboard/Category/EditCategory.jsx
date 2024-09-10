@@ -6,9 +6,12 @@ import { useParams } from "react-router-dom";
 import FileUpload from "../../common/FileUpload";
 import { toDataURL } from "../../../utils/DataUrl";
 import { SERVER } from "../../../config";
+import InputToggle from "../../common/InputToggle";
 
 const EditCategory = () => {
   const [image, setImage] = useState(null);
+  const [iconImage, setIconImage] = useState(null);
+
   const { id } = useParams();
   const { fetchCategoryById, category, updateCategory, loading } =
     useCategoryStore();
@@ -24,6 +27,13 @@ const EditCategory = () => {
         setImage(base64);
       });
     }
+
+    if (category?.iconImage?.secure_url) {
+      const avatarUrl = `${SERVER}${category.iconImage.secure_url}`;
+      toDataURL(avatarUrl).then((base64) => {
+        setIconImage(base64);
+      });
+    }
     if (category) {
       setForm({
         name: category.name || "",
@@ -36,8 +46,7 @@ const EditCategory = () => {
         transactionCostType: category.transactionCostType || "percentage",
         vat: category.vat || "",
         vatType: category.vatType || "percentage",
-        icon: category.icon || "",
-        image: null,
+        isHomeShown: category.isHomeShown || false,
       });
     }
   }, [category]);
@@ -53,8 +62,9 @@ const EditCategory = () => {
     transactionCostType: "percentage",
     vat: "",
     vatType: "percentage",
-    image: null,
-    icon: "",
+    image: image,
+    iconImage: iconImage,
+    isHomeShown: false,
   });
 
   const toggleDiscountType = (field) => {
@@ -75,6 +85,10 @@ const EditCategory = () => {
     setForm({ ...form, image: img });
   };
 
+  const handleIconImageChange = (img) => {
+    setIconImage(img);
+    setForm({ ...form, iconImage: img });
+  };
   console.log(form);
 
   return (
@@ -177,18 +191,28 @@ const EditCategory = () => {
         onChange={(e) => setForm({ ...form, status: e.target.value })}
         value={form.status}
       /> */}
-      <InputField
-        label="Category Icon"
-        value={form.icon}
-        onChange={(e) => setForm({ ...form, icon: e.target.value })}
-        placeholder="Category Icon"
-      />
+
       <FileUpload
         label="Category Image"
         setFile={handleImageChange}
         name="image"
         file={image}
       />
+      <div className="-mt-10">
+        <FileUpload
+          label="Icon Image"
+          setFile={handleIconImageChange}
+          name="iconImage"
+          file={iconImage}
+        />
+      </div>
+      <div>
+        <InputToggle
+          label="Is Home Show?"
+          value={form.isHomeShown}
+          onChange={(e) => setForm({ ...form, isHomeShown: e.target.checked })}
+        />
+      </div>
       <PrimaryButton value={loading ? "Updating..." : "Update Category"} />
     </form>
   );

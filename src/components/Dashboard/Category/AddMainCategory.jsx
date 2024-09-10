@@ -4,11 +4,12 @@ import PrimaryButton from "../../common/PrimaryButton";
 import useCategoryStore from "../../../store/categoryStore";
 import FileUpload from "../../common/FileUpload";
 import { toast } from "react-toastify";
+import InputToggle from "../../common/InputToggle";
 
 const AddMainCategory = () => {
   const [image, setImage] = useState(null);
   const { addCategory, loading } = useCategoryStore();
-  // const [iconImage, setIconImage] = useState(null);
+  const [iconImage, setIconImage] = useState(null);
   // const status = [
   //   { id: 1, label: "Active", value: "active" },
   //   { id: 2, label: "Inactive", value: "inactive" },
@@ -26,14 +27,13 @@ const AddMainCategory = () => {
     vat: "",
     vatType: "percentage",
     image: image,
-    icon: "",
-    // iconImage: iconImage,
-    // isHomeShow: false,
+    iconImage: iconImage,
+    isHomeShown: false,
   });
 
   useEffect(() => {
-    setForm((prevForm) => ({ ...prevForm, image }));
-  }, [image]);
+    setForm((prevForm) => ({ ...prevForm, image, iconImage }));
+  }, [image, iconImage]);
 
   const toggleDiscountType = (field) => {
     setForm((prevForm) => ({
@@ -53,7 +53,6 @@ const AddMainCategory = () => {
     }
   };
 
-  console.log(form);
   return (
     <form
       className="grid grid-cols-1 md:grid-cols-2 gap-5"
@@ -148,14 +147,22 @@ const AddMainCategory = () => {
           {form.vatType === "percentage" ? "%" : "Flat"}
         </button>
       </div>
-      <InputField
-        label="Category Icon"
-        value={form.icon}
-        onChange={(e) => setForm({ ...form, icon: e.target.value })}
-        placeholder="Category Icon"
-      />
+
       <FileUpload label="Category Image" setFile={setImage} name="image" />
-      {/* <FileUpload label="Icon Image" setFile={setIconImage} name="iconImage" /> */}
+      <div className="-mt-10">
+        <FileUpload
+          label="Icon Image"
+          setFile={setIconImage}
+          name="iconImage"
+        />
+      </div>
+      <div>
+        <InputToggle
+          label="Is Home Show?"
+          value={form.isHomeShown}
+          onChange={(e) => setForm({ ...form, isHomeShown: e.target.checked })}
+        />
+      </div>
       <PrimaryButton
         value={loading ? "Adding..." : "Add Category"}
         disabled={loading}
