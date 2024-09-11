@@ -31,6 +31,29 @@ const useUserStore = create((set, get) => ({
             set({ error: error.message, loading: false });
         }
     },
+    fetchAllCustomer: async (page = 1, limit = 2000, searchTerm = '', sortField = 'createdAt', sortOrder = 'asc') => {
+        set({ loading: true, error: null, searchTerm, sortField, sortOrder });
+        try {
+            const response = await axios.get(`${API_URL}/users?_filter[role]=user`, {
+                params: {
+                    _page: page,
+                    _limit: limit,
+                    _search: searchTerm,
+                    _sort: `${sortField},${sortOrder}`
+                },
+                withCredentials: true
+            });
+            set({
+                users: response.data.data,
+                loading: false,
+                currentPage: page,
+                totalPages: response.data.totalPages
+            });
+        } catch (error) {
+            set({ error: error.message, loading: false });
+
+        }
+    },
     fetchAllUser: async (page = 1, limit = 2000, searchTerm = '', sortField = 'createdAt', sortOrder = 'asc') => {
         set({ loading: true, error: null, searchTerm, sortField, sortOrder });
         try {

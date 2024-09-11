@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { customerData } from "../../utils/constant";
 import InputSearch from "../../components/common/InputSearch";
 import TableHead from "../../components/common/TableHead";
 import { Link } from "react-router-dom";
+import useUserStore from "../../store/AuthStore";
 const Customer = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const { fetchAllCustomer, users } = useUserStore();
 
+  useEffect(() => {
+    fetchAllCustomer();
+  }, [fetchAllCustomer]);
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
