@@ -116,7 +116,12 @@ const useUserStore = create((set, get) => ({
             const response = await axios.patch(`${API_URL}/users/${id}`, userData, {
                 withCredentials: true,
             });
-            set({ user: response.data.data, loading: false });
+            set((state) => ({
+                users: state.users.map(user =>
+                    user._id === id ? { ...user, ...response.data.data } : user
+                ),
+                loading: false
+            }));
             toast.success('User updated successfully!');
         } catch (error) {
             set({ error: error.message, loading: false });

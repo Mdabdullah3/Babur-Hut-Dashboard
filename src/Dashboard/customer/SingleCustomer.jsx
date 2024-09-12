@@ -47,7 +47,7 @@ const SingleCustomer = () => {
         )}
         {activeMenu === 2 && (
           <div>
-            <CustomerSettings />
+            <CustomerSettings id={id}/>
           </div>
         )}
       </div>

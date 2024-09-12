@@ -1,89 +1,198 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { SERVER } from "../../config";
+import { toDataURL } from "../../utils/DataUrl";
+import FileUpload from "../common/FileUpload";
 import InputField from "../common/InputField";
+import SelectField from "../common/SelectField";
 import PrimaryButton from "../common/PrimaryButton";
+import useUserStore from "../../store/AuthStore";
 
-const CustomerSettings = () => {
-  const [form, setForm] = useState({
-    customerName: "",
-    shippingAddress: "",
-    password: "",
-    birthdate: "",
-    additionAddress: "",
-    confirmPassword: "",
-    image: "",
-    phoneNumber: "",
+const CustomerSettings = ({ id }) => {
+  const { user, fetchSingleUser, updateSingleUser } = useUserStore();
+  console.log(user);
+  const [avatar, setAvatar] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
     email: "",
+    location: {
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      postcode: "",
+      country: "",
+    },
+    avatar: null,
+    phone: "",
+    gender: "",
   });
+
+  useEffect(() => {
+    fetchSingleUser(id);
+  }, [fetchSingleUser, id]);
+  useEffect(() => {
+    if (user) {
+      setFormData((prevData) => ({
+        ...prevData,
+        name: user?.name || "",
+        email: user?.email || "",
+        location: {
+          address1: user?.location.address1 || "",
+          address2: user?.location.address2 || "",
+          city: user?.location.city || "",
+          state: user?.location.state || "",
+          postcode: user?.location.postcode || "",
+          country: user?.location.country || "",
+        },
+        avatar: null,
+        phone: user?.phone || "",
+        gender: user?.gender || "",
+      }));
+    }
+    if (user?.avatar?.secure_url) {
+      const avatarUrl = user?.avatar?.secure_url.startsWith("/")
+        ? `${SERVER}${user.avatar.secure_url}`
+        : user.avatar.secure_url;
+      toDataURL(avatarUrl).then((base64) => {
+        setAvatar(base64);
+        setFormData((prevData) => ({
+          ...prevData,
+          avatar: base64,
+        }));
+      });
+    }
+  }, [user?.avatar?.secure_url, user]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleLocationChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      location: {
+        ...prevData.location,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleAvatarChange = (newAvatar) => {
+    setAvatar(newAvatar);
+    setFormData((prevData) => ({
+      ...prevData,
+      avatar: newAvatar,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateSingleUser(formData, id);
+    console.log(formData);
+  };
+
+  console.log(avatar);
+
   return (
-    <form className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-      <InputField
-        label={"Customer Name"}
-        placeholder={"Customer Name"}
-        value={form.customerName}
-        onChange={(e) => setForm({ ...form, customerName: e.target.value })}
-        required
+    <form onSubmit={handleSubmit} className="mx-4">
+      <FileUpload
+        label="Profile Picture"
+        name="avatar"
+        setFile={handleAvatarChange}
+        file={avatar}
       />
-      <InputField
-        label={"Shipping Address"}
-        placeholder={"Shipping Address"}
-        value={form.shippingAddress}
-        onChange={(e) => setForm({ ...form, shippingAddress: e.target.value })}
-        required
-      />
-      <InputField
-        label={"Password"}
-        placeholder={"Password"}
-        value={form.password}
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-        required
-      />
-      <InputField
-        label={"Birth Date"}
-        type="date"
-        placeholder={"Birth Date"}
-        value={form.birthdate}
-        onChange={(e) => setForm({ ...form, birthdate: e.target.value })}
-        required
-      />
-      <InputField
-        label={"Addition Address"}
-        placeholder={"Addition Address"}
-        value={form.additionAddress}
-        onChange={(e) => setForm({ ...form, additionAddress: e.target.value })}
-        required
-      />
-      <InputField
-        label={"Confirm Password"}
-        placeholder={"Confirm Password"}
-        value={form.confirmPassword}
-        onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
-        required
-      />
-      <InputField
-        label={"Image"}
-        placeholder={"Image"}
-        type="file"
-        value={form.image}
-        onChange={(e) => setForm({ ...form, image: e.target.value })}
-        required
-      />
-      <InputField
-        label={"Phone Number"}
-        type="number"
-        placeholder={"Phone Number"}
-        value={form.phoneNumber}
-        onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
-        required
-      />
-      <InputField
-        label={"Email"}
-        placeholder={"Email"}
-        value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-        required
-      />
-      <div></div>
-      <PrimaryButton value="Update" />
+      <div className="lg:grid lg:grid-cols-2 gap-4 my-6">
+        <div>
+          <InputField
+            label="Name"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <InputField
+            label="Email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          {/* <InputField
+            label="Phone"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+          /> */}
+          <SelectField
+            label="Gender"
+            id="gender"
+            name="gender"
+            required
+            value={formData.gender}
+            onChange={handleChange}
+            options={[
+              { value: "male", label: "Male" },
+              { value: "male", label: "Female" },
+              { value: "other", label: "Other" },
+            ]}
+            placeholder="Select Gender"
+          />
+          <InputField
+            label="Address 1"
+            id="address1"
+            name="address1"
+            value={formData.location.address1}
+            onChange={handleLocationChange}
+          />
+          <InputField
+            label="Address 2"
+            id="address2"
+            name="address2"
+            value={formData.location.address2}
+            onChange={handleLocationChange}
+          />
+        </div>
+        <div>
+          <InputField
+            label="City"
+            id="city"
+            name="city"
+            value={formData.location.city}
+            onChange={handleLocationChange}
+          />
+          <InputField
+            label="State"
+            id="state"
+            name="state"
+            value={formData.location.state}
+            onChange={handleLocationChange}
+          />
+          <InputField
+            label="Postcode"
+            id="postcode"
+            name="postcode"
+            value={formData.location.postcode}
+            onChange={handleLocationChange}
+          />
+          <InputField
+            label="Country"
+            id="country"
+            name="country"
+            value={formData.location.country}
+            onChange={handleLocationChange}
+          />
+        </div>
+      </div>
+      <PrimaryButton type="submit" value="Update Profile" />
     </form>
   );
 };

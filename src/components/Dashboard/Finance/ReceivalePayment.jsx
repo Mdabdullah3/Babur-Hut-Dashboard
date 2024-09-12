@@ -2,6 +2,7 @@ import React from "react";
 import { financeData } from "../../../utils/constant";
 
 const ReceivalePayment = () => {
+  
   const header = [
     "No",
     "Order Id",
