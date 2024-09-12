@@ -20,7 +20,7 @@ const UploadImage = () => {
     const requestBody = {
       user: user?._id,
       image: image || "",
-      link: "",
+      link: link || "",
       banner: "BannerImage",
       mobileBanner: MobileImage || "",
     };

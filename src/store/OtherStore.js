@@ -79,6 +79,7 @@ const useOtherStore = create((set) => ({
                 others: state.others.filter((other) => other._id !== otherId),
                 loading: false,
             }));
+            toast.success('Image deleted successfully!');
         } catch (error) {
             set({ error: error.message, loading: false });
         }
