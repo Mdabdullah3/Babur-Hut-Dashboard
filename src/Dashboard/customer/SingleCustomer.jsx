@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import VendorOrders from "../../components/Dashboard/Vendor/VendorOrders";
 import CustomerSettings from "../../components/Dashboard/CustomerSettings";
+import { useParams } from "react-router-dom";
+import CustomerOrders from "./CustomerOrders";
 const SingleCustomer = () => {
+  const { id } = useParams();
   const [activeMenu, setActiveMenu] = useState(1);
+
   const handleMenuClick = (id) => {
     setActiveMenu(id);
   };
@@ -10,6 +13,11 @@ const SingleCustomer = () => {
     {
       id: 1,
       name: "Orders",
+      items: 5,
+    },
+    {
+      id: 2,
+      name: "Settings",
       items: 5,
     },
   ];
@@ -34,7 +42,7 @@ const SingleCustomer = () => {
       <div>
         {activeMenu === 1 && (
           <div>
-            <VendorOrders />
+            <CustomerOrders id={id} />
           </div>
         )}
         {activeMenu === 2 && (

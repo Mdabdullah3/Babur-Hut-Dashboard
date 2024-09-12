@@ -70,15 +70,50 @@ const useOrderStore = create((set) => ({
     },
 
     // Fetch All Orders of a User
-    fetchUserOrders: async (userId) => {
+
+    
+    fetchUserOrders: async (userId, { status = "", page = 1, limit = 10 }) => {
+        set({ loading: true });
+        try {
+            const params = {
+                _page: page,
+                _limit: limit,
+            };
+
+            if (status) {
+                params['_filter[status]'] = status;
+            }
+
+            const response = await axios.get(`${API_URL}/users/${userId}/orders`, {
+                params,
+                withCredentials: true,
+            });
+
+            set({
+                userOrders: response.data.data,
+                totalOrders: response.data.total,
+                totalPages: Math.ceil(response.data.total / limit),
+                loading: false,
+            });
+        } catch (error) {
+            set({
+                error: error.response?.data?.message || 'Error fetching orders',
+                loading: false,
+            });
+        }
+    },
+    fetchCustomerOrders: async (userId) => {
         set({ loading: true });
         try {
             const response = await axios.get(`${API_URL}/users/${userId}/orders`, { withCredentials: true });
             set({ userOrders: response.data.data, loading: false });
+            return response.data.data;
         } catch (error) {
             set({ error: error.response?.data?.message || 'Error fetching user orders', loading: false });
+            return [];
         }
     },
+
 
     // Fetch All Orders of Logged In User
     fetchLoggedInUserOrders: async () => {
