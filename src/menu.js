@@ -42,6 +42,11 @@ import VendorRequest from "./Dashboard/vendor/VendorRequest";
 import VendorDetails from "./Dashboard/vendor/VendorDetails";
 import ReportDetails from "./Dashboard/Support/SupportDetails";
 import OrderDetails from "./Dashboard/order/OrderDetails";
+import UploadLogoUpload from "./Dashboard/BannerImageUpload/UpdateLogoImage";
+import UpdateLogoImage from "./Dashboard/BannerImageUpload/UpdateLogoImage";
+import UpdateBannerImage from "./Dashboard/BannerImageUpload/UpdateBannerImage";
+import PopImage from "./Dashboard/BannerImageUpload/PopImage";
+import UpdatePopImage from "./Dashboard/BannerImageUpload/UpdatePopImage";
 
 const menu = [
     {
@@ -270,6 +275,36 @@ const menu = [
         path: "banner-img",
         navMenu: true,
         component: <BannerImageUpload />
+    },
+    {
+        name: "Logo Image Upload",
+        layout: "/admin",
+        path: "logo-image",
+        component: <UploadLogoUpload />
+    },
+    {
+        name: "Logo Image Update",
+        layout: "/admin",
+        path: "logo-image-update",
+        component: <UpdateLogoImage />
+    },
+    {
+        name: "Banner Image Update",
+        layout: "/admin",
+        path: "banner-image-update",
+        component: <UpdateBannerImage />
+    },
+    {
+        name: "Pop Up Image Add",
+        layout: "/admin",
+        path: "popup-img-upload",
+        component: <PopImage />
+    },
+    {
+        name: "Pop Up Image Update",
+        layout: "/admin",
+        path: "popup-img-update",
+        component: <UpdatePopImage />
     },
     {
         name: "Banner Image Add",
