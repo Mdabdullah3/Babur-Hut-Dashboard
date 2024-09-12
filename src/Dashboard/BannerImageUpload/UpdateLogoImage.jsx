@@ -1,44 +1,54 @@
 import React, { useEffect, useState } from "react";
 import FileUpload from "../../components/common/FileUpload";
 import PrimaryButton from "../../components/common/PrimaryButton";
-import axios from "axios";
-import { API_URL } from "../../config";
+import { SERVER } from "../../config";
 import { toast } from "react-toastify";
-import useUserStore from "../../store/AuthStore";
+import { useParams } from "react-router-dom";
+import useOtherStore from "../../store/OtherStore";
+import { toDataURL } from "../../utils/DataUrl";
+
 const UpdateLogoImage = () => {
-  const [LogoImage, setLogoImage] = useState();
-  const { user, fetchUser } = useUserStore();
+  const { id } = useParams();
+  const [LogoImage, setLogoImage] = useState(null);
+  const { other, fetchOtherById, updateOther } = useOtherStore();
 
   useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+    fetchOtherById(id);
+  }, [id, fetchOtherById]);
 
+  useEffect(() => {
+    if (other?.logo) {
+      const imageUrl = `${SERVER}${other?.logo?.secure_url}`;
+      toDataURL(imageUrl).then((base64) => {
+        setLogoImage(base64);
+      });
+    }
+  }, [other]);
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const requestBody = {
-      user: user?._id,
       banner: "LogoImage",
-      logo: LogoImage || "",
+      logo: LogoImage || "", 
     };
 
-    console.log(requestBody);
     try {
-      const response = await axios.post(`${API_URL}/others`, requestBody);
-      console.log("Response:", response.data);
-      toast.success("Logo Image uploaded successfully!");
+      updateOther(id, requestBody);
     } catch (error) {
-      console.error("Error uploading image:", error);
+      toast.error("Error updating image.");
     }
   };
+
   return (
     <div>
       <h1 className="text-xl font-semibold my-4">Upload An Image</h1>
-      <form action="" className=" space-y-4" onSubmit={handleSubmit}>
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <FileUpload
           label="Logo Image Upload"
           name="logoimage"
           imageSize="Image size should be less than 5 MB, and Minimum Height and Width should be 40px40px"
-          setFile={setLogoImage}
+          setFile={setLogoImage} // Directly update LogoImage state
+          file={LogoImage} // Pass the current image
         />
         <PrimaryButton value="Upload" />
       </form>

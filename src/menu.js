@@ -42,11 +42,11 @@ import VendorRequest from "./Dashboard/vendor/VendorRequest";
 import VendorDetails from "./Dashboard/vendor/VendorDetails";
 import ReportDetails from "./Dashboard/Support/SupportDetails";
 import OrderDetails from "./Dashboard/order/OrderDetails";
-import UploadLogoUpload from "./Dashboard/BannerImageUpload/UpdateLogoImage";
 import UpdateLogoImage from "./Dashboard/BannerImageUpload/UpdateLogoImage";
 import UpdateBannerImage from "./Dashboard/BannerImageUpload/UpdateBannerImage";
 import PopImage from "./Dashboard/BannerImageUpload/PopImage";
 import UpdatePopImage from "./Dashboard/BannerImageUpload/UpdatePopImage";
+import UploadLogoImage from "./Dashboard/BannerImageUpload/UploadLogoImage";
 
 const menu = [
     {
@@ -280,18 +280,18 @@ const menu = [
         name: "Logo Image Upload",
         layout: "/admin",
         path: "logo-image",
-        component: <UploadLogoUpload />
+        component: <UploadLogoImage />
     },
     {
         name: "Logo Image Update",
         layout: "/admin",
-        path: "logo-image-update",
+        path: "logo-image-update/:id",
         component: <UpdateLogoImage />
     },
     {
         name: "Banner Image Update",
         layout: "/admin",
-        path: "banner-image-update",
+        path: "banner-image-update/:id",
         component: <UpdateBannerImage />
     },
     {
@@ -303,7 +303,7 @@ const menu = [
     {
         name: "Pop Up Image Update",
         layout: "/admin",
-        path: "popup-img-update",
+        path: "popup-img-update/:id",
         component: <UpdatePopImage />
     },
     {

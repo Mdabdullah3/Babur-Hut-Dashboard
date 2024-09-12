@@ -4,6 +4,7 @@ import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import useOtherStore from "../../store/OtherStore";
 import { SERVER } from "../../config";
+import { FaEdit } from "react-icons/fa";
 
 const BannerImageUpload = () => {
   const { others, fetchOthers, deleteOther } = useOtherStore();
@@ -104,9 +105,15 @@ const BannerImageUpload = () => {
                   </td>
 
                   <td className="py-4 px-6 flex space-x-2 cursor-pointer">
+                    {/* <Link
+                      to={`/admin/logo-image-update/${img?._id}`}
+                      className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                    >
+                      <FaEdit className="mr-1" /> Edit
+                    </Link> */}
                     <div
                       onClick={() => deleteOther(img?._id)}
-                      className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                      className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
                     >
                       <FaTrash className="mr-1" /> Delete
                     </div>

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
 import { API_URL } from '../config';
+import { toast } from 'react-toastify';
 
 const useOtherStore = create((set) => ({
     others: [],
@@ -54,12 +55,14 @@ const useOtherStore = create((set) => ({
             const response = await axios.patch(`${API_URL}/others/${otherId}`, updatedOther, {
                 withCredentials: true,
             });
+
             set((state) => ({
                 others: state.others.map((other) =>
                     other._id === otherId ? response.data.data : other
                 ),
                 loading: false,
             }));
+            toast.success('Other updated successfully!');
         } catch (error) {
             set({ error: error.message, loading: false });
         }
