@@ -4,7 +4,6 @@ import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import useOtherStore from "../../store/OtherStore";
 import { SERVER } from "../../config";
-import { FaEdit } from "react-icons/fa";
 
 const BannerImageUpload = () => {
   const { others, fetchOthers, deleteOther } = useOtherStore();
