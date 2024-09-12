@@ -97,7 +97,7 @@ const AllOrder = () => {
                     {item?._id}
                   </td>
                   <td className="text-center text-dark font-medium py-5">
-                    {item?.date}
+                    {new Date(item?.createdAt).toLocaleDateString("en-US")}
                   </td>
                   <td className="text-center text-dark font-medium py-5">
                     {item?.paymentType}

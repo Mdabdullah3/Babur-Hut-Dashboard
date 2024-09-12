@@ -124,14 +124,14 @@ const CustomerSettings = ({ id }) => {
             onChange={handleChange}
             required
           />
-          {/* <InputField
+          <InputField
             label="Phone"
             id="phone"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
             required
-          /> */}
+          />
           <SelectField
             label="Gender"
             id="gender"

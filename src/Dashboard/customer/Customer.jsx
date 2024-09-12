@@ -10,7 +10,7 @@ const Customer = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [userOrders, setUserOrders] = useState({});
 
-  const { fetchAllCustomer, users } = useUserStore();
+  const { fetchAllCustomer, users, deleteUser } = useUserStore();
   const { fetchCustomerOrders } = useOrderStore();
 
   useEffect(() => {
@@ -108,6 +108,7 @@ const Customer = () => {
                         More
                       </button>
                     </Link>
+                    <h1 onClick={() => deleteUser(user?._id)}>Delete</h1>
                   </td>
                 </tr>
               </tbody>
