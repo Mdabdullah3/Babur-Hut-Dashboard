@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import useUserStore from "../../store/AuthStore";
 
 export function SidebarLinks(props) {
-    const { user } = useUserStore();
+    const { user, fetchUser } = useUserStore();
     const location = useLocation();
     const { routes } = props;
 
@@ -11,6 +11,9 @@ export function SidebarLinks(props) {
         return location.pathname.includes(routeName);
     };
 
+    useEffect(() => {
+        fetchUser()
+    }, [fetchUser]);
     const checkPermission = (routeName) => {
         const permissions = user?.otherPermissions || {};
         switch (routeName) {
