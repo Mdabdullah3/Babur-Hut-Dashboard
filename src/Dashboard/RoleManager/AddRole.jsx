@@ -3,7 +3,6 @@ import InputField from "../../components/common/InputField";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import { toast } from "react-toastify";
 import useUserStore from "../../store/AuthStore";
-
 const AddRole = () => {
   const menuOptions = [
     { label: "Vendor", value: "isVendor" },
@@ -29,7 +28,6 @@ const AddRole = () => {
       value: "isHasBanner",
     },
   ];
-
   const { register, loading } = useUserStore();
   const [form, setForm] = useState({
     role: "admin",
@@ -121,7 +119,7 @@ const AddRole = () => {
         <div className="my-4">
           <h1>Allow Permission</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-            {menuOptions.map((item) => (
+            {menuOptions?.map((item) => (
               <div key={item.value} className="flex items-center">
                 <input
                   type="checkbox"

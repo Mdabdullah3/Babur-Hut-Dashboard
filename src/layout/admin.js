@@ -3,10 +3,12 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import menu from "../menu";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Navbar from "../components/Navbar";
+import useUserStore from "../store/AuthStore";
 
 export default function Admin(props) {
     const { ...rest } = props;
     const location = useLocation();
+    const { user } = useUserStore()
     const [open, setOpen] = React.useState(true);
     const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
 
@@ -43,6 +45,40 @@ export default function Admin(props) {
         }
         return activeNavbar;
     };
+
+
+    const getFirstAccessibleRoute = (menu) => {
+        const permissions = user?.otherPermissions || {};
+        for (let i = 0; i < menu.length; i++) {
+            const routeName = menu[i].path;
+            if (checkPermission(routeName, permissions)) {
+                return menu[i].path;
+            }
+        }
+        return "default";
+    };
+
+    const checkPermission = (routeName, permissions) => {
+        switch (routeName) {
+            case 'vendor': return permissions.isVendor;
+            case 'customer': return permissions.isCustomer;
+            case 'categories': return permissions.isCategories;
+            case 'products': return permissions.isProducts;
+            case 'order-review': return permissions.isOrders;
+            case 'vouchers': return permissions.isVouchers;
+            case 'ads-manager': return permissions.isAdManager;
+            case 'role-manager': return permissions.isRoleManager;
+            case 'message-center': return permissions.isMessageCenter;
+            case 'finance': return permissions.isFinance;
+            case 'shipment': return permissions.isShipment;
+            case 'support': return permissions.isSupport;
+            case 'event-manager': return permissions.isEventManager;
+            case 'default': return permissions.isHasDashboard;
+            case 'banner-img': return permissions.isHasBanner;
+            default: return false;
+        }
+    };
+    const firstRoute = getFirstAccessibleRoute(menu);
     const getRoutes = (routes) => {
         return routes.map((prop, key) => {
             if (prop.layout === "/admin") {
@@ -80,7 +116,7 @@ export default function Admin(props) {
 
                                 <Route
                                     path="/"
-                                    element={<Navigate to="/admin/default" replace />}
+                                    element={<Navigate to={`/admin/${firstRoute}`} replace />}
                                 />
                             </Routes>
                         </div>
