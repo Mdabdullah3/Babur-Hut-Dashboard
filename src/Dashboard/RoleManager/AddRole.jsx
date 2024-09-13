@@ -1,18 +1,10 @@
-// src/components/AddRole.jsx
-
 import React, { useState } from "react";
-import SelectField from "../../components/common/SelectField";
 import InputField from "../../components/common/InputField";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import { toast } from "react-toastify";
 import useUserStore from "../../store/AuthStore";
 
 const AddRole = () => {
-  const roleOptions = [
-    { label: "Admin", value: "admin" },
-    { label: "User", value: "user" },
-  ];
-
   const menuOptions = [
     { label: "Vendor", value: "isVendor" },
     { label: "Customer", value: "isCustomer" },
@@ -39,7 +31,6 @@ const AddRole = () => {
   ];
 
   const { register, loading } = useUserStore();
-
   const [form, setForm] = useState({
     role: "admin",
     email: "",
@@ -51,7 +42,6 @@ const AddRole = () => {
       {}
     ),
   });
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
@@ -63,7 +53,6 @@ const AddRole = () => {
       setForm({ ...form, [name]: value });
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -71,7 +60,6 @@ const AddRole = () => {
       toast.error("Passwords do not match");
       return;
     }
-
     try {
       const result = await register(form);
       if (result.status === "success") {
