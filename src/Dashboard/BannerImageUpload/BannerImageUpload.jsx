@@ -12,7 +12,7 @@ const BannerImageUpload = () => {
   }, [fetchOthers]);
   const bannerImage = others.filter((other) => other?.banner === "BannerImage");
   const LogoImage = others.filter((other) => other?.banner === "LogoImage");
-  const PopUp = others.filter((other) => other?.name === "PopUp");
+  const PopUp = others.filter((other) => other?.banner === "PopUp");
   const headerForBanner = ["Image", "Mobile Image", "Action"];
   const headerForLogo = ["Image", "Action"];
 
@@ -57,7 +57,7 @@ const BannerImageUpload = () => {
                   <td className="py-4 px-6 flex space-x-2 cursor-pointer">
                     <div
                       onClick={() => deleteOther(img?._id)}
-                      className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                      className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
                     >
                       <FaTrash className="mr-1" /> Delete
                     </div>
@@ -106,7 +106,7 @@ const BannerImageUpload = () => {
                   <td className="py-4 px-6 flex space-x-2 cursor-pointer">
                     {/* <Link
                       to={`/admin/logo-image-update/${img?._id}`}
-                      className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                      className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
                     >
                       <FaEdit className="mr-1" /> Edit
                     </Link> */}
@@ -149,7 +149,7 @@ const BannerImageUpload = () => {
                 <tr key={img?._id} className="border-b border-gray-200">
                   <td className="py-4 px-6">
                     <img
-                      src={`${SERVER}${img?.popupImage.secure_url}`}
+                      src={`${SERVER}${img?.popupImage?.secure_url}`}
                       alt=""
                     />
                   </td>
@@ -162,7 +162,7 @@ const BannerImageUpload = () => {
                   <td className="py-4 px-6 flex space-x-2 cursor-pointer">
                     <div
                       onClick={() => deleteOther(img?._id)}
-                      className="flex items-center px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                      className="flex items-center px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
                     >
                       <FaTrash className="mr-1" /> Delete
                     </div>

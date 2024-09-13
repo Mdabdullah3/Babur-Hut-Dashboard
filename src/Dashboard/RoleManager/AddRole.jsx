@@ -38,7 +38,7 @@ const AddRole = () => {
     },
   ];
 
-  const { register } = useUserStore();
+  const { register, loading } = useUserStore();
 
   const [form, setForm] = useState({
     role: "admin",
@@ -88,14 +88,12 @@ const AddRole = () => {
     <section className="mt-5">
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <SelectField
-            label="Role"
-            id="role"
+          <InputField
+            label="role"
             name="role"
             value={form.role}
-            onChange={handleChange}
-            options={roleOptions}
             required
+            disabled={true}
           />
           <InputField
             label="Name"
@@ -151,7 +149,10 @@ const AddRole = () => {
             ))}
           </div>
         </div>
-        <PrimaryButton value="Add Role Manager" />
+        <PrimaryButton
+          value={loading ? "Loading..." : "Add Role Manager"}
+          disabled={loading}
+        />
       </form>
     </section>
   );
