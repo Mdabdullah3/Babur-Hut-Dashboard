@@ -79,20 +79,21 @@ const SingleVendor = () => {
 
   const handleDectiveProfile = async () => {
     try {
-      const updatedStatus = !user?.isActive;  // Toggle the current status
+      const updatedStatus = !user?.isActive;
       const response = await updateSingleUser({ isActive: updatedStatus }, id);
-            setUsers((prevState) => ({
+      setUsers((prevState) => ({
         ...prevState,
         isActive: updatedStatus,
       }));
-  
+
+      console.log(updatedStatus);
       toast.success(`User is now ${updatedStatus ? "Active" : "Deactive"}`);
     } catch (error) {
       console.error("Failed to update profile status:", error);
       toast.error("Profile status update failed!");
     }
   };
-  
+
   return (
     <section className="w-11/12 mx-auto my-6">
       <div className="flex items-center justify-between">
