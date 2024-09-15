@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import InputSearch from "../../common/InputSearch";
 import TableHead from "../../../components/common/TableHead";
 import { SERVER } from "../../../config";
+import { Link } from "react-router-dom";
 
 const Products = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,7 +32,14 @@ const Products = ({ products }) => {
     setFilteredProducts(filterProducts());
   }, [searchTerm, products]);
 
-  const header = ["Image", "Product Name", "Quantity", "Price", "Date"];
+  const header = [
+    "Image",
+    "Product Name",
+    "Quantity",
+    "Price",
+    "Date",
+    "Action",
+  ];
 
   const menu = [
     { id: 1, name: "All", items: products?.length },
@@ -111,14 +119,21 @@ const Products = ({ products }) => {
                         : 0}
                     </td>
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                      BDT
                       {item?.productVariants
                         ? item?.productVariants[0]?.price
-                        : 0}
+                        : 0}{" "}
+                      BDT
                     </td>
 
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                      {item?.createdAt}
+                      {new Date(item?.createdAt).toLocaleDateString("en-US")}
+                    </td>
+                    <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
+                      <Link to={`/admin/edit-product/${item?._id}`}>
+                        <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
+                          Edit
+                        </button>
+                      </Link>
                     </td>
                   </tr>
                 </tbody>

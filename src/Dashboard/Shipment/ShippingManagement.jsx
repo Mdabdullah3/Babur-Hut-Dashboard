@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FiPlus } from "react-icons/fi";
 import useShippingStore from "../../store/shippingStore";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -101,7 +100,6 @@ const ShippingManagement = () => {
     <div className="flex flex-col p-10 relative">
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-bold">Shipping Management</h1>
-        
       </div>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>

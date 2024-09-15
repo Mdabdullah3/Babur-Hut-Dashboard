@@ -104,7 +104,7 @@ const useUserStore = create((set, get) => ({
         try {
             const response = await axios.get(`${API_URL}/users`, {
                 params: {
-                    _filter: { role: ['vendor', 'admin'] }, 
+                    _filter: { role: ['vendor', 'admin'] },
                     _page: page,
                     _limit: limit,
                     _search: searchTerm,
@@ -146,7 +146,8 @@ const useUserStore = create((set, get) => ({
                 ),
                 loading: false
             }));
-            toast.success('User updated successfully!');
+            console.log(response);
+            toast.success('Updated successfully!');
         } catch (error) {
             set({ error: error.message, loading: false });
         }

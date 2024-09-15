@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import ReceivalePayment from "../../components/Dashboard/Finance/ReceivalePayment";
-import PayablePayment from "../../components/Dashboard/Finance/PayablePayment";
 
 const Finance = () => {
-  const menu = ["Receivale Payment", "Payable Payment", "Request Payment"];
+  const menu = ["Receivale Payment",  "Request Payment"];
   const [activeMenu, setActiveMenu] = useState(menu[0]);
   const handleMenuClick = (item) => {
     setActiveMenu(item);
@@ -29,7 +28,6 @@ const Finance = () => {
           ))}
         </div>
         {activeMenu === "Receivale Payment" && <ReceivalePayment />}
-        {activeMenu === "Payable Payment" && <PayablePayment />}
       </div>
     </section>
   );

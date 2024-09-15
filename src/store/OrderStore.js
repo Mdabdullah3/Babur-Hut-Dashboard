@@ -145,7 +145,6 @@ const useOrderStore = create((set) => ({
             set({ error: error.response?.data?.message || 'Error creating order', loading: false });
         }
     },
-
     // Update Order (Admin only)
     updateOrderStatus: async (orderId, updateData) => {
         set({ loading: true });
@@ -166,8 +165,6 @@ const useOrderStore = create((set) => ({
             });
         }
     },
-
-
     // Delete Order (Admin only)
     deleteOrder: async (orderId) => {
         set({ loading: true });

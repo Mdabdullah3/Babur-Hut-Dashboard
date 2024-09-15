@@ -3,7 +3,9 @@ import React from "react";
 const Loading = () => {
   return (
     <div>
-      <h1>Loading...</h1>
+      <section className=" relative place-items-center grid h-screen w-screen gap-4">
+      <span className="loading loading-dots loading-lg"></span>
+      </section>
     </div>
   );
 };
