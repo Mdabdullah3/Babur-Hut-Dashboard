@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { API_URL } from '../config';
@@ -97,6 +97,30 @@ const useUserStore = create((set, get) => ({
         } catch (error) {
             set({ error: error.message, loading: false });
 
+        }
+    },
+    fetchAllVendorAndAdminUsers: async (page = 1, limit = 2000, searchTerm = '', sortField = 'createdAt', sortOrder = 'asc') => {
+        set({ loading: true, error: null, searchTerm, sortField, sortOrder });
+        try {
+            const response = await axios.get(`${API_URL}/users`, {
+                params: {
+                    _filter: { role: ['vendor', 'admin'] }, 
+                    _page: page,
+                    _limit: limit,
+                    _search: searchTerm,
+                    _sort: `${sortField},${sortOrder}`,
+                },
+                withCredentials: true,
+            });
+            set({
+                users: response.data.data,
+                loading: false,
+                currentPage: page,
+                totalPages: response.data.totalPages,
+            });
+        } catch (error) {
+            set({ error: error.message, loading: false });
+            toast.error('Failed to fetch vendor and admin users');
         }
     },
     updateUser: async (userData) => {

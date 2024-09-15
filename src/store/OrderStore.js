@@ -71,7 +71,7 @@ const useOrderStore = create((set) => ({
 
     // Fetch All Orders of a User
 
-    
+
     fetchUserOrders: async (userId, { status = "", page = 1, limit = 10 }) => {
         set({ loading: true });
         try {
@@ -113,8 +113,17 @@ const useOrderStore = create((set) => ({
             return [];
         }
     },
-
-
+    fetchAllVendorOrders: async (id) => {
+        set({ loading: true });
+        try {
+            const response = await axios.get(`${API_URL}/orders?_filter[vendor]=${id}`, { withCredentials: true });
+            set({ userOrders: response.data.data, loading: false });
+            return response.data.data;
+        } catch (error) {
+            set({ error: error.response?.data?.message || 'Error fetching user orders', loading: false });
+            return [];
+        }
+    },
     // Fetch All Orders of Logged In User
     fetchLoggedInUserOrders: async () => {
         set({ loading: true });

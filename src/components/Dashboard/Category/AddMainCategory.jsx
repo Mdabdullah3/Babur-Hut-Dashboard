@@ -43,9 +43,54 @@ const AddMainCategory = () => {
     }));
   };
 
+  // Validation function to ensure percentage is less than or equal to 100
+  const validatePercentage = (value, field) => {
+    if (form[`${field}Type`] === "percentage" && (value < 0 || value > 100)) {
+      toast.error(`${field} percentage must be between 0 and 100%`);
+      return false;
+    }
+    return true;
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+
+    // Validate individual percentage fields
+    if (
+      !validatePercentage(Number(form.shippingCharge) || 0, "Shipping Charge")
+    )
+      isValid = false;
+    if (!validatePercentage(Number(form.commission) || 0, "Commission"))
+      isValid = false;
+    if (
+      !validatePercentage(Number(form.transactionCost) || 0, "Transaction Cost")
+    )
+      isValid = false;
+    if (!validatePercentage(Number(form.vat) || 0, "VAT")) isValid = false;
+
+    // Validate that all percentages together are reasonable
+    const totalPercentage =
+      (form.shippingChargeType === "percentage"
+        ? Number(form.shippingCharge) || 0
+        : 0) +
+      (form.commissionType === "percentage"
+        ? Number(form.commission) || 0
+        : 0) +
+      (form.transactionCostType === "percentage"
+        ? Number(form.transactionCost) || 0
+        : 0) +
+      (form.vatType === "percentage" ? Number(form.vat) || 0 : 0);
+
+    if (totalPercentage > 100) {
+      toast.error("Total percentage across all fields cannot exceed 100%");
+      isValid = false;
+    }
+
+    return isValid;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!validateForm()) return;
     try {
       await addCategory(form);
     } catch (error) {

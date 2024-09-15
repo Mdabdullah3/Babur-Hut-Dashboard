@@ -7,6 +7,7 @@ import FileUpload from "../../common/FileUpload";
 import { toDataURL } from "../../../utils/DataUrl";
 import { SERVER } from "../../../config";
 import InputToggle from "../../common/InputToggle";
+import { toast } from "react-toastify";
 
 const EditCategory = () => {
   const [image, setImage] = useState(null);
@@ -74,9 +75,51 @@ const EditCategory = () => {
         prevForm[`${field}Type`] === "percentage" ? "flat" : "percentage",
     }));
   };
+  const validatePercentage = (value, field) => {
+    if (form[`${field}Type`] === "percentage" && (value < 0 || value > 100)) {
+      toast.error(`${field} percentage must be between 0 and 100%`);
+      return false;
+    }
+    return true;
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    if (
+      !validatePercentage(Number(form.shippingCharge) || 0, "Shipping Charge")
+    )
+      isValid = false;
+    if (!validatePercentage(Number(form.commission) || 0, "Commission"))
+      isValid = false;
+    if (
+      !validatePercentage(Number(form.transactionCost) || 0, "Transaction Cost")
+    )
+      isValid = false;
+    if (!validatePercentage(Number(form.vat) || 0, "VAT")) isValid = false;
+
+    const totalPercentage =
+      (form.shippingChargeType === "percentage"
+        ? Number(form.shippingCharge) || 0
+        : 0) +
+      (form.commissionType === "percentage"
+        ? Number(form.commission) || 0
+        : 0) +
+      (form.transactionCostType === "percentage"
+        ? Number(form.transactionCost) || 0
+        : 0) +
+      (form.vatType === "percentage" ? Number(form.vat) || 0 : 0);
+
+    if (totalPercentage > 100) {
+      toast.error("Total percentage across all fields cannot exceed 100%");
+      isValid = false;
+    }
+
+    return isValid;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     updateCategory(id, form);
   };
 
