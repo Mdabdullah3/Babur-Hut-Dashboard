@@ -37,6 +37,7 @@ const Products = ({ products }) => {
     "Product Name",
     "Quantity",
     "Price",
+    "Status",
     "Date",
     "Action",
   ];
@@ -66,6 +67,7 @@ const Products = ({ products }) => {
     },
   ];
 
+  const handleStatusChange = (id, status) => {};
   return (
     <section className="py-5">
       <InputSearch
@@ -124,7 +126,21 @@ const Products = ({ products }) => {
                         : 0}{" "}
                       BDT
                     </td>
-
+                    <td className="text-center text-dark font-medium py-5 capitalize">
+                      <select
+                        value={item?.status}
+                        onChange={(e) =>
+                          handleStatusChange(item?._id, e.target.value)
+                        }
+                        className="border border-gray-300 p-2 rounded"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="shipped">Suspended</option>
+                        <option value="completed">Deleted</option>
+                        <option value="completed">Approved</option>
+                      </select>
+                    </td>
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
                       {new Date(item?.createdAt).toLocaleDateString("en-US")}
                     </td>

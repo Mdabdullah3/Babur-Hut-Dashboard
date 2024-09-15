@@ -2,18 +2,20 @@ import React, { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import Select from "react-select";
 import useAuthStore from "../../../store/AuthStore";
-import { SERVER } from "../../../config";
+import { API_URL, SERVER } from "../../../config";
 import { toDataURL } from "../../../utils/DataUrl";
 import InputField from "../../common/InputField";
 import FileUpload from "../../common/FileUpload";
 import PrimaryButton from "../../common/PrimaryButton";
+import axios from "axios";
 const VendorSetting = ({ id }) => {
-  const { user, fetchSingleUser, updateSingleUser } = useAuthStore();
+  const { updateSingleUser } = useAuthStore();
   const [bdDistricts, setBdDistricts] = useState([]);
   const [bdCities, setBdCities] = useState([]);
   const [cityOptions, setCityOptions] = useState([]);
   const [selectedDistrictObj, setSelectedDistrictObj] = useState(null);
   const [selectedCityObj, setSelectedCityObj] = useState(null);
+  const [user, setUsers] = useState([]);
   const [formData, setFormData] = useState({
     selectedDistrict: null,
     selectedCity: null,
@@ -34,8 +36,15 @@ const VendorSetting = ({ id }) => {
   });
 
   useEffect(() => {
-    fetchSingleUser(id);
-  }, [fetchSingleUser, id]);
+    const fetchSingleUser = async () => {
+      const response = await axios.get(`${API_URL}/users/${id}`, {
+        withCredentials: true,
+      });
+      setUsers(response.data.data);
+    };
+
+    fetchSingleUser();
+  }, [id]);
 
   useEffect(() => {
     if (user) {
