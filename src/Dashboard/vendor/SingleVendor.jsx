@@ -6,7 +6,6 @@ import VendorVouchers from "../../components/Dashboard/Vendor/VendorVouchers";
 import VendorCampaign from "../../components/Dashboard/Vendor/VendorCampaign";
 import VendorAds from "../../components/Dashboard/Vendor/VendorAds";
 import VendorReview from "../../components/Dashboard/Vendor/VendorReview";
-import { useFetcher, useParams } from "react-router-dom";
 import useProductStore from "../../store/ProductStore";
 import useVoucherStore from "../../store/useVoucherStore";
 import VendorSetting from "../../components/Dashboard/Vendor/VendorSetting";
@@ -14,6 +13,7 @@ import useUserStore from "../../store/AuthStore";
 import { API_URL, SERVER } from "../../config";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 const SingleVendor = () => {
   const { id } = useParams();
   const [user, setUsers] = useState([]);
@@ -85,9 +85,7 @@ const SingleVendor = () => {
         ...prevState,
         isActive: updatedStatus,
       }));
-
-      console.log(updatedStatus);
-      toast.success(`User is now ${updatedStatus ? "Active" : "Deactive"}`);
+      console.log(response);
     } catch (error) {
       console.error("Failed to update profile status:", error);
       toast.error("Profile status update failed!");

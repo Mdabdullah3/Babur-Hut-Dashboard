@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import { SERVER } from "../../config";
+import { API_URL, SERVER } from "../../config";
 import { toDataURL } from "../../utils/DataUrl";
 import FileUpload from "../common/FileUpload";
 import InputField from "../common/InputField";
 import SelectField from "../common/SelectField";
 import PrimaryButton from "../common/PrimaryButton";
 import useUserStore from "../../store/AuthStore";
+import axios from "axios";
 
 const CustomerSettings = ({ id }) => {
-  const { user, fetchSingleUser, updateSingleUser } = useUserStore();
-  console.log(user);
+  const { updateSingleUser } = useUserStore();
+  const [user, setUsers] = useState([]);
   const [avatar, setAvatar] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -28,8 +29,15 @@ const CustomerSettings = ({ id }) => {
   });
 
   useEffect(() => {
-    fetchSingleUser(id);
-  }, [fetchSingleUser, id]);
+    const fetchSingleUser = async () => {
+      const response = await axios.get(`${API_URL}/users/${id}`, {
+        withCredentials: true,
+      });
+      setUsers(response.data.data);
+    };
+
+    fetchSingleUser();
+  }, [id]);
   useEffect(() => {
     if (user) {
       setFormData((prevData) => ({
@@ -37,12 +45,12 @@ const CustomerSettings = ({ id }) => {
         name: user?.name || "",
         email: user?.email || "",
         location: {
-          address1: user?.location.address1 || "",
-          address2: user?.location.address2 || "",
-          city: user?.location.city || "",
-          state: user?.location.state || "",
-          postcode: user?.location.postcode || "",
-          country: user?.location.country || "",
+          address1: user?.location?.address1 || "",
+          address2: user?.location?.address2 || "",
+          city: user?.location?.city || "",
+          state: user?.location?.state || "",
+          postcode: user?.location?.postcode || "",
+          country: user?.location?.country || "",
         },
         avatar: null,
         phone: user?.phone || "",
@@ -51,8 +59,8 @@ const CustomerSettings = ({ id }) => {
     }
     if (user?.avatar?.secure_url) {
       const avatarUrl = user?.avatar?.secure_url.startsWith("/")
-        ? `${SERVER}${user.avatar.secure_url}`
-        : user.avatar.secure_url;
+        ? `${SERVER}${user?.avatar?.secure_url}`
+        : user?.avatar?.secure_url;
       toDataURL(avatarUrl).then((base64) => {
         setAvatar(base64);
         setFormData((prevData) => ({
@@ -76,7 +84,7 @@ const CustomerSettings = ({ id }) => {
     setFormData((prevData) => ({
       ...prevData,
       location: {
-        ...prevData.location,
+        ...prevData?.location,
         [name]: value,
       },
     }));
