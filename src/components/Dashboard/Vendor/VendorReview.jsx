@@ -4,6 +4,7 @@ import axios from "axios";
 
 const VendorReview = ({ product }) => {
   const [reviews, setReviews] = useState([]);
+  
   useEffect(() => {
     const fetchReviewsForProducts = async () => {
       try {

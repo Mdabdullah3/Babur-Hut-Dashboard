@@ -48,6 +48,7 @@ import PopImage from "./Dashboard/BannerImageUpload/PopImage";
 import UpdatePopImage from "./Dashboard/BannerImageUpload/UpdatePopImage";
 import UploadLogoImage from "./Dashboard/BannerImageUpload/UploadLogoImage";
 import PayablePayment from "./components/Dashboard/Finance/PayablePayment";
+import MessageCenter from "./Dashboard/MessageCenter/MessageCenter";
 
 const menu = [
     {
@@ -252,6 +253,7 @@ const menu = [
         icon: <FaRocketchat className="h-6 w-6" />,
         path: "message-center",
         navMenu: true,
+        component: <MessageCenter />
     },
     {
         name: "Support",
