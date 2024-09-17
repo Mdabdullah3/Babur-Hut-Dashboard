@@ -5,17 +5,17 @@ import Loading from "../../common/Loading";
 
 const PayablePayment = () => {
   const { id } = useParams();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const { userOrders, fetchAllVendorOrders, updateOrderStatus } =
     useOrderStore();
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     const loadOrdersForAllUsers = async () => {
       await fetchAllVendorOrders(id);
-      setLoading(false)
-    }
-    loadOrdersForAllUsers();   
+      setLoading(false);
+    };
+    loadOrdersForAllUsers();
   }, [fetchAllVendorOrders, id, userOrders]);
 
   console.log(loading);
@@ -40,7 +40,7 @@ const PayablePayment = () => {
     await updateOrderStatus(orderId, { vendorPaid: "paid" });
   };
   if (loading) {
-    return <Loading />
+    return <Loading />;
   }
   return (
     <div>
@@ -87,9 +87,7 @@ const PayablePayment = () => {
                   </td>
                 ) : (
                   <td className="py-4 px-6">
-                    <button disabled className="btn btn-primary text-white ">
-                      Paid
-                    </button>
+                    <button className="btn bg-primary text-white ">Paid</button>
                   </td>
                 )}
               </tr>

@@ -27,15 +27,12 @@ const ReceivablePayment = () => {
 
       for (let user of users) {
         const orders = await fetchAllVendorOrders(user._id);
-        ordersByUser[user._id] = orders;
-
+        ordersByUser[user?._id] = orders;
         const activeOrders = calculateActiveOrders(orders);
-
         totalCost += calculateTotalOrderCost(activeOrders);
-        vendorIncome += calculateVendorPayment(activeOrders);
+        vendorIncome += calculateVendorPayment(activeOrders, false);
         profit += calculateTotalProfit(activeOrders);
       }
-
       setUserOrders(ordersByUser);
       setTotalOrderCost(totalCost);
       setTotalVendorIncome(vendorIncome);
@@ -47,7 +44,7 @@ const ReceivablePayment = () => {
     }
   }, [users, fetchAllVendorOrders]);
 
-  // Filter active orders (non-canceled)
+  // Filter active orders
   const calculateActiveOrders = (orders) => {
     return orders?.filter((order) => order.status !== "cancelled");
   };
@@ -63,11 +60,17 @@ const ReceivablePayment = () => {
   };
 
   // Calculate vendor payment for unpaid orders excluding canceled ones
-  const calculateVendorPayment = (orders) => {
+  const calculateVendorPayment = (orders, forUnpaidOnly = true) => {
     return orders.reduce((profit, order) => {
-      if (order.vendorPaid === "unpaid" && order.status !== "cancelled") {
+      if (order.status !== "cancelled") {
         const orderProfit = Number(order.profit || 0);
-        return profit + orderProfit;
+        if (forUnpaidOnly) {
+          if (order.vendorPaid === "unpaid") {
+            return profit + orderProfit;
+          }
+        } else {
+          return profit + orderProfit;
+        }
       }
       return profit;
     }, 0);

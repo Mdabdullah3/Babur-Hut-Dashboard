@@ -4,7 +4,7 @@ import TableHead from "../../../components/common/TableHead";
 import { SERVER } from "../../../config";
 import { Link } from "react-router-dom";
 
-const Products = ({ products }) => {
+const Products = ({ products, updateProduct }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeMenu, setActiveMenu] = useState(1);
   const [filteredProducts, setFilteredProducts] = useState(products);
@@ -67,7 +67,9 @@ const Products = ({ products }) => {
     },
   ];
 
-  const handleStatusChange = (id, status) => {};
+  const handleStatusChange = (id, status) => {
+    updateProduct(id, { status });
+  };
   return (
     <section className="py-5">
       <InputSearch
@@ -138,7 +140,7 @@ const Products = ({ products }) => {
                         <option value="cancelled">Cancelled</option>
                         <option value="shipped">Suspended</option>
                         <option value="completed">Deleted</option>
-                        <option value="completed">Approved</option>
+                        <option value="approved">Approved</option>
                       </select>
                     </td>
                     <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">

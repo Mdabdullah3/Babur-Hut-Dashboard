@@ -70,7 +70,7 @@ const SingleVendor = () => {
       name: "About Settings",
     },
   ];
-  const { products, fetchProductByIdForUser } = useProductStore();
+  const { products, fetchProductByIdForUser, updateProduct } = useProductStore();
   const { vouchers, fetchVoucherByUserId } = useVoucherStore();
   useEffect(() => {
     fetchProductByIdForUser(id);
@@ -146,7 +146,7 @@ const SingleVendor = () => {
         ))}
       </div>
       <div>
-        {activeMenu === 1 && <VendorProducts products={products} id={id} />}
+        {activeMenu === 1 && <VendorProducts products={products} updateProduct={updateProduct} id={id} />}
       </div>
       <div>{activeMenu === 2 && <VendorOrders />}</div>
       <div>

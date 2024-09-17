@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import axios from 'axios';
 import { API_URL } from '../config';
 import { toast } from 'react-toastify';
@@ -99,6 +99,12 @@ const useProductStore = create((set) => ({
             const response = await axios.patch(`${API_URL}/products/${idOrSlug}`, productData, {
                 withCredentials: true,
             });
+            set((state) => ({
+                orders: state.products.map(product =>
+                    product._id === idOrSlug ? { ...product, ...response.data.data } : product
+                ),
+                loading: false
+            }));
             toast.success("Product Updated Successfully");
             console.log(response);
         } catch (error) {
