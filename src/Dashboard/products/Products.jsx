@@ -21,13 +21,11 @@ const ProductAdminPanel = () => {
 
   useEffect(() => {
     fetchUser();
-
     if (user?._id) {
       fetchProductByIdForUser(user._id, page, limit, searchTerm);
     }
   }, [user?._id, fetchUser, page, limit, searchTerm, fetchProductByIdForUser]);
 
-  console.log(products, user);
   const handleSearch = (value) => {
     setSearchTerm(value);
   };

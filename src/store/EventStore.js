@@ -36,6 +36,7 @@ const useEventStore = create((set, get) => ({
         try {
             const response = await axios.post(`${API_URL}/events`, eventData);
             set({ loading: false });
+            set({ event: response.data.data, loading: false });
             toast.success('Event created successfully!');
             get().fetchEvents();
         } catch (error) {
@@ -48,7 +49,7 @@ const useEventStore = create((set, get) => ({
         set({ loading: true, error: null });
         try {
             const response = await axios.patch(`${API_URL}/events/${eventId}`, eventData);
-            set({ loading: false });
+            set({ event: response.data.data, loading: false });
             toast.success('Event updated successfully!');
             get().fetchEvents(); // Refresh the events list
         } catch (error) {
