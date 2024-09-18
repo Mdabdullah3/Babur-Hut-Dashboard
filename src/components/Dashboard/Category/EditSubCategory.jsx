@@ -30,15 +30,6 @@ const EditSubCategory = () => {
     fetchSubCategoryById(id);
   }, [fetchCategories, fetchSubCategories, fetchSubCategoryById, id]);
 
-  useEffect(() => {
-    if (subCategory?.image?.secure_url) {
-      const avatarUrl = `${SERVER}${subCategory.image.secure_url}`;
-      toDataURL(avatarUrl).then((base64) => {
-        setImage(base64);
-      });
-    }
-  }, [subCategory?.image?.secure_url]);
-
   const [form, setForm] = useState({
     category: "",
     name: "",
@@ -51,7 +42,7 @@ const EditSubCategory = () => {
     commissionType: "percentage",
     vat: "",
     vatType: "percentage",
-    image: null,
+    image: image,
     icon: "",
   });
 
@@ -69,8 +60,13 @@ const EditSubCategory = () => {
         commissionType: subCategory.commissionType || "percentage",
         vat: subCategory.vat || "",
         vatType: subCategory.vatType || "percentage",
-        image: subCategory.image?.secure_url || null,
         icon: subCategory.icon || "",
+      });
+    }
+    if (subCategory?.image?.secure_url) {
+      const avatarUrl = `${SERVER}${subCategory.image.secure_url}`;
+      toDataURL(avatarUrl).then((base64) => {
+        setImage(base64);
       });
     }
   }, [subCategory]);
@@ -89,8 +85,64 @@ const EditSubCategory = () => {
     }));
   };
 
+  const validatePercentage = (value, field) => {
+    if (form[`${field}Type`] === "percentage" && (value < 0 || value > 100)) {
+      toast.error(`${field} percentage must be between 0 and 100%`);
+      return false;
+    }
+    return true;
+  };
+  const validateForm = () => {
+    let isValid = true;
+
+    // Validate individual percentage fields
+    if (
+      !validatePercentage(Number(form.shippingCharge) || 0, "Shipping Charge")
+    )
+      isValid = false;
+    if (!validatePercentage(Number(form.commission) || 0, "Commission"))
+      isValid = false;
+    if (
+      !validatePercentage(Number(form.transactionCost) || 0, "Transaction Cost")
+    )
+      isValid = false;
+    if (!validatePercentage(Number(form.vat) || 0, "VAT")) isValid = false;
+
+    // Validate that all percentages together are reasonable
+    const totalPercentage =
+      (form.shippingChargeType === "percentage"
+        ? Number(form.shippingCharge) || 0
+        : 0) +
+      (form.commissionType === "percentage"
+        ? Number(form.commission) || 0
+        : 0) +
+      (form.transactionCostType === "percentage"
+        ? Number(form.transactionCost) || 0
+        : 0) +
+      (form.vatType === "percentage" ? Number(form.vat) || 0 : 0);
+
+    if (totalPercentage > 100) {
+      toast.error("Total percentage across all fields cannot exceed 100%");
+      isValid = false;
+    }
+
+    return isValid;
+  };
+  const totalPercentage =
+    (form.shippingChargeType === "percentage"
+      ? Number(form.shippingCharge) || 0
+      : 0) +
+    (form.commissionType === "percentage" ? Number(form.commission) || 0 : 0) +
+    (form.transactionCostType === "percentage"
+      ? Number(form.transactionCost) || 0
+      : 0) +
+    (form.vatType === "percentage" ? Number(form.vat) || 0 : 0);
+  console.log(totalPercentage);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (totalPercentage > 100) {
+      toast.error("Total percentage across all fields cannot exceed 100%");
+    }
     try {
       await updateSubCategory(id, form);
     } catch (error) {
@@ -203,12 +255,12 @@ const EditSubCategory = () => {
           {form.vatType === "percentage" ? "%" : "Flat"}
         </button>
       </div>
-      <InputField
+      {/* <InputField
         label="Category Icon"
         value={form.icon}
         onChange={(e) => setForm({ ...form, icon: e.target.value })}
         placeholder="Category Icon"
-      />
+      /> */}
       <FileUpload
         label="Sub Category Image"
         setFile={setImage}

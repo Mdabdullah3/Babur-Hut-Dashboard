@@ -26,10 +26,8 @@ const Vendor = () => {
       (product) => product?.user?._id === userId
     );
     const productCount = userProducts?.length || 0;
-
-    // Sum up the total reviews for all the products by the user
     const reviewCount = userProducts?.reduce((totalReviews, product) => {
-      return totalReviews + (product?.reviews?.length || 0); // Handle case when no reviews
+      return totalReviews + (product?.reviews?.length || 0); 
     }, 0);
 
     return { productCount, reviewCount };
