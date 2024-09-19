@@ -36,7 +36,6 @@ const Customer = () => {
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
-
   const header = [
     "Customer ID",
     "Name",
