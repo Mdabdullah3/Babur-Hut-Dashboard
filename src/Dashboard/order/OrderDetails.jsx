@@ -28,7 +28,7 @@ const OrderDetails = () => {
   } = singleOrder;
 
   const orderedVariant = product?.productVariants.find(
-    (variant) => variant._id === transactionId
+    (variant) => variant._id === variantId
   );
 
   return (
