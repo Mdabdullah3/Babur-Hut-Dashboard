@@ -37,7 +37,7 @@ const useProductStore = create((set) => ({
     },
 
 
-    fetchProductByIdForUser: async (filter = {}, userId, page = 1, limit = 20, searchTerm = '') => {
+    fetchProductByIdForUser: async ( userId, page = 1, limit = 20, searchTerm = '') => {
         set({ loading: true });
         try {
             const response = await axios.get(`${API_URL}/users/${userId}/products`, {
@@ -45,7 +45,7 @@ const useProductStore = create((set) => ({
                     _page: page,
                     _limit: limit,
                     _search: searchTerm ? `${searchTerm},name,slug,summary,description` : '',
-                    ...filter,
+                    // ...filter,
                 },
             });
             set({
