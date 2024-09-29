@@ -29,7 +29,6 @@ const SelectField = ({
     setCustomValue(newValue);
     onChange({ target: { name, value: newValue } });
   };
-
   return (
     <div>
       <label
