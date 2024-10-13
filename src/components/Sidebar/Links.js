@@ -32,6 +32,7 @@ export function SidebarLinks(props) {
             case 'event-manager': return permissions.isEventManager;
             case 'default': return permissions.isHasDashboard;
             case 'banner-img': return permissions.isHasBanner;
+            case "chat": return true;
             default: return false;
         }
     };

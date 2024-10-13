@@ -49,6 +49,7 @@ import UpdatePopImage from "./Dashboard/BannerImageUpload/UpdatePopImage";
 import UploadLogoImage from "./Dashboard/BannerImageUpload/UploadLogoImage";
 import PayablePayment from "./components/Dashboard/Finance/PayablePayment";
 import MessageCenter from "./Dashboard/MessageCenter/MessageCenter";
+import ChatCenterAdminView from "./Dashboard/MessageCenter/ChatCenter";
 
 const menu = [
     {
@@ -326,6 +327,14 @@ const menu = [
         layout: "/admin",
         path: "add-role",
         component: <AddRole />
+    },
+    {
+        name: "Chat",
+        layout: "/admin",
+        path: "chat",
+        navMenu: true,
+        icon: <FaRocketchat className="h-6 w-6" />,
+        component: <ChatCenterAdminView />
     }
 
 ];
