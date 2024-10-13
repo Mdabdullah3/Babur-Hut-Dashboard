@@ -107,7 +107,7 @@ const Customer = () => {
                         More
                       </button>
                     </Link>
-                    <h1 onClick={() => deleteUser(user?._id)}>Delete</h1>
+                    {/* <h1 onClick={() => deleteUser(user?._id)}>Delete</h1> */}
                   </td>
                 </tr>
               </tbody>
