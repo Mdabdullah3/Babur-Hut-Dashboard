@@ -56,7 +56,7 @@ const JoinEvents = () => {
   };
   const isProductInEvent = (productId) => {
     return event?.eventProducts?.some(
-      (eventProduct) => eventProduct.product === productId
+      (eventProduct) => eventProduct.product?._id === productId
     );
   };
   const onPaymentProcess = () => {};
@@ -130,21 +130,21 @@ const ProductList = ({
             <span className="capitalize">{product?.name?.slice(0, 20)}</span>
             <button
               className={`px-4 py-2 ${
-                isProductInEvent(product.id) || isProductSelected(product.id)
+                isProductInEvent(product?.id) || isProductSelected(product?.id)
                   ? "bg-gray-400"
                   : "bg-blue-500"
               } text-white rounded-lg ${
-                isProductInEvent(product.id)
+                isProductInEvent(product?.id)
                   ? "cursor-not-allowed"
                   : "hover:bg-blue-600"
               }`}
               onClick={() =>
-                !isProductInEvent(product.id) &&
-                !isProductSelected(product.id) &&
+                !isProductInEvent(product?.id) &&
+                !isProductSelected(product?.id) &&
                 onSelectProduct(product)
               }
               disabled={
-                isProductInEvent(product.id) || isProductSelected(product.id)
+                isProductInEvent(product?.id) || isProductSelected(product?.id)
               }
             >
               {isProductInEvent(product.id)
@@ -192,7 +192,7 @@ const SelectedProducts = ({
         ))}
       </ul>
       <div className="mt-6">
-        {event.price > 0 ? (
+        {event?.price > 0 ? (
           <button
             className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
             onClick={onPaymentProcess}

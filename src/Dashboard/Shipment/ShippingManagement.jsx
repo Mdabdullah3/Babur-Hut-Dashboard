@@ -123,8 +123,8 @@ const ShippingManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {shippingCharges.length > 0 ? (
-            shippingCharges.map(({ _id, district, deliveryFee }) => (
+          {shippingCharges?.length > 0 ? (
+            shippingCharges?.map(({ _id, district, deliveryFee }) => (
               <tr key={_id} className="border-b border-gray-200">
                 <td className="py-4 px-6">
                   <input
