@@ -2,6 +2,142 @@ import React, { useEffect, useState } from "react";
 import useUserStore from "../../../store/AuthStore";
 import useOrderStore from "../../../store/OrderStore";
 import { Link } from "react-router-dom";
+import {
+  PDFDownloadLink,
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+} from "@react-pdf/renderer";
+
+// Create styles for PDF
+const styles = StyleSheet.create({
+  page: {
+    padding: 30,
+    fontSize: 12,
+  },
+  section: {
+    marginBottom: 20,
+  },
+  header: {
+    backgroundColor: "#f8f8f8",
+    padding: 10,
+    fontWeight: "bold",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottom: "1px solid #eee",
+    padding: 10,
+  },
+  totalSection: {
+    marginTop: 20,
+    marginBottom: 20,
+    paddingTop: 10,
+    borderTop: "1px solid #333",
+  },
+  boldText: {
+    fontWeight: "bold",
+  },
+  title: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+});
+
+// PDF Document Component
+const MyDocument = ({
+  users,
+  userOrders,
+  calculateActiveOrders,
+  calculateTotalOrderCost,
+  calculateVendorPayment,
+  calculateTotalProfit,
+}) => (
+  <Document>
+    <Page style={styles.page}>
+      <Text style={styles.title}>Receivable Payment Report</Text>
+
+      <View style={styles.totalSection}>
+        <Text>
+          Total Order Cost:{" "}
+          {users
+            ?.reduce(
+              (total, user) =>
+                total +
+                calculateTotalOrderCost(
+                  calculateActiveOrders(userOrders[user._id] || [])
+                ),
+              0
+            )
+            .toFixed(2)}{" "}
+          BDT
+        </Text>
+        <Text>
+          Total Profit:{" "}
+          {users
+            ?.reduce(
+              (total, user) =>
+                total +
+                calculateTotalProfit(
+                  calculateActiveOrders(userOrders[user._id] || [])
+                ),
+              0
+            )
+            .toFixed(2)}{" "}
+          BDT
+        </Text>
+
+        <Text>
+          Total Vendor Income:{" "}
+          {users
+            ?.reduce(
+              (total, user) =>
+                total +
+                calculateVendorPayment(
+                  calculateActiveOrders(userOrders[user._id] || []),
+                  false
+                ),
+              0
+            )
+            .toFixed(2)}{" "}
+          BDT
+        </Text>
+      </View>
+      {users?.map((user, userIndex) => {
+        const orders = userOrders[user._id] || [];
+        const activeOrders = calculateActiveOrders(orders);
+        const totalOrderCost = calculateTotalOrderCost(activeOrders);
+        const vendorPayment = calculateVendorPayment(activeOrders);
+        const totalProfit = calculateTotalProfit(activeOrders);
+        return (
+          <View key={user._id} style={styles.section}>
+            <Text style={styles.header}>
+              Vendor: {user.name} (ID: {user._id})
+            </Text>
+            <View style={styles.row}>
+              <Text>Total Order Cost: </Text>
+              <Text>{totalOrderCost.toFixed(2)} BDT</Text>
+            </View>
+            <View style={styles.row}>
+              <Text>Total Profit: </Text>
+              <Text>{totalProfit.toFixed(2)} BDT</Text>
+            </View>
+            <View style={styles.row}>
+              <Text>Vendor Payment: </Text>
+              <Text>{vendorPayment.toFixed(2)} BDT</Text>
+            </View>
+            <View style={styles.row}>
+              <Text>Total Orders: </Text>
+              <Text>{activeOrders.length}</Text>
+            </View>
+          </View>
+        );
+      })}
+    </Page>
+  </Document>
+);
 
 const ReceivablePayment = () => {
   const { users, fetchAllVendorAndAdminUsers } = useUserStore();
@@ -115,6 +251,33 @@ const ReceivablePayment = () => {
           <h1 className="font-bold">Total Vendor Income :</h1>
           <h2>{totalVendorIncome.toFixed(2)} BDT</h2>
         </div>
+      </div>
+      <div className="flex justify-end my-3">
+        <PDFDownloadLink
+          document={
+            <MyDocument
+              users={users}
+              userOrders={userOrders}
+              calculateActiveOrders={calculateActiveOrders}
+              calculateTotalOrderCost={calculateTotalOrderCost}
+              calculateVendorPayment={calculateVendorPayment}
+              calculateTotalProfit={calculateTotalProfit}
+            />
+          }
+          fileName="receivable_payment_report.pdf"
+        >
+          {({ loading }) =>
+            loading ? (
+              <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+                Loading Document...
+              </button>
+            ) : (
+              <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+                Download PDF
+              </button>
+            )
+          }
+        </PDFDownloadLink>
       </div>
       <table className="w-full bg-white border border-gray-200 mt-10">
         <thead>
