@@ -1,52 +1,78 @@
 import { create } from "zustand";
 import axios from "axios";
+import { API_URL } from "../config";
+import { toast } from "react-toastify";
 
 const useChatStore = create((set) => ({
     chats: [],
-    selectedUser: null,
 
     fetchChats: async () => {
         try {
-            const response = await axios.get('/api/reports', {
-                params: { chatsOnly: true },
+            const response = await axios.get(`${API_URL}/api/reports?chatsOnly=true`, {
+                withCredentials: true,
             });
-
-            const chatsData = response.data;
+            const chatsData = response.data.data;
             set({ chats: chatsData });
         } catch (error) {
             console.error('Failed to fetch chats:', error);
         }
     },
-
-    setSelectedUser: (user) => set({ selectedUser: user }),
-
     sendMessage: async (message) => {
-        const { selectedUser } = useChatStore.getState();
-        if (!selectedUser) return;
-
-        const newMessage = {
-            user: selectedUser._id,
-            title: `Chat with ${selectedUser.name}`,
-            message,
-            description: '',
-            image: '',
-        };
-
         try {
-            const response = await axios.post('/api/reports', newMessage, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+            const response = await axios.post(`${API_URL}/api/reports`, message, {
+                withCredentials: true,
             });
-
-            const updatedChat = response.data;
-            set((state) => ({
-                chats: state.chats.map((chat) =>
-                    chat.user._id === selectedUser._id ? updatedChat : chat
-                ),
-            }));
+            const chatsData = response.data.data;
+            set({ chats: chatsData });
+            toast.success('Message sent successfully!');
         } catch (error) {
-            console.error('Failed to send message:', error);
+            toast.error('Failed to send message:', error);
+        }
+    },
+    updateMessage: async (message, id) => {
+        try {
+            const response = await axios.patch(`${API_URL}/api/reports/${message.id}`, message, {
+                withCredentials: true,
+            });
+            const chatsData = response.data.data;
+            set({ chats: chatsData });
+            toast.success('Message updated successfully!');
+        } catch (error) {
+            toast.error('Failed to update message:', error);
+        }
+    },
+    deleteMessage: async (message, id) => {
+        try {
+            const response = await axios.delete(`${API_URL}/api/reports/${message.id}`, {
+                withCredentials: true,
+            });
+            const chatsData = response.data.data;
+            set({ chats: chatsData });
+            toast.success('Message deleted successfully!');
+        } catch (error) {
+            toast.error('Failed to delete message:', error);
+        }
+    },
+    singleMessage: async (id) => {
+        try {
+            const response = await axios.get(`${API_URL}/api/reports/${id}`, {
+                withCredentials: true,
+            });
+            const chatsData = response.data.data;
+            set({ chats: chatsData });
+        } catch (error) {
+            toast.error('Failed to fetch message:', error);
+        }
+    },
+    loadUserChats: async (id) => {
+        try {
+            const response = await axios.get(`${API_URL}/api/users/${id}/chats`, {
+                withCredentials: true,
+            });
+            const chatsData = response.data.data.chats;
+            set({ chats: chatsData });
+        } catch (error) {
+            toast.error('Failed to fetch chats:', error);
         }
     },
 }));
