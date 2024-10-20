@@ -8,7 +8,7 @@ const useChatStore = create((set) => ({
 
     fetchChats: async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/reports?chatsOnly=true`, {
+            const response = await axios.get(`${API_URL}/reports?chatsOnly=true`, {
                 withCredentials: true,
             });
             const chatsData = response.data.data;
@@ -19,7 +19,7 @@ const useChatStore = create((set) => ({
     },
     sendMessage: async (message) => {
         try {
-            const response = await axios.post(`${API_URL}/api/reports`, message, {
+            const response = await axios.post(`${API_URL}/reports`, message, {
                 withCredentials: true,
             });
             const chatsData = response.data.data;
@@ -31,7 +31,7 @@ const useChatStore = create((set) => ({
     },
     updateMessage: async (message, id) => {
         try {
-            const response = await axios.patch(`${API_URL}/api/reports/${message.id}`, message, {
+            const response = await axios.patch(`${API_URL}/reports/${message.id}`, message, {
                 withCredentials: true,
             });
             const chatsData = response.data.data;
@@ -41,9 +41,9 @@ const useChatStore = create((set) => ({
             toast.error('Failed to update message:', error);
         }
     },
-    deleteMessage: async (message, id) => {
+    deleteMessage: async (id) => {
         try {
-            const response = await axios.delete(`${API_URL}/api/reports/${message.id}`, {
+            const response = await axios.delete(`${API_URL}/reports/${id}`, {
                 withCredentials: true,
             });
             const chatsData = response.data.data;
@@ -55,7 +55,7 @@ const useChatStore = create((set) => ({
     },
     singleMessage: async (id) => {
         try {
-            const response = await axios.get(`${API_URL}/api/reports/${id}`, {
+            const response = await axios.get(`${API_URL}/reports/${id}`, {
                 withCredentials: true,
             });
             const chatsData = response.data.data;
@@ -66,7 +66,7 @@ const useChatStore = create((set) => ({
     },
     loadUserChats: async (id) => {
         try {
-            const response = await axios.get(`${API_URL}/api/users/${id}/chats`, {
+            const response = await axios.get(`${API_URL}/users/${id}/chats`, {
                 withCredentials: true,
             });
             const chatsData = response.data.data.chats;

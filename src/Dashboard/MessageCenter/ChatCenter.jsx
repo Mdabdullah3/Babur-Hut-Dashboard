@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import useChatStore from "../../store/ChatStore";
+import { SERVER } from "../../config";
+import { useNavigate } from "react-router-dom";
 
 const ChatCenterAdminView = () => {
   const { chats, fetchChats } = useChatStore();
@@ -7,20 +9,40 @@ const ChatCenterAdminView = () => {
   useEffect(() => {
     fetchChats();
   }, [fetchChats]);
+  const uniqueChats = [];
+  const seenUsers = new Set();
 
-  const handleViewChat = (chatId) => {
-    // Handle view chat logic here
+  // Filter chat data by unique user
+  chats?.forEach((chat) => {
+    if (!seenUsers.has(chat.user._id)) {
+      seenUsers.add(chat.user._id);
+      uniqueChats.push(chat);
+    }
+  });
+  console.log(uniqueChats);
+  const navigate = useNavigate();
+  const handleViewChat = (id) => {
+    navigate(`/admin/user-chat/${id}`);
   };
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">Vendor Chat Center</h1>
       <ul className="mt-4">
-        {chats?.map((chat) => (
+        {uniqueChats?.map((chat) => (
           <li
-            key={chat?._id}
-            className="flex items-center justify-between p-4 border-b"
+            key={chat?.user?._id}
+            className="flex items-center justify-between p-4 border-b "
           >
-            <span>{chat?.name}</span>
+            <div className="flex items-center gap-2">
+              <img
+                src={`${SERVER}${chat?.user?.avatar?.secure_url}`}
+                alt=""
+                className="w-12 h-12 rounded-full"
+              />
+              <h1 className=" capitalize text-md font-semibold">
+                {chat?.user?.name}
+              </h1>
+            </div>
             <button
               className="text-blue-500"
               onClick={() => handleViewChat(chat?._id)}

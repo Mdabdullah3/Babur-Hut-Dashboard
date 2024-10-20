@@ -4,15 +4,21 @@ import useUserStore from "../../store/AuthStore";
 import axios from "axios";
 import { API_URL } from "../../config";
 import { toast } from "react-toastify";
+import useChatStore from "../../store/ChatStore";
 
 const UserChatCenter = () => {
   const { user, fetchUser } = useUserStore();
+  const { chats, loadUserChats } = useChatStore();
+
   const { id } = useParams();
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
+    loadUserChats(id);
+  }, [fetchUser, loadUserChats, id]);
+
+  console.log(chats);
   const handleSend = async () => {
     try {
       const body = {
@@ -24,9 +30,8 @@ const UserChatCenter = () => {
 
       // Make the API request
       const response = await axios.post(`${API_URL}/reports`, body, {
-        withCredentials: true, // Make sure the server supports this if needed
+        withCredentials: true,
       });
-      // Check for successful response
       if (response) {
         toast.success("Message sent successfully");
       } else {

@@ -340,7 +340,7 @@ const menu = [
     {
         name: "User Chat",
         layout: "/admin",
-        path: "user-chat",
+        path: "user-chat/:id",
         navMenu: true,
         icon: <FaRocketchat className="h-6 w-6" />,
         component: <UserChatCenter />
