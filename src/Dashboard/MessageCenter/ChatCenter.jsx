@@ -45,7 +45,7 @@ const ChatCenterAdminView = () => {
             </div>
             <button
               className="text-blue-500"
-              onClick={() => handleViewChat(chat?._id)}
+              onClick={() => handleViewChat(chat?.user?._id)}
             >
               View Chat
             </button>

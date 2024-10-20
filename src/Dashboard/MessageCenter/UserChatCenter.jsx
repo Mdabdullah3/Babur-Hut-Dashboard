@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import useUserStore from "../../store/AuthStore";
 import axios from "axios";
@@ -8,22 +8,70 @@ import useChatStore from "../../store/ChatStore";
 
 const UserChatCenter = () => {
   const { user, fetchUser } = useUserStore();
+  const [messages, setMessages] = useState([]); // To hold combined chats
+  const { id } = useParams();
+  const messagesEndRef = useRef(null); // For auto-scroll to bottom
+  const [message, setMessage] = useState("");
   const { chats, loadUserChats } = useChatStore();
 
-  const { id } = useParams();
-  const [message, setMessage] = useState("");
+  // Fetch chats for the current user and conversation
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const response = await axios.get(
+          `https://baburhaatbd.com/api/users/66e43df8158a80a07ab66bfe/reports?_filter[replyTo]=671262e09ad3a1c44151edbc&chatsOnly=true`,
+          {
+            withCredentials: true,
+          }
+        );
+        if (response?.data?.data) {
+          const fetchedChats = response?.data?.data;
 
+          setMessages((prevMessages) => {
+            // Combine new messages with existing ones and filter duplicates
+            const allMessages = [...prevMessages, ...fetchedChats, ...chats];
+            // Create a Set to keep unique messages based on their IDs
+            const uniqueMessages = Array.from(
+              new Map(allMessages.map((msg) => [msg._id, msg])).values()
+            );
+            return uniqueMessages.sort(
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            );
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user chats:", error);
+        toast.error("Failed to load chats");
+      }
+    };
+
+    if (user?._id) {
+      fetchChats();
+    }
+  }, [user?._id, id]);
+
+  // Fetch user and load chats
   useEffect(() => {
     fetchUser();
     loadUserChats(id);
   }, [fetchUser, loadUserChats, id]);
 
-  console.log(chats);
+  // Auto-scroll to the bottom of the chat on new messages
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // Handle sending a message
   const handleSend = async () => {
     try {
       const body = {
         message: message,
         user: user?._id,
+        replyTo: id,
         title: "Chat with " + id,
         description: "Chat message description goes here",
       };
@@ -34,11 +82,16 @@ const UserChatCenter = () => {
       });
       if (response) {
         toast.success("Message sent successfully");
+        // Add the new message to the existing messages
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { ...response.data.data, createdAt: new Date() },
+        ]);
+        console.log(response.data.data);
+        setMessage(""); // Clear input after sending
       } else {
         toast.error("Failed to send message");
       }
-
-      setMessage("");
     } catch (error) {
       if (error.response && error.response.status === 400) {
         toast.error("Bad Request: Please check your input.");
@@ -49,13 +102,52 @@ const UserChatCenter = () => {
     }
   };
 
+  console.log(message);
+  // Modern chat UI design with better chat bubble styling
   return (
-    <div className="flex flex-col h-screen bg-gray-100 relative">
+    <div className="flex flex-col bg-gray-100">
       {/* Message Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4"></div>
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.map((chat) => (
+          <div
+            key={chat?._id}
+            className={`flex items-start space-x-2 ${
+              user?._id === chat?.user?._id || user?._id === chat?.user
+                ? "justify-end"
+                : "justify-start"
+            }`}
+          >
+            {/* User Avatar */}
+            {id === chat?.user?._id && (
+              <img
+                src="https://via.placeholder.com/40" // Replace with actual user avatar
+                alt="User Avatar"
+                className="w-10 h-10 rounded-full"
+              />
+            )}
+            {/* Chat Bubble */}
+            <div
+              className={`max-w-xs p-4 rounded-lg shadow-md ${
+                user?._id === chat?.user?._id || user?._id === chat?.user
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-300 text-gray-900"
+              }`}
+            >
+              <p className="text-sm">{chat?.message}</p>
+              <p className="text-xs text-right mt-2 opacity-70">
+                {new Date(chat?.createdAt).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
 
       {/* Input Area (Fixed at the bottom) */}
-      <div className="bg-white border-t border-gray-300 p-4 flex items-center fixed bottom-0 left-0 right-0">
+      <div className="bg-white border-t border-gray-300 p-2 flex items-center fixed bottom-0 left-0 right-0">
         <textarea
           className="flex-1 resize-none p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 max-h-36"
           rows="1"
