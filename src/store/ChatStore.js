@@ -75,10 +75,10 @@ const useChatStore = create((set) => ({
             set({ error: error.response?.data?.message || "An error occurred", loading: false });
         }
     },
-    loadUserChats: async (id) => {
+    loadUserChats: async (id, replyToId) => {
         set({ loading: true, error: null });
         try {
-            const response = await axios.get(`${API_URL}/users/${id}/reports?chatsOnly=true`, {
+            const response = await axios.get(`${API_URL}/users/${id}/reports?_filter[replyTo]=${replyToId}&chatsOnly=true`, {
                 withCredentials: true,
             });
             const chatsData = response.data.data;

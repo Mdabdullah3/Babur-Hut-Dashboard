@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import useUserStore from "../../store/AuthStore";
 import axios from "axios";
-import { API_URL } from "../../config";
+import { API_URL, SERVER } from "../../config";
 import { toast } from "react-toastify";
 import useChatStore from "../../store/ChatStore";
 
@@ -19,11 +19,12 @@ const UserChatCenter = () => {
     const fetchChats = async () => {
       try {
         const response = await axios.get(
-          `https://baburhaatbd.com/api/users/66e43df8158a80a07ab66bfe/reports?_filter[replyTo]=671262e09ad3a1c44151edbc&chatsOnly=true`,
+          `https://baburhaatbd.com/api/users/66e43df8158a80a07ab66bfe/reports?_filter[replyTo]=66e43ad4158a80a07ab5fada&chatsOnly=true`,
           {
             withCredentials: true,
           }
         );
+        console.log(response.data.data);
         if (response?.data?.data) {
           const fetchedChats = response?.data?.data;
 
@@ -48,13 +49,17 @@ const UserChatCenter = () => {
     if (user?._id) {
       fetchChats();
     }
-  }, [user?._id, id]);
+  }, [user?._id, id, chats, loadUserChats]);
 
   // Fetch user and load chats
   useEffect(() => {
-    fetchUser();
-    loadUserChats(id);
-  }, [fetchUser, loadUserChats, id]);
+    fetchUser(id);
+    const interval = setInterval(() => {
+      loadUserChats(id, user?._id);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [id, user?._id, loadUserChats, fetchUser]);
 
   // Auto-scroll to the bottom of the chat on new messages
   const scrollToBottom = () => {
@@ -102,16 +107,14 @@ const UserChatCenter = () => {
     }
   };
 
-  console.log(message);
-  // Modern chat UI design with better chat bubble styling
   return (
     <div className="flex flex-col bg-gray-100">
       {/* Message Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-10">
         {messages.map((chat) => (
           <div
             key={chat?._id}
-            className={`flex items-start space-x-2 ${
+            className={`flex items-start space-x-2  ${
               user?._id === chat?.user?._id || user?._id === chat?.user
                 ? "justify-end"
                 : "justify-start"
@@ -120,8 +123,12 @@ const UserChatCenter = () => {
             {/* User Avatar */}
             {id === chat?.user?._id && (
               <img
-                src="https://via.placeholder.com/40" // Replace with actual user avatar
-                alt="User Avatar"
+                src={
+                  chat?.user?.avatar
+                    ? `${SERVER}${chat?.user?.avatar?.secure_url}`
+                    : "https://via.placeholder.com/40"
+                }
+                alt="Avatar"
                 className="w-10 h-10 rounded-full"
               />
             )}
