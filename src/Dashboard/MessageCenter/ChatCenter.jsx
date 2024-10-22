@@ -14,12 +14,14 @@ const ChatCenterAdminView = () => {
 
   // Filter chat data by unique user
   chats?.forEach((chat) => {
-    if (!seenUsers.has(chat.user._id)) {
-      seenUsers.add(chat.user._id);
+    const userId = chat.user._id;
+    const userRole = chat.user.role;
+
+    if (!seenUsers.has(userId) && userRole !== "admin") {
+      seenUsers.add(userId);
       uniqueChats.push(chat);
     }
   });
-  console.log(uniqueChats);
   const navigate = useNavigate();
   const handleViewChat = (id) => {
     navigate(`/admin/user-chat/${id}`);
