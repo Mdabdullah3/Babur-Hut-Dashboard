@@ -42,8 +42,8 @@ const Supports = () => {
                     <td>
                       <img
                         src={`${SERVER}${report?.image?.secure_url}`}
-                        alt=""
                         className="w-20 h-20 "
+                        alt="Report img"
                       />
                     </td>
                     <td className="py-3 px-6 text-left whitespace-nowrap border-b border-gray-200">

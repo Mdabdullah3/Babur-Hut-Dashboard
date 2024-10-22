@@ -12,7 +12,7 @@ const useReportStore = create((set, get) => ({
     fetchReports: async () => {
         set({ loading: true, error: null });
         try {
-            const response = await axios.get(`${API_URL}/reports?_limit=10000`);
+            const response = await axios.get(`${API_URL}/reports?_limit=10000&reportsOnly=true`);
             set({ reports: response?.data?.data, loading: false });
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to fetch reports');

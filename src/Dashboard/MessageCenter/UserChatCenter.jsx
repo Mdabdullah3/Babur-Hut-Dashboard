@@ -154,7 +154,7 @@ const UserChatCenter = () => {
       </div>
 
       {/* Input Area (Fixed at the bottom) */}
-      <div className="bg-white border-t border-gray-300 p-2 flex items-center fixed bottom-0 left-0 right-0">
+      <div className="bg-white border-t border-gray-300 p-2 flex items-center fixed bottom-0 left-0 right-0 z-10 rounded-md w-[60%] mx-auto">
         <textarea
           className="flex-1 resize-none p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 max-h-36"
           rows="1"
