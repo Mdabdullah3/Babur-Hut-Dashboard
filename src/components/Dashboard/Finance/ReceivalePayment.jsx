@@ -295,7 +295,7 @@ const ReceivablePayment = () => {
         <tbody>
           {users?.length > 0 ? (
             users?.map((user, userIndex) => {
-              const orders = userOrders[user._id] || [];
+              const orders = userOrders[user?._id] || [];
               const activeOrders = calculateActiveOrders(orders);
               const totalOrderCost = calculateTotalOrderCost(activeOrders);
               const vendorPayment = calculateVendorPayment(activeOrders);
@@ -303,29 +303,29 @@ const ReceivablePayment = () => {
 
               return (
                 <tr
-                  key={user._id}
+                  key={user?._id}
                   className="border-r border-l border-gray-300 border-b"
                 >
                   <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
                     {userIndex + 1}
                   </td>
                   <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300 capitalize">
-                    {user._id}
+                    {user?._id}
                   </td>
                   <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300 capitalize">
-                    {user.name}
+                    {user?.name}
                   </td>
                   <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                    {totalOrderCost.toFixed(2)} BDT
+                    {totalOrderCost?.toFixed(2)} BDT
                   </td>
                   <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                    {totalProfit.toFixed(2)} BDT
+                    {totalProfit?.toFixed(2)} BDT
                   </td>
                   <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                    {vendorPayment.toFixed(2)} BDT
+                    {vendorPayment?.toFixed(2)} BDT
                   </td>
                   <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                    {activeOrders.length}
+                    {activeOrders?.length}
                   </td>
                   <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300 ">
                     <Link to={`/admin/payable-payment/${user?._id}`}>

@@ -78,7 +78,7 @@ const useChatStore = create((set) => ({
     loadUserChats: async (id, replyToId) => {
         set({ loading: true, error: null });
         try {
-            const response = await axios.get(`${API_URL}/users/${id}/reports?_filter[replyTo]=${replyToId}&chatsOnly=true`, {
+            const response = await axios.get(`${API_URL}/users/${id}/reports?_filter[replyTo]=${replyToId}&chatsOnly=true&_limit=100000`, {
                 withCredentials: true,
             });
             const chatsData = response.data.data;

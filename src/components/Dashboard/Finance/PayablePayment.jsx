@@ -132,7 +132,6 @@ const PayablePayment = () => {
     loadOrdersForAllUsers();
   }, [fetchAllVendorOrders, id, userOrders]);
 
-  console.log(loading);
   const header = [
     "No",
     "Order Cost",

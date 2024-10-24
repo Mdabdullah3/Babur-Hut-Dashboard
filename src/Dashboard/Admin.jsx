@@ -7,19 +7,70 @@ import PrimaryButton from "../components/common/PrimaryButton";
 import RecentOrder from "../components/Dashboard/RecentOrder";
 import useUserStore from "../store/AuthStore";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../config";
+import { toast } from "react-toastify";
 
 const Admin = () => {
-  const { user, fetchUser } = useUserStore();
   const [loading, setLoading] = useState(true);
-
+  const [orders, setOrders] = useState([]);
+  const { user, fetchUser } = useUserStore();
+  const [totalEarning, setTotalEarning] = useState(0);
+  const [todaySale, setTodaySale] = useState(0);
+  const [monthlySale, setMonthlySale] = useState(0);
+  const [newCustomer, setNewCustomer] = useState(0);
   useEffect(() => {
     const loadUser = async () => {
       await fetchUser();
       setLoading(false);
     };
-
     loadUser();
   }, [fetchUser]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/orders?_limit=100000`);
+        setOrders(response.data.data);
+        calculateSales(response.data.data);
+      } catch (error) {
+        toast.error("Error fetching orders:", error);
+      }
+    };
+    fetchOrders();
+  }, []);
+
+  // Function to calculate total, monthly, and daily sales
+  const calculateSales = (orders) => {
+    const today = new Date().toISOString().split("T")[0]; // Get today's date
+    const currentMonth = new Date().getMonth();
+
+    let total = 0;
+    let todayTotal = 0;
+    let monthlyTotal = 0;
+
+    orders.forEach((order) => {
+      const orderDate = new Date(order.createdAt);
+      const orderTotal = order.price * order.quantity;
+
+      // Calculate total sales
+      total += orderTotal;
+
+      // Calculate today's sales
+      if (orderDate.toISOString().split("T")[0] === today) {
+        todayTotal += orderTotal;
+      }
+
+      // Calculate monthly sales
+      if (orderDate.getMonth() === currentMonth) {
+        monthlyTotal += orderTotal;
+      }
+    });
+
+    setTotalEarning(total);
+    setTodaySale(todayTotal);
+    setMonthlySale(monthlyTotal);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -28,6 +79,8 @@ const Admin = () => {
   if (!user || user.role !== "admin") {
     return <Navigate to="/" replace />;
   }
+
+  console.log(todaySale, totalEarning, monthlySale);
 
   return (
     <section>
