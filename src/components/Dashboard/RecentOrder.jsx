@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TableHead from "../common/TableHead";
-import { reacentOrder } from "../../utils/constant";
+import { toast } from "react-toastify";
+import { API_URL, SERVER } from "../../config";
+import axios from "axios";
 const RecentOrder = () => {
   const header = [
     "Image",
@@ -9,15 +11,35 @@ const RecentOrder = () => {
     "Product ID",
     "Quantity",
   ];
+
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}/orders?_sort=-createdAt&_limit=10`
+        );
+        setOrders(response.data.data);
+      } catch (error) {
+        toast.error("Error fetching orders:", error);
+      }
+    };
+    fetchOrders();
+  }, []);
   return (
     <div className="overflow-auto w-full">
       <table className="table-auto w-full ">
         <TableHead header={header} />
-        {reacentOrder?.map((item) => (
+        {orders?.map((item) => (
           <tbody key={item?.id}>
             <tr className="border-r border-l border-gray-300 border-b">
               <td>
-                <img className="w-20 h-20 mx-auto" src={item?.img} alt="" />
+                <img
+                  className="w-20 h-20 mx-auto"
+                  src={`${SERVER}${item?.product?.coverPhoto?.secure_url}`}
+                  alt=""
+                />
               </td>
               <td
                 className="
@@ -29,7 +51,7 @@ const RecentOrder = () => {
                                border-b border-l border-r border-gray-300
                                "
               >
-                {item?.name}
+                {item?.product?.name}
               </td>
 
               <td
@@ -42,7 +64,7 @@ const RecentOrder = () => {
                                border-b border-r border-gray-300
                                "
               >
-                {item?.customerNumber}
+                {item?.shippingInfo?.name}
               </td>
               <td
                 className="
