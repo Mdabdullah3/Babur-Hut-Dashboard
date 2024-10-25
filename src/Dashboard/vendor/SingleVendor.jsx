@@ -70,7 +70,8 @@ const SingleVendor = () => {
       name: "About Settings",
     },
   ];
-  const { products, fetchProductByIdForUser, updateProduct } = useProductStore();
+  const { products, fetchProductByIdForUser, updateProduct } =
+    useProductStore();
   const { vouchers, fetchVoucherByUserId } = useVoucherStore();
   useEffect(() => {
     fetchProductByIdForUser(id);
@@ -85,7 +86,6 @@ const SingleVendor = () => {
         ...prevState,
         isActive: updatedStatus,
       }));
-      console.log(response);
     } catch (error) {
       console.error("Failed to update profile status:", error);
       toast.error("Profile status update failed!");
@@ -146,14 +146,20 @@ const SingleVendor = () => {
         ))}
       </div>
       <div>
-        {activeMenu === 1 && <VendorProducts products={products} updateProduct={updateProduct} id={id} />}
+        {activeMenu === 1 && (
+          <VendorProducts
+            products={products}
+            updateProduct={updateProduct}
+            id={id}
+          />
+        )}
       </div>
-      <div>{activeMenu === 2 && <VendorOrders />}</div>
+      <div>{activeMenu === 2 && <VendorOrders id={id} />}</div>
       <div>
         {activeMenu === 3 && <VendorVouchers vouchers={vouchers} id={id} />}
       </div>
-      <div>{activeMenu === 4 && <VendorCampaign />}</div>
-      <div>{activeMenu === 5 && <VendorAds />}</div>
+      <div>{activeMenu === 4 && <VendorCampaign id={id} />}</div>
+      <div>{activeMenu === 5 && <VendorAds id={id} />}</div>
       <div>{activeMenu === 6 && <VendorReview product={products} />}</div>
       <div>{activeMenu === 7 && <VendorSetting id={id} />}</div>
     </section>

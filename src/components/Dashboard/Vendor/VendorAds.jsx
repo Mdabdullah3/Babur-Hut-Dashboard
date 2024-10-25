@@ -1,39 +1,37 @@
-"use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableHead from "../../common/TableHead";
-import { vendorAds } from "../../../utils/constant";
+import usePackageStore from "../../../store/PackageStore";
 
-const VendorAds = () => {
+const VendorAds = ({ id }) => {
   const [activeMenu, setActiveMenu] = useState(1);
+  const { packages, fetchPackages } = usePackageStore();
 
+  useEffect(() => {
+    fetchPackages();
+  }, [fetchPackages, id]);
   const handleMenuClick = (id) => {
     setActiveMenu(id);
   };
-
-  const header = ["Ads Id", "Payment", "Invest", "Date", "Status", "Action"];
+  const filteredPackages = packages?.filter((pack) =>
+    pack?.packageProducts?.some((packageProduct) => packageProduct?.user === id)
+  );
+  const header = ["Ads Name", "Payment", "Max Product", "Date", "Status"];
   const menu = [
     {
       id: 1,
       name: "All",
-      items: vendorAds.length,
-    },
-    {
-      id: 2,
-      name: "Previous Ads",
-      items: vendorAds.filter((item) => item.status === "Closed").length,
+      items: filteredPackages?.length,
     },
   ];
 
+  console.log(filteredPackages);
+
   // Filtered ads based on the active menu
-  const filteredAds =
-    activeMenu === 1
-      ? vendorAds
-      : vendorAds.filter((item) => item.status === "Closed");
 
   return (
     <section className="w-11/12 mx-auto">
       <div className="flex items-center justify-center border-b-2 gap-10 my-10">
-        {menu.map((item) => (
+        {menu?.map((item) => (
           <button
             key={item.id}
             onClick={() => handleMenuClick(item.id)}
@@ -47,31 +45,27 @@ const VendorAds = () => {
           </button>
         ))}
       </div>
-      {filteredAds.length > 0 ? (
+      {filteredPackages?.length !== 0 ? (
         <div className=" overflow-auto">
           <TableHead header={header} />
-          {filteredAds.map((item) => (
-            <tbody key={item.id}>
+          {filteredPackages?.map((item) => (
+            <tbody key={item?._id}>
               <tr className="border-r border-l border-gray-300 border-b">
-                <td className="text-center text-dark font-medium text-secondary py-5 text-sm bg-transparent border-b border-l border-r border-gray-300">
-                  {item.adsId}
+                <td className="text-center text-dark font-medium text-secondary py-5 capitalize text-sm bg-transparent border-b border-l border-r border-gray-300">
+                  {item?.name}
                 </td>
                 <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                  {item.payment}
+                  {item?.price}
                 </td>
                 <td className="text-center text-dark font-medium text-secondary py-5 px-2 bg-transparent border-b border-r border-gray-300">
-                  {item.invest}
+                  {item?.maxProduct}
                 </td>
                 <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                  Start {item.strDate} | Valid Till {item.endDate}
+                  Joined: {new Date(item?.createdAt).toDateString()} End Date:{" "}
+                  {new Date(item?.endDate).toDateString()}
                 </td>
                 <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                  {item.status}
-                </td>
-                <td className="text-center text-dark font-medium text-secondary py-5 px-2 cursor-pointer bg-transparent border-b border-r border-gray-300">
-                  <button className="bg-primary text-white px-5 py-1.5 rounded-lg">
-                    Active
-                  </button>
+                  {item?.status}
                 </td>
               </tr>
             </tbody>
@@ -79,7 +73,7 @@ const VendorAds = () => {
         </div>
       ) : (
         <div className="text-center text-xl font-bold text-red-500">
-          No data found
+          No Ads found
         </div>
       )}
     </section>

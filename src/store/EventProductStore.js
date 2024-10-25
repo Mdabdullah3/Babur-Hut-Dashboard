@@ -36,9 +36,11 @@ const useEventProductStore = create((set, get) => ({
         set({ loading: true, error: null });
         try {
             const response = await axios.post(`${API_URL}/event-products`, eventProductData);
-            set({ loading: false });
-            toast.success('Event product created successfully!');
-            get().fetchEventProducts(); // Refresh the event products list
+            if (response) {
+                set({ loading: false });
+                toast.success('Event product created successfully!');
+                get().fetchEventProducts();
+            } // Refresh the event products list
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to create event product');
             set({ loading: false });
@@ -49,9 +51,11 @@ const useEventProductStore = create((set, get) => ({
         set({ loading: true, error: null });
         try {
             const response = await axios.patch(`${API_URL}/event-products/${eventProductId}`, eventProductData);
-            set({ loading: false });
-            toast.success('Event product updated successfully!');
-            get().fetchEventProducts(); // Refresh the event products list
+            if (response) {
+                set({ loading: false });
+                toast.success('Event product updated successfully!');
+            }
+            get().fetchEventProducts();
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to update event product');
             set({ loading: false });
@@ -66,6 +70,16 @@ const useEventProductStore = create((set, get) => ({
             get().fetchEventProducts(); // Refresh the event products list
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to delete event product');
+            set({ loading: false });
+        }
+    },
+    usersEventProducts: async (id) => {
+        set({ loading: true, error: null });
+        try {
+            const response = await axios.get(`${API_URL}/event-products?_filter[user]=${id}`);
+            set({ eventProducts: response.data.data, loading: false });
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to fetch event products');
             set({ loading: false });
         }
     },

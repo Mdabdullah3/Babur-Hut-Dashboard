@@ -26,7 +26,6 @@ const useEventStore = create((set, get) => ({
             const response = await axios.get(`${API_URL}/events/${eventId}`);
             set({ event: response.data.data, loading: false });
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to fetch event');
             set({ loading: false });
         }
     },

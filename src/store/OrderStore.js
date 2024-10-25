@@ -113,11 +113,23 @@ const useOrderStore = create((set) => ({
             return [];
         }
     },
-    fetchAllVendorOrders: async (id) => {
+    fetchAllVendorOrders: async (id, { status = "", page = 1, limit = 20 }) => {
         set({ loading: true });
         try {
-            const response = await axios.get(`${API_URL}/orders?_filter[vendor]=${id}&_limit=1000`, { withCredentials: true });
-            set({ userOrders: response.data.data, loading: false });
+            const params = {
+                _page: page,
+                _limit: limit,
+            };
+            if (status) {
+                params['_filter[status]'] = status;
+            }
+            const response = await axios.get(`${API_URL}/orders?_filter[vendor]=${id}`, { params, withCredentials: true });
+            set({
+                totalPages: Math.ceil(response.data.count / limit),
+                userOrders: response.data.data,
+                loading: false
+            });
+
             return response.data.data;
         } catch (error) {
             set({ error: error.response?.data?.message || 'Error fetching user orders', loading: false });
