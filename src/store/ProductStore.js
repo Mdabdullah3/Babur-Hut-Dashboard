@@ -22,7 +22,6 @@ const useProductStore = create((set) => ({
                     _page: page,
                     _limit: limit,
                     _search: searchTerm ? `${searchTerm},name,slug,summary,description` : '',
-
                 },
             });
             set({
@@ -37,17 +36,24 @@ const useProductStore = create((set) => ({
     },
 
 
-    fetchProductByIdForUser: async ( userId, page = 1, limit = 20, searchTerm = '') => {
+    fetchProductByIdForUser: async (userId, page = 1, filter = '', limit = 20, searchTerm = '') => {
         set({ loading: true });
         try {
-            const response = await axios.get(`${API_URL}/users/${userId}/products`, {
-                params: {
-                    _page: page,
-                    _limit: limit,
-                    _search: searchTerm ? `${searchTerm},name,slug,summary,description` : '',
-                    // ...filter,
-                },
-            });
+            const params = {
+                _page: page,
+                _limit: limit,
+                _sort: '-createdAt,price',
+            };
+            // Only add filter if it’s set
+            if (filter) {
+                params['_filter[status]'] = filter;
+            }
+            // Only add search if searchTerm is set
+            if (searchTerm) {
+                params['_search'] = `${searchTerm},name,slug,summary,description`;
+            }
+            const response = await axios.get(`${API_URL}/users/${userId}/products`, { params });
+
             set({
                 products: response.data.data,
                 totalProducts: response.data.total,

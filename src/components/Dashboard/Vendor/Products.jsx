@@ -18,9 +18,8 @@ const Products = ({ id, updateProduct }) => {
 
   const handleMenuClick = (status) => {
     setActiveMenu(status);
-    const filter =
-      status !== "All" ? { "_filter[status]": status.toLowerCase() } : {};
-    fetchProductByIdForUser(filter, id, page, 20, searchTerm);
+    const filter = status === "All" ? "" : status.toLowerCase();
+    fetchProductByIdForUser(id, page, filter, 20, searchTerm);
   };
 
   const handleSearch = (value) => {
@@ -42,26 +41,30 @@ const Products = ({ id, updateProduct }) => {
   ];
 
   const menu = [
-    { id: 1, name: "All", items: products?.length },
+    { id: 1, name: "All", status: "All", items: products?.length },
     {
       id: 2,
       name: "Online",
+      status: "approved",
       items: products?.filter((product) => product.status === "approved")
         .length,
     },
     {
       id: 3,
       name: "Pending",
+      status: "pending",
       items: products?.filter((product) => product.status === "pending").length,
     },
     {
       id: 4,
       name: "Suspended",
+      status: "suspend",
       items: products?.filter((product) => product.status === "suspend").length,
     },
     {
       id: 5,
       name: "Cancelled",
+      status: "cancelled",
       items: products?.filter((product) => product.status === "cancelled")
         .length,
     },
@@ -70,6 +73,8 @@ const Products = ({ id, updateProduct }) => {
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
+
+  console.log(products);
 
   return (
     <section className="py-5">
@@ -84,9 +89,9 @@ const Products = ({ id, updateProduct }) => {
         {menu.map((item) => (
           <button
             key={item.id}
-            onClick={() => handleMenuClick(item.name)}
+            onClick={() => handleMenuClick(item.status)}
             className={`font-bold pb-2 ${
-              activeMenu === item.name
+              activeMenu === item.status
                 ? "text-primary border-b-2 border-primary"
                 : ""
             }`}
