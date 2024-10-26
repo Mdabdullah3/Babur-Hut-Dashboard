@@ -137,9 +137,9 @@ const EditSubCategory = () => {
       ? Number(form.transactionCost) || 0
       : 0) +
     (form.vatType === "percentage" ? Number(form.vat) || 0 : 0);
-  console.log(totalPercentage);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     if (totalPercentage > 100) {
       toast.error("Total percentage across all fields cannot exceed 100%");
     }

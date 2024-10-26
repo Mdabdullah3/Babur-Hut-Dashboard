@@ -10,7 +10,7 @@ const Customer = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [userOrders, setUserOrders] = useState({});
 
-  const { fetchAllCustomer, users, deleteUser } = useUserStore();
+  const { fetchAllCustomer, users } = useUserStore();
   const { fetchCustomerOrders } = useOrderStore();
 
   useEffect(() => {

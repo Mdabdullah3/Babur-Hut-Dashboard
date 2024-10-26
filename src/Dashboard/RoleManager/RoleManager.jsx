@@ -8,9 +8,9 @@ const RoleManager = () => {
   const {
     users,
     fetchAdminUser,
-    currentPage,
-    totalPages,
-    setPage,
+    // currentPage,
+    // totalPages,
+    // setPage,
     setSearchTerm,
     setSortField,
     deleteUser,
@@ -24,9 +24,9 @@ const RoleManager = () => {
     setSearchTerm(value);
   };
 
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
+  // const handlePageChange = (newPage) => {
+  //   setPage(newPage);
+  // };
 
   const handleSort = (field) => {
     setSortField(field);

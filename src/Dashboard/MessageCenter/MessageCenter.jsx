@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import useUserStore from "../../store/AuthStore";
 import useProductStore from "../../store/ProductStore";
-import { useNavigate } from "react-router-dom";
 import { SERVER } from "../../config";
 
 const MessageCenter = () => {
   const { user, fetchUser } = useUserStore();
   const { products, fetchProductByIdForUser } = useProductStore();
   const [commentsWithReplies, setCommentsWithReplies] = useState([]);
-  const router = useNavigate();
 
   useEffect(() => {
     const fetchProductsAndReviews = async () => {

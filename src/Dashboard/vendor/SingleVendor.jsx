@@ -82,10 +82,12 @@ const SingleVendor = () => {
     try {
       const updatedStatus = !user?.isActive;
       const response = await updateSingleUser({ isActive: updatedStatus }, id);
-      setUsers((prevState) => ({
-        ...prevState,
-        isActive: updatedStatus,
-      }));
+      if (response) {
+        setUsers((prevState) => ({
+          ...prevState,
+          isActive: updatedStatus,
+        }));
+      }
     } catch (error) {
       console.error("Failed to update profile status:", error);
       toast.error("Profile status update failed!");

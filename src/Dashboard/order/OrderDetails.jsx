@@ -211,7 +211,7 @@ const OrderDetails = () => {
     currency,
     paymentType,
     quantity,
-    transactionId,
+    // transactionId,
   } = singleOrder;
 
   const orderedVariant = product?.productVariants.find(
