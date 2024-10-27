@@ -89,7 +89,6 @@ const SingleVendor = () => {
         }));
       }
     } catch (error) {
-      console.error("Failed to update profile status:", error);
       toast.error("Profile status update failed!");
     }
   };
