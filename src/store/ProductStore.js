@@ -142,6 +142,30 @@ const useProductStore = create((set) => ({
             set({ error: error.response?.data?.message || error.message, loading: false });
         }
     },
+
+    fetchProductsUserId: async (userId, page = 1, limit = 20, searchTerm = '') => {
+        set({ loading: true });
+        try {
+            const response = await axios.get(`${API_URL}/users/${userId}/products`, {
+                params: {
+                    _page: page,
+                    _limit: limit,
+                    _search: searchTerm ? `${searchTerm},name,slug,summary,description` : '',
+                },
+            });
+            set({
+                products: response.data.data,
+                totalProducts: response.data.total,
+                totalPages: Math.ceil(response.data.total / limit),
+                loading: false,
+                page,
+                limit,
+                searchTerm,
+            });
+        } catch (error) {
+            set({ error: error.response?.data?.message || error.message, loading: false });
+        }
+    },
     setSearchTerm: (searchTerm) => set({ searchTerm }),
     setPage: (page) => set({ page }),
     setLimit: (limit) => set({ limit }),

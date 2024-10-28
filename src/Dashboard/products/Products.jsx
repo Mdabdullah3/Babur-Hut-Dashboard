@@ -10,7 +10,7 @@ const ProductAdminPanel = () => {
   const { user, fetchUser } = useUserStore();
   const {
     products,
-    fetchProductByIdForUser,
+    fetchProductsUserId,
     totalPages,
     limit,
     searchTerm,
@@ -22,9 +22,9 @@ const ProductAdminPanel = () => {
   useEffect(() => {
     fetchUser();
     if (user?._id) {
-      fetchProductByIdForUser(user._id, page, limit, searchTerm);
+      fetchProductsUserId(user._id, page, limit, searchTerm);
     }
-  }, [user?._id, fetchUser, page, limit, searchTerm, fetchProductByIdForUser]);
+  }, [user?._id, fetchUser, page, limit, searchTerm, fetchProductsUserId]);
 
   const handleSearch = (value) => {
     setSearchTerm(value);

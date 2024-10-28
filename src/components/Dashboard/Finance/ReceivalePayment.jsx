@@ -145,6 +145,7 @@ const ReceivablePayment = () => {
   const [totalOrderCost, setTotalOrderCost] = useState(0);
   const [totalVendorIncome, setTotalVendorIncome] = useState(0);
   const [totalProfit, setTotalProfit] = useState(0);
+  console.log(users);
 
   const { fetchAllVendorOrders } = useOrderStore();
 
@@ -162,7 +163,7 @@ const ReceivablePayment = () => {
       let profit = 0;
 
       for (let user of users) {
-        const orders = await fetchAllVendorOrders(user._id);
+        const orders = await fetchAllVendorOrders(user?._id, {});
         ordersByUser[user?._id] = orders;
         const activeOrders = calculateActiveOrders(orders);
         totalCost += calculateTotalOrderCost(activeOrders);
