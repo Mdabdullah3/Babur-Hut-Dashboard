@@ -90,7 +90,7 @@ const AllOrder = () => {
         <div className="overflow-auto">
           <table className="table-auto w-full mt-10">
             <TableHead header={header} />
-            {filteredOrders.map((item) => (
+            {filteredOrders?.map((item) => (
               <tbody key={item?._id}>
                 <tr className="border-r border-l border-gray-300 border-b">
                   <td className="text-center text-dark font-medium py-5">
@@ -114,6 +114,7 @@ const AllOrder = () => {
                       className="border border-gray-300 p-2 rounded"
                     >
                       <option value="pending">Pending</option>
+                      <option value="received">Received</option>
                       <option value="shipped">Shipped</option>
                       <option value="completed">Delivered</option>
                       <option value="cancelled">Cancelled</option>

@@ -19,6 +19,7 @@ const useOrderStore = create((set) => ({
             const params = {
                 _page: page,
                 _limit: limit,
+                _sort: '-createdAt'
             };
 
             if (status) {
@@ -51,7 +52,7 @@ const useOrderStore = create((set) => ({
     fetchOrderById: async (orderId) => {
         set({ loading: true });
         try {
-            const response = await axios.get(`${API_URL}/orders/${orderId}`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}/orders/${orderId}?_sort=-createdAt`, { withCredentials: true });
             set({ singleOrder: response.data.data, loading: false });
         } catch (error) {
             set({ error: error.response?.data?.message || 'Error fetching order', loading: false });
@@ -84,7 +85,7 @@ const useOrderStore = create((set) => ({
                 params['_filter[status]'] = status;
             }
 
-            const response = await axios.get(`${API_URL}/users/${userId}/orders`, {
+            const response = await axios.get(`${API_URL}/users/${userId}/orders?_sort=-createdAt`, {
                 params,
                 withCredentials: true,
             });
@@ -105,7 +106,7 @@ const useOrderStore = create((set) => ({
     fetchCustomerOrders: async (userId) => {
         set({ loading: true });
         try {
-            const response = await axios.get(`${API_URL}/users/${userId}/orders`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}/users/${userId}/orders?_sort=-createdAt`, { withCredentials: true });
             set({ userOrders: response.data.data, loading: false });
             return response.data.data;
         } catch (error) {
@@ -119,6 +120,7 @@ const useOrderStore = create((set) => ({
             const params = {
                 _page: page,
                 _limit: limit,
+                _sort: "-createdAt"
             };
             if (status) {
                 params['_filter[status]'] = status;
