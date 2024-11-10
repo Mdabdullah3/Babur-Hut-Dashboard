@@ -59,7 +59,7 @@ const CreateAd = () => {
             type="number"
             value={form.duration}
             onChange={handleInputChange}
-            placeholder="Enter duration"
+            placeholder="Enter duration in days"
             required
           />
           <InputField

@@ -24,7 +24,6 @@ const UserChatCenter = () => {
             withCredentials: true,
           }
         );
-        console.log(response.data.data);
         if (response?.data?.data) {
           const fetchedChats = response?.data?.data;
 
@@ -41,7 +40,6 @@ const UserChatCenter = () => {
           });
         }
       } catch (error) {
-        console.error("Error fetching user chats:", error);
         toast.error("Failed to load chats");
       }
     };

@@ -17,18 +17,17 @@ const MessageCenter = () => {
         await fetchProductByIdForUser(userId);
 
         const allReviews = products
-          .filter((product) => product.reviews && product.reviews.length > 0)
-          .flatMap((product) => product.reviews);
+          .filter((product) => product?.reviews && product?.reviews?.length > 0)
+          .flatMap((product) => product?.reviews).filter((review) => review?.comment); 
 
         const groupedComments = allReviews
           .filter((review) => !review.replyTo) // Filter only top-level comments
           .map((comment) => ({
             ...comment,
-            replies: allReviews.filter(
-              (reply) => reply.replyTo?._id === comment._id
+            replies: allReviews?.filter(
+              (reply) => reply?.replyTo?._id === comment?._id
             ), // Attach replies to each comment
           }));
-
         setCommentsWithReplies(groupedComments);
       }
     };
@@ -45,13 +44,12 @@ const MessageCenter = () => {
     return formatDistanceToNow(new Date(date), { addSuffix: true });
   };
 
-  console.log(commentsWithReplies);
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Product Comments and Replies</h1>
       <div className="grid grid-cols-3 gap-5 items-start">
-        {commentsWithReplies.length > 0 ? (
-          commentsWithReplies.map((comment, index) => (
+        {commentsWithReplies?.length > 0 ? (
+          commentsWithReplies?.map((comment, index) => (
             <div
               key={index}
               className="bg-white shadow-lg rounded-lg p-6 mb-6"
@@ -72,28 +70,28 @@ const MessageCenter = () => {
                   />
                   <div>
                     <p className="text-gray-900  capitalize">
-                      {comment.user.name}
+                      {comment?.user?.name}
                     </p>
                   </div>
                 </div>
                 {/* Date Display */}
                 <p className="text-gray-500 text-sm">
-                  {formatCommentDate(comment.createdAt)}{" "}
+                  {formatCommentDate(comment?.createdAt)}{" "}
                   {/* Modern relative date */}
                 </p>
               </div>
               <p className="text-gray-700 capitalize my-2 font-semibold">
-                {comment.comment}
+                {comment?.comment}
               </p>
               <hr />
               {/* Replies Section */}
-              {comment.replies.length > 0 && (
+              {comment?.replies?.length > 0 && (
                 <div className="ml-10 mt-4">
                   <p className="text-gray-900 font-medium">
-                    {comment.replies.length}{" "}
-                    {comment.replies.length > 1 ? "Replies" : "Reply"}:
+                    {comment?.replies?.length}{" "}
+                    {comment?.replies?.length > 1 ? "Replies" : "Reply"}:
                   </p>
-                  {comment.replies.map((reply, replyIndex) => (
+                  {comment?.replies?.map((reply, replyIndex) => (
                     <div key={replyIndex} className="mt-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center">
@@ -109,19 +107,19 @@ const MessageCenter = () => {
                           />
                           <div>
                             <p className="text-gray-900 capitalize">
-                              {reply.user.name}
+                              {reply?.user?.name}
                             </p>
                           </div>
                         </div>
                         {/* Date Display for Replies */}
                         <p className="text-gray-500 text-[13px]">
-                          {formatCommentDate(reply.createdAt)}
+                          {formatCommentDate(reply?.createdAt)}
                         </p>
                       </div>
                       <p className="text-gray-700 capitalize font-semibold my-2">
-                        {reply.comment}
+                        {reply?.comment}
                       </p>
-                      {replyIndex < comment.replies.length - 1 && <hr />}
+                      {replyIndex < comment?.replies?.length - 1 && <hr />}
                     </div>
                   ))}
                 </div>

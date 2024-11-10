@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { FiEdit, FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import usePackageStore from "../../store/PackageStore";
+import { FaBangladeshiTakaSign } from "react-icons/fa6";
 const AdManager = () => {
   const { fetchPackages, packages } = usePackageStore();
   useEffect(() => {
@@ -44,10 +45,16 @@ const AdManager = () => {
           </thead>
           <tbody>
             {packages?.map((pack) => (
-              <tr key={pack?._id} className="border-b border-gray-200">
+              <tr
+                key={pack?._id}
+                className="border-b border-gray-200 capitalize"
+              >
                 <td className="py-4 px-6">{pack.name}</td>
-                <td className="py-4 px-6">{pack.duration}</td>
-                <td className="py-4 px-6">{pack.price}</td>
+                <td className="py-4 px-6">{pack.duration} Days</td>
+                <td className="py-4 px-6 flex items-center gap-1">
+                  <FaBangladeshiTakaSign />
+                  {pack.price}
+                </td>
                 <td className="py-4 px-6">{pack.maxProduct}</td>
                 <td className="py-4 px-6">{pack.status}</td>
                 <td className="py-4 px-6 flex space-x-2">
