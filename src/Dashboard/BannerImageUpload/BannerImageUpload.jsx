@@ -43,11 +43,11 @@ const BannerImageUpload = () => {
               {bannerImage?.map((img) => (
                 <tr key={img?._id} className="border-b border-gray-200">
                   <td className="py-4 px-6">
-                    <img src={`${SERVER}${img?.image.secure_url}`} alt="" />
+                    <img src={`${SERVER}${img?.image?.secure_url}`} alt="" />
                   </td>
                   <td className="py-4 px-6">
                     <img
-                      src={`${SERVER}${img?.mobileBanner.secure_url}`}
+                      src={`${SERVER}${img?.mobileBanner?.secure_url}`}
                       alt=""
                     />
                   </td>
@@ -94,7 +94,7 @@ const BannerImageUpload = () => {
                 >
                   <td className="py-4 px-6">
                     <img
-                      src={`${SERVER}${img?.logo.secure_url}`}
+                      src={`${SERVER}${img?.logo?.secure_url}`}
                       className="w-32 h-32 "
                       alt=""
                     />
@@ -152,7 +152,7 @@ const BannerImageUpload = () => {
                   </td>
                   <td className="py-4 px-6">
                     <img
-                      src={`${SERVER}${img?.popupImageMobile.secure_url}`}
+                      src={`${SERVER}${img?.popupImageMobile?.secure_url}`}
                       alt=""
                     />
                   </td>
