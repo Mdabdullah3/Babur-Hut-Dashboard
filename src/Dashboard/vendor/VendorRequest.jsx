@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
 import { Link } from "react-router-dom";
+import useUserStore from "../../store/AuthStore";
 
 const VendorRequest = () => {
   const [vendors, setVendors] = useState([]);
@@ -10,6 +11,7 @@ const VendorRequest = () => {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { deleteUser } = useUserStore();
   const fetchAllVendors = async () => {
     try {
       const response = await axios.get(
@@ -73,12 +75,19 @@ const VendorRequest = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading vendors: {error}</p>;
 
+  const handleDeleteUser = (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+    if (confirmDelete) {
+      deleteUser(id);
+    }
+  }
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-xl font-semibold my-6 text-center">
         Pending Vendor Requests
       </h1>
-
       <div className="my-4">
         <input
           type="text"
@@ -120,6 +129,12 @@ const VendorRequest = () => {
                   className="bg-green-500 hover:bg-green-500/70 text-white font-bold py-2 px-4 rounded-lg ml-2"
                 >
                   Approve
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-500/70 text-white font-bold py-2 px-4 rounded-lg ml-2"
+                  onClick={() => handleDeleteUser(vendor?._id)}
+                >
+                  Delete
                 </button>
               </td>
             </tr>
