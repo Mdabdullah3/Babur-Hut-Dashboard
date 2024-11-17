@@ -6,7 +6,6 @@ import useEventStore from "../../store/EventStore";
 import useProductStore from "../../store/ProductStore";
 import axios from "axios";
 import { API_URL, SERVER } from "../../config";
-
 const JoinEvents = () => {
   const { id } = useParams();
   const { user, fetchUser } = useUserStore();
@@ -23,31 +22,28 @@ const JoinEvents = () => {
   const handleSelectProduct = (product) => {
     const currentDate = new Date();
     const eventEndDate = new Date(event?.endDate);
-
     if (eventEndDate < currentDate) {
       toast.error("Cannot add products, the event has already ended!");
       return;
     }
-
     setSelectedProducts((prev) => [...prev, product]);
   };
-
   const handleRemoveProduct = (productId) => {
-    setSelectedProducts((prev) => prev.filter((p) => p.id !== productId));
+    setSelectedProducts((prev) => prev.filter((p) => p?.id !== productId));
   };
 
   const handleAddProductsToEvent = async () => {
     try {
-      const eventProducts = selectedProducts.map((product) => ({
-        product: product._id,
-        user: user._id,
+      const eventProducts = selectedProducts?.map((product) => ({
+        product: product?._id,
+        user: user?._id,
         event: id,
       }));
-      const response = await axios.post(
+      const response = await axios?.post(
         `${API_URL}/event-products`,
         eventProducts
       );
-      if (response.status === 201) {
+      if (response?.status === 201) {
         toast.success("Products added to the event successfully!");
       }
     } catch (error) {
@@ -75,7 +71,7 @@ const JoinEvents = () => {
               {new Date(event?.endDate).toLocaleDateString()}
             </p>
             <p>
-              <span className="font-medium mb-2">Price:</span> BDT{" "}
+              <span className="font-medium mb-2">Price:</span> BDT{""}
               {event?.price}
             </p>
             <p>
@@ -110,7 +106,7 @@ const ProductList = ({
   onSelectProduct,
 }) => {
   const isProductSelected = (productId) => {
-    return selectedProducts.some((product) => product.id === productId);
+    return selectedProducts.some((product) => product?.id === productId);
   };
 
   return (
@@ -119,7 +115,7 @@ const ProductList = ({
       <ul>
         {products.map((product) => (
           <li
-            key={product.id}
+            key={product?.id}
             className="flex justify-between items-center py-2 border-b border-gray-200"
           >
             <img
@@ -147,9 +143,9 @@ const ProductList = ({
                 isProductInEvent(product?.id) || isProductSelected(product?.id)
               }
             >
-              {isProductInEvent(product.id)
+              {isProductInEvent(product?.id)
                 ? "Already in Event"
-                : isProductSelected(product.id)
+                : isProductSelected(product?.id)
                 ? "Selected"
                 : "Select"}
             </button>
@@ -181,10 +177,10 @@ const SelectedProducts = ({
               alt=""
               className="w-12 h-12 rounded"
             />
-            <span>{product?.name.slice(0, 20)}</span>
+            <span>{product?.name?.slice(0, 20)}</span>
             <button
               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-              onClick={() => onRemoveProduct(product.id)}
+              onClick={() => onRemoveProduct(product?.id)}
             >
               Remove
             </button>
