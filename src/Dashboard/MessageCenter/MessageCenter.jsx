@@ -18,7 +18,8 @@ const MessageCenter = () => {
 
         const allReviews = products
           .filter((product) => product?.reviews && product?.reviews?.length > 0)
-          .flatMap((product) => product?.reviews).filter((review) => review?.comment); 
+          .flatMap((product) => product?.reviews)
+          .filter((review) => review?.comment);
 
         const groupedComments = allReviews
           .filter((review) => !review.replyTo) // Filter only top-level comments
@@ -36,7 +37,7 @@ const MessageCenter = () => {
   }, [fetchUser, fetchProductByIdForUser, user?._id, products]);
 
   const handleReply = (productId) => {
-    const url = `https://baburhaatbd.com/products/${productId}`;
+    const url = `https://readyhow.com/products/${productId}`;
     window.open(url, "_blank");
   };
 
