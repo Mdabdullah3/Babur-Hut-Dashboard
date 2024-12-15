@@ -26,7 +26,6 @@ const UpdateLogoImage = () => {
   }, [other]);
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const requestBody = {
       banner: "LogoImage",
       logo: LogoImage || "", 
